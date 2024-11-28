@@ -1,10 +1,12 @@
 package ttps.spring.entrega5.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.validation.constraints.Size;
 
 
 public class RolDTO {
-
+	
     private Long id;
 
     @Size(max = 255)
