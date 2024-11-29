@@ -8,6 +8,8 @@ import ttps.spring.entrega5.domain.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Usuario findFirstByRol(Rol rol);
+    
+    Usuario findByEmail(String email);
 
     boolean existsByDni(Integer dni);
 

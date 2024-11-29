@@ -2,6 +2,7 @@ package ttps.spring.entrega5.service;
 
 import java.util.List;
 import org.springframework.data.domain.Sort;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ttps.spring.entrega5.domain.Pedido;
 import ttps.spring.entrega5.domain.Rol;
@@ -23,14 +24,16 @@ public class UsuarioService {
     private final RolRepository rolRepository;
     private final SugerenciaRepository sugerenciaRepository;
     private final PedidoRepository pedidoRepository;
+    //private final PasswordEncoder passwordEncoder;  // Inyectar PasswordEncoder
 
     public UsuarioService(final UsuarioRepository usuarioRepository,
             final RolRepository rolRepository, final SugerenciaRepository sugerenciaRepository,
-            final PedidoRepository pedidoRepository) {
+			final PedidoRepository pedidoRepository /* , final PasswordEncoder passwordEncoder */) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
         this.sugerenciaRepository = sugerenciaRepository;
         this.pedidoRepository = pedidoRepository;
+		//this.passwordEncoder = passwordEncoder;
     }
 
     public List<UsuarioDTO> findAll() {
@@ -48,6 +51,8 @@ public class UsuarioService {
 
     public Integer create(final UsuarioDTO usuarioDTO) {
         final Usuario usuario = new Usuario();
+        //String encodedPassword = passwordEncoder.encode(usuarioDTO.getClave());  // Codificar contraseña
+        //usuario.setClave(encodedPassword);
         mapToEntity(usuarioDTO, usuario);
         return usuarioRepository.save(usuario).getId();
     }
@@ -110,5 +115,11 @@ public class UsuarioService {
         }
         return null;
     }
+
+	public Usuario findByEmail(String email) {
+		return usuarioRepository.findByEmail(email);
+	}
+
+	
 
 }
