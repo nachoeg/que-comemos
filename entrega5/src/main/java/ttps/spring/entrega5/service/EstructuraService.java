@@ -1,11 +1,14 @@
 package ttps.spring.entrega5.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ttps.spring.entrega5.domain.Comida;
 import ttps.spring.entrega5.domain.Estructura;
 import ttps.spring.entrega5.domain.Menu;
+import ttps.spring.entrega5.model.EstructuraConComidasDTO;
 import ttps.spring.entrega5.model.EstructuraDTO;
 import ttps.spring.entrega5.repos.ComidaRepository;
 import ttps.spring.entrega5.repos.EstructuraRepository;
@@ -86,4 +89,18 @@ public class EstructuraService {
         return null;
     }
 
+    public List<EstructuraConComidasDTO> findAllByMenu(Long menuId) {
+        final List<Estructura> estructuras = estructuraRepository.findAllByMenu_Id(menuId);
+        return estructuras.stream()
+            .map(estructura -> mapToEstructuraConComidasDTO(estructura))
+            .collect(Collectors.toList());
+    }
+
+    private EstructuraConComidasDTO mapToEstructuraConComidasDTO(Estructura estructura) {
+        EstructuraConComidasDTO estructuraDTO = new EstructuraConComidasDTO();
+        estructuraDTO.setId(estructura.getId());
+        estructuraDTO.setNombre(estructura.getNombre());
+        // ... (set other relevant fields)
+        return estructuraDTO;
+    }
 }

@@ -9,7 +9,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.util.Streamable;
 
 
 @Entity
@@ -61,5 +67,10 @@ public class Estructura {
     public void setMenu(final Menu menu) {
         this.menu = menu;
     }
+	
+	public List<Comida> getComidas() {
+	    // Convertir el Set a una List y devolverla
+	    return new ArrayList<>(comida);
+	}
 
 }

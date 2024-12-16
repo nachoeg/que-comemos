@@ -2,6 +2,8 @@ package ttps.spring.entrega5.service;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ttps.spring.entrega5.domain.Comida;
@@ -81,6 +83,13 @@ public class ComidaService {
                 .orElseThrow(() -> new NotFoundException("estructura not found"));
         comida.setEstructura(estructura);
         return comida;
+    }
+    
+    public List<ComidaDTO> findAllByEstructura(Long estructuraId) {
+        final List<Comida> comidas = comidaRepository.findAllByEstructura_Id(estructuraId);
+        return comidas.stream()
+                .map(comida -> mapToDTO(comida, new ComidaDTO()))
+                .collect(Collectors.toList());
     }
 
 }

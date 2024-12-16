@@ -3,6 +3,8 @@ package ttps.spring.entrega5.rest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +42,9 @@ public class AutenticacionResource {
         if (user != null) {
             // Generate a simple token (replace with a more secure token generation strategy)
             String token = user.getId() + "123456";
-            return ResponseEntity.ok(token);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("token", token);
+            return ResponseEntity.ok().header("token", token).build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import ttps.spring.entrega5.model.MenuConEstructurasDTO;
 import ttps.spring.entrega5.model.MenuDTO;
 import ttps.spring.entrega5.service.MenuService;
 import ttps.spring.entrega5.util.ReferencedException;
@@ -30,9 +32,14 @@ public class MenuResource {
         this.menuService = menuService;
     }
 
+	/*
+	 * @GetMapping public ResponseEntity<List<MenuDTO>> getAllMenus() { return
+	 * ResponseEntity.ok(menuService.findAll()); }
+	 */
     @GetMapping
-    public ResponseEntity<List<MenuDTO>> getAllMenus() {
-        return ResponseEntity.ok(menuService.findAll());
+    public ResponseEntity<List<MenuConEstructurasDTO>> getAllMenus() {
+        List<MenuConEstructurasDTO> menusDTO = menuService.findAllWithEstructurasYComidas();
+        return ResponseEntity.ok(menusDTO);
     }
 
     @GetMapping("/{id}")
@@ -64,5 +71,7 @@ public class MenuResource {
         menuService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    
+    
 
 }

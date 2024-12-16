@@ -11,13 +11,13 @@ public class AutenticacionService {
     private UsuarioService usuarioService;
 
 	 public Usuario authenticate(String email, String password) {
-	        // 1. Retrieve user by username (assuming email is used for login)
+	        
 	        Usuario user = usuarioService.findByEmail(email);
 	        if (user == null) {
 	            return null; // User not found
 	        }
 
-	        // 2. Compare passwords (assuming passwords are stored in plain text - NOT RECOMMENDED)
+	        //Comparar contraseñas
 	        if (!user.getClave().equals(password)) {
 	            return null; // Invalid password
 	        }
