@@ -1,0 +1,29 @@
+<mat-drawer-container class="example-container">
+    <mat-drawer mode="side" [opened]="displaySidebar" class="sidebar">
+      <mat-list role="list">
+        <mat-list-item role="listitem" (click)="navigateToHome()">
+          <div class="list-item">
+            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon>
+            <span>Home</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item role="listitem" (click)="navigateToMenu()">
+          <div class="list-item">
+            <mat-icon>fastfood</mat-icon>
+            <span>Menu</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+          <div class="list-item">
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
+          </div>
+        </mat-list-item>
+      </mat-list>      
+    </mat-drawer>
+
+    <mat-drawer-content>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+  

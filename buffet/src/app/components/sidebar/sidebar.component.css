@@ -1,0 +1,31 @@
+.example-container {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #555;
+    background: #eee;
+  }
+  
+.sidebar {
+    border-right: 1px solid #555;
+    border-radius: 0;
+    width: 250px;
+}
+
+.sidebar mat-list{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.list-item {
+    vertical-align: middle;
+    display: flex;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+mat-list-item:hover {
+    background-color: cadetblue;
+}
