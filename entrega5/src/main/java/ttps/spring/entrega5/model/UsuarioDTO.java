@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 public class UsuarioDTO {
     private Integer id;
 
-    @UsuarioDniUnique
+    @NotNull
     private Integer dni;
 
     @Size(max = 255)

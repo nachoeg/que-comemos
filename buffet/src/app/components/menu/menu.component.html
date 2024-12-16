@@ -1,1 +1,14 @@
-<p>menu works!</p>
+<div *ngFor="let menu of menus">
+    <h2>{{ menu.nombre }}</h2>
+    <p>Precio: {{ menu.precio }}</p>
+    <ul>
+      <li *ngFor="let estructura of menu.estructuras">
+        <h4>{{ estructura.nombre }}</h4>
+        <ul>
+          <li *ngFor="let comida of estructura.comidas">
+            {{ comida.nombre }} - {{ comida.foto }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>

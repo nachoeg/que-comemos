@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,9 @@ import ttps.spring.entrega5.util.ReferencedWarning;
 
 @RestController
 @RequestMapping(value = "/api/menus", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:4200")
 public class MenuResource {
+	
 
     private final MenuService menuService;
 
@@ -36,6 +39,7 @@ public class MenuResource {
 	 * @GetMapping public ResponseEntity<List<MenuDTO>> getAllMenus() { return
 	 * ResponseEntity.ok(menuService.findAll()); }
 	 */
+    
     @GetMapping
     public ResponseEntity<List<MenuConEstructurasDTO>> getAllMenus() {
         List<MenuConEstructurasDTO> menusDTO = menuService.findAllWithEstructurasYComidas();
