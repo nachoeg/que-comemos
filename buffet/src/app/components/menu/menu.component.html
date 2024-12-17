@@ -1,14 +1,39 @@
-<div *ngFor="let menu of menus">
-    <h2>{{ menu.nombre }}</h2>
-    <p>Precio: {{ menu.precio }}</p>
-    <ul>
-      <li *ngFor="let estructura of menu.estructuras">
-        <h4>{{ estructura.nombre }}</h4>
+
+<div class="cards-container">
+  <div *ngFor="let menu of menus; let i = index">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title><h2>{{ menu.nombre }}</h2></mat-card-title>
+        <img [src]="images[getRandomImageIndex()]" alt="Menu Image">
+        <mat-card-subtitle>Precio: {{ menu.precio }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content *ngIf="isDetailVisible[i]">
         <ul>
-          <li *ngFor="let comida of estructura.comidas">
-            {{ comida.nombre }} - {{ comida.foto }}
+          <li *ngFor="let estructura of menu.estructuras">
+            <h4>{{ estructura.nombre }}</h4>
+            <ul>
+              <li *ngFor="let comida of estructura.comidas">
+                {{ comida.nombre }}
+              </li>
+            </ul>
           </li>
         </ul>
-      </li>
-    </ul>
+        <br>
+      </mat-card-content>
+      <div class="container">
+        <button  (click)="isDetailVisible[i] = !isDetailVisible[i]">
+          {{ isDetailVisible[i] ? 'Ocultar detalle' : 'Ver detalle' }}
+        </button>
+          <button >
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button >
+            <mat-icon>edit</mat-icon>
+          </button>
+        
+
+      </div>
+      
+    </mat-card>
   </div>
+</div>
