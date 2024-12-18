@@ -72,6 +72,7 @@ public class MenuService {
 
 	public void delete(final Long id) {
 		final Menu menu = menuRepository.findById(id).orElseThrow(NotFoundException::new);
+		menu.getEstructuras().size();
 		// remove many-to-many relations at owning side
 		pedidoRepository.findAllByMenus(menu).forEach(pedido -> pedido.getMenus().remove(menu));
 		menuRepository.delete(menu);
@@ -112,10 +113,10 @@ public class MenuService {
 	            menuDTO.setPrecio(menu.getPrecio());
 
 	           
-				// Utilize EstructuraService to retrieve structures
+				// Genera lista de esctructuras de un menu
 	            List<EstructuraConComidasDTO> estructurasDTO = estructuraService.findAllByMenu(menu.getId());
 
-	            // Populate EstructuraConComidasDTO with meals (Optional)
+	            // por cada estructura, genera la lista de comidas asociada
 	            if (!estructurasDTO.isEmpty()) {
 	                for (EstructuraConComidasDTO estructuraDTO : estructurasDTO) {
 	                    List<ComidaDTO> comidasDTO = comidaService.findAllByEstructura(estructuraDTO.getId());

@@ -1,10 +1,14 @@
-
+<div>
+  <button mat-flat-button (click)="navigateToNewMenu()">Nuevo Menu<i class="material-icons">add_circle</i></button>
+</div>
 <div class="cards-container">
   <div *ngFor="let menu of menus; let i = index">
     <mat-card>
       <mat-card-header>
-        <mat-card-title><h2>{{ menu.nombre }}</h2></mat-card-title>
-        <img [src]="images[getRandomImageIndex()]" alt="Menu Image">
+        <mat-card-title>
+          <h2>{{ menu.nombre }}</h2>
+        </mat-card-title>
+        <img [src]="getImageUrl(i)" alt="Imagen del elemento {{ i + 1 }}">
         <mat-card-subtitle>Precio: {{ menu.precio }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content *ngIf="isDetailVisible[i]">
@@ -21,19 +25,16 @@
         <br>
       </mat-card-content>
       <div class="container">
-        <button  (click)="isDetailVisible[i] = !isDetailVisible[i]">
+        <button class="btn btn-celeste btn-sm" (click)="isDetailVisible[i] = !isDetailVisible[i]">
           {{ isDetailVisible[i] ? 'Ocultar detalle' : 'Ver detalle' }}
         </button>
-          <button >
-            <mat-icon>delete</mat-icon>
-          </button>
-          <button >
-            <mat-icon>edit</mat-icon>
-          </button>
-        
-
+        <button class="btn btn-rosa-suave btn-sm" color="accent" (click)="deleteMenu(menu.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button class="btn btn-verde-menta btn-sm">
+          <mat-icon>edit</mat-icon>
+        </button>
       </div>
-      
     </mat-card>
   </div>
 </div>

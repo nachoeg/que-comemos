@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Nuevo Menú </h2>
+
+  <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" class="form-control" formControlName="nombre">
+      <div *ngIf="menuForm.get('nombre')?.invalid && (menuForm.get('nombre')?.dirty || menuForm.get('nombre')?.touched)">
+        <div *ngIf="menuForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</div>
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <label for="precio">Precio:</label>
+      <input type="number" id="precio" class="form-control" formControlName="precio">
+      <div *ngIf="menuForm.get('precio')?.invalid && (menuForm.get('precio')?.dirty || menuForm.get('precio')?.touched)">
+        <div *ngIf="menuForm.get('precio')?.errors?.['required']">El precio es obligatorio.</div>
+        <div *ngIf="menuForm.get('precio')?.errors?.['min']">El precio debe ser mayor o igual a 0.</div>
+      </div>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Crear Menú</button>
+  
+    <div *ngIf="createSuccessMessage" class="alert alert-success mt-3">
+      {{ createSuccessMessage }}
+    </div>
+  
+    <div *ngIf="createErrorMessage" class="alert alert-danger mt-3">
+      {{ createErrorMessage }}
+    </div>
+  </form>
+</div>

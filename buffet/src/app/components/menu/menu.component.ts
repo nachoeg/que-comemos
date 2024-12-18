@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, RouterModule],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css',
   providers: [MenuesServicio],
@@ -17,9 +18,6 @@ import {MatIconModule} from '@angular/material/icon';
 })
 export class MenuComponent implements OnInit {
   isDetailVisible: boolean[] = [];
-
-
-
 
   images = [
     "/buffet-1.jpg",
@@ -29,20 +27,42 @@ export class MenuComponent implements OnInit {
     "/buffet-5.jpg"
   ]
 
-  getRandomImageIndex() {
-    return Math.floor(Math.random() * this.images.length);
+  imageIndex = 0;
+
+  getImageUrl(index: number): string {
+    return this.images[index % this.images.length];
   }
 
 
   menus: Menu[] = [];
-  constructor(private menuService: MenuesServicio) { }
+  constructor(private menuServicio: MenuesServicio, private router: Router) { }
 
   ngOnInit() {
-    this.menuService.getMenus().subscribe(menus => {
+    this.menuServicio.getMenus().subscribe(menus => {
       this.menus = menus;
       this.isDetailVisible = new Array(menus.length).fill(false);
     });
 
   }
+  
+  navigateToNewMenu() {
+    this.router.navigate(['/new-menu']);
+  }
+
+  deleteMenu(menuId: number) {
+    this.menuServicio.deleteMenu(menuId).subscribe(
+      () => {
+        // Handle successful deletion
+        this.menus = this.menus.filter(menu => menu.id !== menuId);
+        console.log('Menú eliminado correctamente');
+      },
+      (error) => {
+        // Handle errors
+        console.error('Error al eliminar el menú:', error);
+        // Display an error message to the user
+      }
+    );
+  }
+
 
 }

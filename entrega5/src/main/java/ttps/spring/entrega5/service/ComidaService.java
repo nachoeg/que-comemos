@@ -91,5 +91,9 @@ public class ComidaService {
                 .map(comida -> mapToDTO(comida, new ComidaDTO()))
                 .collect(Collectors.toList());
     }
+    
+    public void eliminarComidasPorEstructura(Long estructuraId) {
+        comidaRepository.deleteByEstructuraId(estructuraId);
+    }
 
 }

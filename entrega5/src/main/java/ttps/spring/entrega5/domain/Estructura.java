@@ -1,5 +1,6 @@
 package ttps.spring.entrega5.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,13 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import ttps.spring.entrega5.repos.EstructuraRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.data.util.Streamable;
+import org.hibernate.annotations.Cascade;
 
 
 @Entity
@@ -29,10 +30,11 @@ public class Estructura {
     @Column(nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "estructura")
+    @OneToMany(mappedBy = "estructura", cascade=CascadeType.ALL, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Set<Comida> comida;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 

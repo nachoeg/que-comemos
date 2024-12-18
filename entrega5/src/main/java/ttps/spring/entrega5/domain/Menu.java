@@ -1,5 +1,6 @@
 package ttps.spring.entrega5.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.Set;
+
+import org.hibernate.annotations.Cascade;
 
 
 @Entity
@@ -23,7 +26,8 @@ public class Menu {
     @Column(nullable = false)
     private Double precio;
 
-    @OneToMany(mappedBy = "menu")
+    @OneToMany(mappedBy = "menu", cascade=CascadeType.ALL, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Set<Estructura> estructuras;
 
     public Long getId() {
