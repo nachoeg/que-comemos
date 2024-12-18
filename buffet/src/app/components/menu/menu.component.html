@@ -28,10 +28,10 @@
         <button class="btn btn-celeste btn-sm" (click)="isDetailVisible[i] = !isDetailVisible[i]">
           {{ isDetailVisible[i] ? 'Ocultar detalle' : 'Ver detalle' }}
         </button>
-        <button class="btn btn-rosa-suave btn-sm" color="accent" (click)="deleteMenu(menu.id)">
+        <button class="btn btn-rosa-suave btn-sm" (click)="deleteMenu(menu.id)">
           <mat-icon>delete</mat-icon>
         </button>
-        <button class="btn btn-verde-menta btn-sm">
+        <button class="btn btn-verde-menta btn-sm" [routerLink]="['/menu', menu.id, 'edit']">
           <mat-icon>edit</mat-icon>
         </button>
       </div>

@@ -64,5 +64,9 @@ export class MenuComponent implements OnInit {
     );
   }
 
+  editMenu(menuId: number) {
+    this.router.navigate(['/menu', menuId, 'edit']); //recibe el Id del menu
+  }
+
 
 }

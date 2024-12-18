@@ -3,6 +3,8 @@ package ttps.spring.entrega5.rest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +49,7 @@ public class MenuResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MenuDTO> getMenu(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<Optional<MenuConEstructurasDTO>> getMenu(@PathVariable(name = "id") final Long id) {
         return ResponseEntity.ok(menuService.get(id));
     }
 

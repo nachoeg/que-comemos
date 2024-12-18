@@ -2,6 +2,7 @@ package ttps.spring.entrega5.service;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +52,21 @@ public class MenuService {
 	  }
 	 
 
-	
+	  public Optional<MenuConEstructurasDTO> get(final Long id) {
+		    return menuRepository.findById(id)
+		        .map(menu -> {
+		            MenuConEstructurasDTO menuDTO = new MenuConEstructurasDTO();
+		            menuDTO.setId(menu.getId());
+		            menuDTO.setNombre(menu.getNombre());
+		            menuDTO.setPrecio(menu.getPrecio());
 
-	public MenuDTO get(final Long id) {
-		return menuRepository.findById(id).map(menu -> mapToDTO(menu, new MenuDTO()))
-				.orElseThrow(NotFoundException::new);
-	}
+		            List<EstructuraConComidasDTO> estructurasDTO = estructuraService.findAllByMenu(menu.getId());
+		            estructurasDTO.forEach(estructuraDTO -> estructuraDTO.setComidas(comidaService.findAllByEstructura(estructuraDTO.getId())));
+
+		            menuDTO.setEstructuras(estructurasDTO);
+		            return menuDTO;
+		        });
+		}
 
 	public Long create(final MenuDTO menuDTO) {
 		final Menu menu = new Menu();

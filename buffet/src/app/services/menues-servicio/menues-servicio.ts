@@ -24,4 +24,9 @@ export class MenuesServicio {
     return this.http.delete(url);
   }
 
+  getMenuById(menuId: number): Observable<Menu> {
+    const url = `${this.baseUrl}/${menuId}`; //url+id del menu a buscar
+    return this.http.get<Menu>(url);
+  }
+
 }
