@@ -20,7 +20,7 @@ export class MenuesServicio {
   }
 
   deleteMenu(menuId: number): Observable<any> {
-    const url = `${this.baseUrl}/${menuId}`; // Construct the delete URL with id
+    const url = `${this.baseUrl}/${menuId}`; //url+id del menu a eliminar
     return this.http.delete(url);
   }
 

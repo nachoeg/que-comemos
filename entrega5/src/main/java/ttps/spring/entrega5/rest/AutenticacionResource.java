@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ttps.spring.entrega5.domain.Usuario;
+import ttps.spring.entrega5.model.AutenticacionDTO;
 import ttps.spring.entrega5.service.AutenticacionService;
 import ttps.spring.entrega5.service.UsuarioService;
 import ttps.spring.entrega5.util.ReferencedException;
@@ -35,12 +36,25 @@ public class AutenticacionResource {
         this.autenticacionService = autenticacionService;
     }
 
+	/*
+	 * @PostMapping("/login") public ResponseEntity<String>
+	 * authenticate(@RequestParam String mail, @RequestParam String clave) { Usuario
+	 * user = autenticacionService.authenticate(mail, clave);
+	 * 
+	 * if (user != null) { // Generate a simple token (replace with a more secure
+	 * token generation strategy) String token = user.getId() + "123456";
+	 * HttpHeaders headers = new HttpHeaders(); headers.add("token", token); return
+	 * ResponseEntity.ok().header("token", token).build(); } else { return
+	 * ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials"); }
+	 * }
+	 */
+    
     @PostMapping("/login")
-    public ResponseEntity<String> authenticate(@RequestParam String mail, @RequestParam String clave) {
-        Usuario user = autenticacionService.authenticate(mail, clave);
+    public ResponseEntity<String> authenticate(@RequestBody AutenticacionDTO request) {
+        Usuario user = autenticacionService.authenticate(request.getMail(), request.getClave());
 
         if (user != null) {
-            // Generate a simple token (replace with a more secure token generation strategy)
+            //genera un tocken con id+123456
             String token = user.getId() + "123456";
             HttpHeaders headers = new HttpHeaders();
             headers.add("token", token);

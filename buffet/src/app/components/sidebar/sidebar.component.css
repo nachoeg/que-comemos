@@ -29,3 +29,7 @@
 mat-list-item:hover {
     background-color: cadetblue;
 }
+
+mat-drawer-content {
+    background-color: #f5f5dc; /* A light blue color */
+  }
