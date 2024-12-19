@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.hibernate.annotations.Cascade;
 
-
 @Entity
 public class Menu {
 
@@ -26,7 +25,7 @@ public class Menu {
     @Column(nullable = false)
     private Double precio;
 
-    @OneToMany(mappedBy = "menu", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Set<Estructura> estructuras;
 
@@ -51,6 +50,9 @@ public class Menu {
     }
 
     public void setPrecio(final Double precio) {
+        if (precio < 0) {
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        }
         this.precio = precio;
     }
 
