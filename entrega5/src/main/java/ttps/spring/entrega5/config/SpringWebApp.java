@@ -42,6 +42,8 @@ import org.springframework.context.annotation.Configuration;
 
 import jakarta.persistence.EntityManagerFactory;
 
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 @Configuration
 @ComponentScan(basePackages = "ttps.spring")

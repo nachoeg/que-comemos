@@ -3,16 +3,16 @@ package ttps.spring.entrega5.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ttps.spring.entrega5.domain.Usuario;
+import ttps.spring.entrega5.model.UsuarioDTO;
 
 @Service
 public class AutenticacionService {
 	@Autowired
     private UsuarioService usuarioService;
 
-	 public Usuario authenticate(String email, String password) {
+	 public UsuarioDTO authenticate(String email, String password) {
 	        
-	        Usuario user = usuarioService.findByEmail(email);
+	        UsuarioDTO user = usuarioService.findByEmail(email);
 	        if (user == null) {
 	            return null; // User not found
 	        }

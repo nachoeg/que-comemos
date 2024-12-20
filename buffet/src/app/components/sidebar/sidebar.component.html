@@ -23,7 +23,17 @@
     </mat-drawer>
 
     <mat-drawer-content>
+      <div *ngIf="showInitialMessage" >
+        <mat-card class="card" appearance="outlined" >
+          <mat-card-title>Sistema de Gestión del Buffet</mat-card-title>
+          <mat-card-content>
+              <p>Este es un sistema diseñado para gestionar tu buffet de manera eficiente.</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
       <router-outlet></router-outlet>
     </mat-drawer-content>
   </mat-drawer-container>
+
+ 
   

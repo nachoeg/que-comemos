@@ -116,8 +116,12 @@ public class UsuarioService {
         return null;
     }
 
-	public Usuario findByEmail(String email) {
-		return usuarioRepository.findByEmail(email);
+	public UsuarioDTO findByEmail(String email) {
+		
+		Usuario user = usuarioRepository.findByEmail(email);
+		UsuarioDTO userDTO = new UsuarioDTO();
+				this.mapToDTO(user, userDTO);
+		return userDTO;
 	}
 
 	

@@ -7,7 +7,7 @@ import { NewMenu } from '../../models/new-menu/new-menu';
     providedIn: 'root'
   })
 export class MenuesServicio {
-    private baseUrl = 'http://localhost:8080/api/menus'; // Reemplaza con la URL de tu backend
+    private baseUrl = 'http://localhost:8080/api/menus'; // API menu
 
   constructor(private http: HttpClient) { }
 
