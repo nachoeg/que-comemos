@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  providers: [LoginServicio]
+  // providers: [LoginServicio]
 })
 export class LoginComponent {
   email = '';  
@@ -22,10 +22,7 @@ export class LoginComponent {
       clave: this.password
     };
     this.loginServicio.login(user).subscribe({
-      next: (response) => {
-        // const token = response.headers.get('token');
-        // if (token) {
-        //   localStorage.setItem('token', token);
+      next: (response) => {       
           console.log('Login successful!');
           this.router.navigate(['/home']);
           // Redirect to a protected route or main application area
@@ -37,7 +34,7 @@ export class LoginComponent {
         console.error('Login failed:', error);
       }
     });
-     
   }
+  
 
 }

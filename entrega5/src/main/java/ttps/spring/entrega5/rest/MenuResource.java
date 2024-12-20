@@ -27,7 +27,7 @@ import ttps.spring.entrega5.util.ReferencedWarning;
 
 @RestController
 @RequestMapping(value = "/api/menus", produces = MediaType.APPLICATION_JSON_VALUE)
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class MenuResource {
 	
 
