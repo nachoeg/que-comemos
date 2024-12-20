@@ -7,8 +7,17 @@
     <button mat-icon-button class="example-icon favorite-icon" aria-label="Registrarse" (click)="navigateToRegister()">
       <mat-icon>person_add</mat-icon>
     </button>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Iniciar sesion" (click)="navigateToLogin()">
-      <mat-icon>login</mat-icon>
-    </button>
+    <span id="login-button-description" hidden>Iniciar sesión</span>
+<span id="logout-button-description" hidden>Cerrar sesión</span>
+
+<button *ngIf="!isLoggedIn" mat-icon-button class="example-icon favorite-icon" aria-label="Iniciar sesión" 
+        aria-describedby="login-button-description" (click)="navigateToLogin()">
+  <mat-icon>login</mat-icon>
+</button>
+
+<button *ngIf="isLoggedIn" mat-icon-button class="example-icon favorite-icon" aria-label="Cerrar sesión" 
+        aria-describedby="logout-button-description" (click)="logout()">
+  <mat-icon>logout</mat-icon>
+</button>
   </mat-toolbar>
   

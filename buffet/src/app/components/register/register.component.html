@@ -1,1 +1,22 @@
-<p>register works!</p>
+<div class="register">
+    <form class="custom-form" method="post" (ngSubmit)="register()">
+        <h1>Registro</h1>
+        <label>Email</label>
+        <input type="email" [(ngModel)]="usuario.email" name="email" placeholder="Email" required="required" />
+        
+        <label>Password</label>
+        <input type="password" [(ngModel)]="usuario.clave" name="password" placeholder="Password" required="required" />
+        <label>Ingrese nuevamente password</label>
+        <input type="password" [(ngModel)]="claveConfirmar" name="confirmPassword" placeholder="Ingrese nuevamente la password"
+            required="required" />
+        
+        <label>DNI</label>
+        <input type="number" [(ngModel)]="usuario.dni" name="dni" placeholder="DNI" required="required" />
+
+        <label>Nombre</label>
+        <input type="text" [(ngModel)]="usuario.nombre" name="nombre" placeholder="Nombre" required="required" />
+        <label>Apellido</label>
+        <input type="text" [(ngModel)]="usuario.apellido" name="apellido" placeholder="Apellido" required="required" />
+        <button type="submit">Registrarse</button>
+    </form>
+</div>

@@ -37,10 +37,6 @@ public class MenuResource {
         this.menuService = menuService;
     }
 
-	/*
-	 * @GetMapping public ResponseEntity<List<MenuDTO>> getAllMenus() { return
-	 * ResponseEntity.ok(menuService.findAll()); }
-	 */
     
     @GetMapping
     public ResponseEntity<List<MenuConEstructurasDTO>> getAllMenus() {
