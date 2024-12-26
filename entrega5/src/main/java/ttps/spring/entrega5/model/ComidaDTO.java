@@ -1,8 +1,8 @@
 package ttps.spring.entrega5.model;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
-
 
 public class ComidaDTO {
 
@@ -13,11 +13,11 @@ public class ComidaDTO {
     private String nombre;
 
     @NotNull
+    @PositiveOrZero
     private Double precio;
 
     @Size(max = 255)
     private String foto;
-
 
     public Long getId() {
         return id;
@@ -50,6 +50,5 @@ public class ComidaDTO {
     public void setFoto(final String foto) {
         this.foto = foto;
     }
-
 
 }
