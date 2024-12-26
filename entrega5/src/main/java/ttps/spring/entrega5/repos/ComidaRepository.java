@@ -13,11 +13,6 @@ import ttps.spring.entrega5.domain.Estructura;
 
 public interface ComidaRepository extends JpaRepository<Comida, Long> {
 
-    Comida findFirstByEstructura(Estructura estructura);
     
-    List<Comida> findAllByEstructura_Id(Long estructuraId); 
     
-    @Modifying
-    @Query("DELETE FROM Comida c WHERE c.estructura.id = :estructuraId")
-    void deleteByEstructuraId(@Param("estructuraId") Long estructuraId);
 }

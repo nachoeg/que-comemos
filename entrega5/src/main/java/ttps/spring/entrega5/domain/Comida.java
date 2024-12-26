@@ -31,10 +31,6 @@ public class Comida {
     @Column
     private String foto;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "estructura_id")
-    private Estructura estructura;
-
     public Long getId() {
         return id;
     }
@@ -65,14 +61,6 @@ public class Comida {
 
     public void setFoto(final String foto) {
         this.foto = foto;
-    }
-
-    public Estructura getEstructura() {
-        return estructura;
-    }
-
-    public void setEstructura(final Estructura estructura) {
-        this.estructura = estructura;
     }
 
 }

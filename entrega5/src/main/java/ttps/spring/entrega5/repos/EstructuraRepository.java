@@ -13,8 +13,5 @@ import ttps.spring.entrega5.domain.Menu;
 
 public interface EstructuraRepository extends JpaRepository<Estructura, Long> {
 
-    Estructura findFirstByMenu(Menu menu);
-    
-    List<Estructura> findAllByMenu_Id(Long menuId);
 
 }

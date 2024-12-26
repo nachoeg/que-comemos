@@ -20,14 +20,12 @@ import ttps.spring.entrega5.util.NotFoundException;
 public class ComidaService {
 
     private final ComidaRepository comidaRepository;
-    private final EstructuraRepository estructuraRepository;
     private final PedidoRepository pedidoRepository;
 
     public ComidaService(final ComidaRepository comidaRepository,
-            final EstructuraRepository estructuraRepository,
             final PedidoRepository pedidoRepository) {
         this.comidaRepository = comidaRepository;
-        this.estructuraRepository = estructuraRepository;
+        
         this.pedidoRepository = pedidoRepository;
     }
 
@@ -71,29 +69,15 @@ public class ComidaService {
         comidaDTO.setNombre(comida.getNombre());
         comidaDTO.setPrecio(comida.getPrecio());
         comidaDTO.setFoto(comida.getFoto());
-        comidaDTO.setEstructura(comida.getEstructura() == null ? null : comida.getEstructura().getId());
         return comidaDTO;
     }
 
-    private Comida mapToEntity(final ComidaDTO comidaDTO, final Comida comida) {
+    Comida mapToEntity(final ComidaDTO comidaDTO, final Comida comida) {
         comida.setNombre(comidaDTO.getNombre());
         comida.setPrecio(comidaDTO.getPrecio());
         comida.setFoto(comidaDTO.getFoto());
-        final Estructura estructura = comidaDTO.getEstructura() == null ? null : estructuraRepository.findById(comidaDTO.getEstructura())
-                .orElseThrow(() -> new NotFoundException("estructura not found"));
-        comida.setEstructura(estructura);
         return comida;
     }
     
-    public List<ComidaDTO> findAllByEstructura(Long estructuraId) {
-        final List<Comida> comidas = comidaRepository.findAllByEstructura_Id(estructuraId);
-        return comidas.stream()
-                .map(comida -> mapToDTO(comida, new ComidaDTO()))
-                .collect(Collectors.toList());
-    }
-    
-    public void eliminarComidasPorEstructura(Long estructuraId) {
-        comidaRepository.deleteByEstructuraId(estructuraId);
-    }
 
 }

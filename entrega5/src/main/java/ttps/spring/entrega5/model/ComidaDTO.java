@@ -18,7 +18,6 @@ public class ComidaDTO {
     @Size(max = 255)
     private String foto;
 
-    private Long estructura;
 
     public Long getId() {
         return id;
@@ -52,12 +51,5 @@ public class ComidaDTO {
         this.foto = foto;
     }
 
-    public Long getEstructura() {
-        return estructura;
-    }
-
-    public void setEstructura(final Long estructura) {
-        this.estructura = estructura;
-    }
 
 }

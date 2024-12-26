@@ -1,7 +1,10 @@
 package ttps.spring.entrega5.model;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import ttps.spring.entrega5.model.ComidaDTO;
 
 
 public class EstructuraDTO {
@@ -11,11 +14,18 @@ public class EstructuraDTO {
     @NotNull
     @Size(max = 255)
     private String nombre;
+    
+    private List<ComidaDTO> comida;
 
-    @NotNull
-    private Long menu;
+    public List<ComidaDTO> getComida() {
+		return comida;
+	}
 
-    public Long getId() {
+	public void setComida(List<ComidaDTO> comida) {
+		this.comida = comida;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -30,13 +40,9 @@ public class EstructuraDTO {
     public void setNombre(final String nombre) {
         this.nombre = nombre;
     }
+    
+    
 
-    public Long getMenu() {
-        return menu;
-    }
 
-    public void setMenu(final Long menu) {
-        this.menu = menu;
-    }
 
 }

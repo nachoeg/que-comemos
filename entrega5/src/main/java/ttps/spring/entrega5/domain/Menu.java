@@ -7,9 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import java.util.Set;
 
-import org.hibernate.annotations.Cascade;
+import java.util.List;
 
 @Entity
 public class Menu {
@@ -25,9 +24,9 @@ public class Menu {
     @Column(nullable = false)
     private Double precio;
 
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-    private Set<Estructura> estructuras;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<Estructura> estructuras;
 
     public Long getId() {
         return id;
@@ -56,12 +55,16 @@ public class Menu {
         this.precio = precio;
     }
 
-    public Set<Estructura> getEstructuras() {
-        return estructuras;
-    }
+	public List<Estructura> getEstructuras() {
+		return estructuras;
+	}
 
-    public void setEstructuras(final Set<Estructura> estructuras) {
-        this.estructuras = estructuras;
-    }
+	public void setEstructuras(List<Estructura> estructuras) {
+		this.estructuras = estructuras;
+	}
+
+    
+   
+
 
 }

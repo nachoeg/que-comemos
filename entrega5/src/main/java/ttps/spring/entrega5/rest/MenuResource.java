@@ -39,13 +39,13 @@ public class MenuResource {
 
     
     @GetMapping
-    public ResponseEntity<List<MenuConEstructurasDTO>> getAllMenus() {
-        List<MenuConEstructurasDTO> menusDTO = menuService.findAllWithEstructurasYComidas();
+    public ResponseEntity<List<MenuDTO>> getAllMenus() {
+        List<MenuDTO> menusDTO = menuService.findAll();
         return ResponseEntity.ok(menusDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<MenuConEstructurasDTO>> getMenu(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<Optional<MenuDTO>> getMenu(@PathVariable(name = "id") final Long id) {
         return ResponseEntity.ok(menuService.get(id));
     }
 

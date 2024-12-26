@@ -1,6 +1,8 @@
 package ttps.spring.entrega5.service;
 
 import jakarta.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,10 +10,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import ttps.spring.entrega5.domain.Comida;
 import ttps.spring.entrega5.domain.Estructura;
 import ttps.spring.entrega5.domain.Menu;
 import ttps.spring.entrega5.model.ComidaDTO;
 import ttps.spring.entrega5.model.EstructuraConComidasDTO;
+import ttps.spring.entrega5.model.EstructuraDTO;
 import ttps.spring.entrega5.model.MenuConEstructurasDTO;
 import ttps.spring.entrega5.model.MenuDTO;
 import ttps.spring.entrega5.repos.EstructuraRepository;
@@ -52,18 +57,37 @@ public class MenuService {
 	  }
 	 
 
-	  public Optional<MenuConEstructurasDTO> get(final Long id) {
+	  public Optional<MenuDTO> get(final Long id) {
 		    return menuRepository.findById(id)
 		        .map(menu -> {
-		            MenuConEstructurasDTO menuDTO = new MenuConEstructurasDTO();
+		            MenuDTO menuDTO = new MenuDTO();
 		            menuDTO.setId(menu.getId());
 		            menuDTO.setNombre(menu.getNombre());
 		            menuDTO.setPrecio(menu.getPrecio());
 
-		            List<EstructuraConComidasDTO> estructurasDTO = estructuraService.findAllByMenu(menu.getId());
-		            estructurasDTO.forEach(estructuraDTO -> estructuraDTO.setComidas(comidaService.findAllByEstructura(estructuraDTO.getId())));
+		         // Create a new list to avoid modification of the original entity's structures
+		            List<EstructuraDTO> estructurasDto = new ArrayList<>();
+		            for (Estructura estructura : menu.getEstructuras()) {
+		                EstructuraDTO estructuraDTO = new EstructuraDTO();
+		                estructuraDTO.setId(estructura.getId());
+		                estructuraDTO.setNombre(estructura.getNombre());
+		             // Map Comidas
+		    	        if (estructura.getComida() != null) {
+		    	            List<ComidaDTO> comidasDto = new ArrayList<>();
+		    	            for (Comida comida : estructura.getComida()) {
+		    	                ComidaDTO comidaDTO = new ComidaDTO();
+		    	                comidaDTO.setId(comida.getId());
+		    	                comidaDTO.setNombre(comida.getNombre());
+		    	                comidaDTO.setPrecio(comida.getPrecio());
+		    	                // Map other attributes of Comida to ComidaDTO if needed
+		    	                comidasDto.add(comidaDTO);
+		    	            }
+		    	            estructuraDTO.setComida(comidasDto);
+		    	        }
 
-		            menuDTO.setEstructuras(estructurasDTO);
+		                estructurasDto.add(estructuraDTO);
+		            }
+		            menuDTO.setEstructuras(estructurasDto);
 		            return menuDTO;
 		        });
 		}
@@ -92,52 +116,95 @@ public class MenuService {
 		menuDTO.setId(menu.getId());
 		menuDTO.setNombre(menu.getNombre());
 		menuDTO.setPrecio(menu.getPrecio());
+		// Create a new list to avoid modification of the original entity's structures
+	    List<EstructuraDTO> estructurasDto = new ArrayList<>();
+	    for (Estructura estructura : menu.getEstructuras()) {
+	        EstructuraDTO estructuraDTO = new EstructuraDTO();
+	        estructuraDTO.setId(estructura.getId());
+	        estructuraDTO.setNombre(estructura.getNombre());
+	     // Map Comidas
+	        if (estructura.getComida() != null) {
+	            List<ComidaDTO> comidasDto = new ArrayList<>();
+	            for (Comida comida : estructura.getComida()) {
+	                ComidaDTO comidaDTO = new ComidaDTO();
+	                comidaDTO.setId(comida.getId());
+	                comidaDTO.setNombre(comida.getNombre());
+	                comidaDTO.setPrecio(comida.getPrecio());
+	                // Map other attributes of Comida to ComidaDTO if needed
+	                comidasDto.add(comidaDTO);
+	            }
+	            estructuraDTO.setComida(comidasDto);
+	        }
+
+	        estructurasDto.add(estructuraDTO);
+	    }
+	    menuDTO.setEstructuras(estructurasDto);
+
 		return menuDTO;
 	}
 
 	private Menu mapToEntity(final MenuDTO menuDTO, final Menu menu) {
-		menu.setNombre(menuDTO.getNombre());
-		menu.setPrecio(menuDTO.getPrecio());
-		return menu;
+	    menu.setNombre(menuDTO.getNombre());
+	    menu.setPrecio(menuDTO.getPrecio());
+
+	    // Mapeo de Estructuras
+	    if (menuDTO.getEstructuras() != null) {
+	        List<Estructura> estructuras = new ArrayList<>();
+	        for (EstructuraDTO estructuraDTO : menuDTO.getEstructuras()) {
+	            Estructura estructura = new Estructura();
+	            estructuraService.mapToEntity(estructuraDTO, estructura);
+
+	            // Mapeo de Comidas
+	            if (estructuraDTO.getComida() != null) {
+	                List<Comida> comidas = new ArrayList<>();
+	                for (ComidaDTO comidaDTO : estructuraDTO.getComida()) {
+	                    Comida comida = new Comida();
+	                    comidaService.mapToEntity(comidaDTO, comida);
+	                    comidas.add(comida);
+	                }
+	                estructura.setComida(comidas);
+	            }
+
+	            estructuras.add(estructura);
+	        }
+	        menu.setEstructuras(estructuras);
+	    }
+
+	    return menu;
 	}
+
 
 	public ReferencedWarning getReferencedWarning(final Long id) {
 		final ReferencedWarning referencedWarning = new ReferencedWarning();
 		final Menu menu = menuRepository.findById(id).orElseThrow(NotFoundException::new);
-		final Estructura menuEstructura = estructuraRepository.findFirstByMenu(menu);
-		if (menuEstructura != null) {
-			referencedWarning.setKey("menu.estructura.menu.referenced");
-			referencedWarning.addParam(menuEstructura.getId());
-			return referencedWarning;
-		}
+		/*
+		 * final Estructura menuEstructura = estructuraRepository.findFirstByMenu(menu);
+		 * if (menuEstructura != null) {
+		 * referencedWarning.setKey("menu.estructura.menu.referenced");
+		 * referencedWarning.addParam(menuEstructura.getId()); return referencedWarning;
+		 * }
+		 */
 		return null;
 	}
-	public List<MenuConEstructurasDTO> findAllWithEstructurasYComidas() {
-	    final List<Menu> menus = menuRepository.findAll(Sort.by("id"));
-
-	    return menus.stream()
-	        .map(menu -> {
-	            MenuConEstructurasDTO menuDTO = new MenuConEstructurasDTO();
-	            menuDTO.setId(menu.getId());
-	            menuDTO.setNombre(menu.getNombre());
-	            menuDTO.setPrecio(menu.getPrecio());
-
-	           
-				// Genera lista de esctructuras de un menu
-	            List<EstructuraConComidasDTO> estructurasDTO = estructuraService.findAllByMenu(menu.getId());
-
-	            // por cada estructura, genera la lista de comidas asociada
-	            if (!estructurasDTO.isEmpty()) {
-	                for (EstructuraConComidasDTO estructuraDTO : estructurasDTO) {
-	                    List<ComidaDTO> comidasDTO = comidaService.findAllByEstructura(estructuraDTO.getId());
-	                    estructuraDTO.setComidas(comidasDTO);
-	                }
-	            }
-
-	            menuDTO.setEstructuras(estructurasDTO);
-	            return menuDTO;
-	        })
-	        .collect(Collectors.toList());
-	}
-
+	/*
+	 * public List<MenuConEstructurasDTO> findAllWithEstructurasYComidas() { final
+	 * List<Menu> menus = menuRepository.findAll(Sort.by("id"));
+	 * 
+	 * return menus.stream() .map(menu -> { MenuConEstructurasDTO menuDTO = new
+	 * MenuConEstructurasDTO(); menuDTO.setId(menu.getId());
+	 * menuDTO.setNombre(menu.getNombre()); menuDTO.setPrecio(menu.getPrecio());
+	 * 
+	 * 
+	 * // Genera lista de esctructuras de un menu List<EstructuraConComidasDTO>
+	 * estructurasDTO = estructuraService.findAllByMenu(menu.getId());
+	 * 
+	 * // por cada estructura, genera la lista de comidas asociada if
+	 * (!estructurasDTO.isEmpty()) { for (EstructuraConComidasDTO estructuraDTO :
+	 * estructurasDTO) { List<ComidaDTO> comidasDTO =
+	 * comidaService.findAllByEstructura(estructuraDTO.getId());
+	 * estructuraDTO.setComidas(comidasDTO); } }
+	 * 
+	 * menuDTO.setEstructuras(estructurasDTO); return menuDTO; })
+	 * .collect(Collectors.toList()); }
+	 */
 }

@@ -58,10 +58,11 @@ public class EstructuraResource {
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteEstructura(@PathVariable(name = "id") final Long id) {
-        final ReferencedWarning referencedWarning = estructuraService.getReferencedWarning(id);
-        if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
-        }
+		/*
+		 * final ReferencedWarning referencedWarning =
+		 * estructuraService.getReferencedWarning(id); if (referencedWarning != null) {
+		 * throw new ReferencedException(referencedWarning); }
+		 */
         estructuraService.delete(id);
         return ResponseEntity.noContent().build();
     }

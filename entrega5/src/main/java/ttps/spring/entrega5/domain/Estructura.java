@@ -30,13 +30,8 @@ public class Estructura {
     @Column(nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "estructura", cascade=CascadeType.ALL, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-    private Set<Comida> comida;
-
-    @ManyToOne()
-    @JoinColumn(name = "menu_id", nullable = false)
-    private Menu menu;
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<Comida> comida;
 
     public Long getId() {
         return id;
@@ -54,22 +49,15 @@ public class Estructura {
         this.nombre = nombre;
     }
 
-    public Set<Comida> getComida() {
-        return comida;
-    }
-
-    public void setComida(final Set<Comida> comida) {
-        this.comida = comida;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final Menu menu) {
-        this.menu = menu;
-    }
 	
+	public List<Comida> getComida() {
+		return comida;
+	}
+
+	public void setComida(List<Comida> comida) {
+		this.comida = comida;
+	}
+
 	public List<Comida> getComidas() {
 	    // Convertir el Set a una List y devolverla
 	    return new ArrayList<>(comida);

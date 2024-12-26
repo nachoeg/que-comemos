@@ -64,43 +64,32 @@ public class EstructuraService {
 	}
 
 	public void delete(final Long id) {
-		comidaRepository.deleteByEstructuraId(id);
 		estructuraRepository.deleteById(id);
 			}
 
 	private EstructuraDTO mapToDTO(final Estructura estructura, final EstructuraDTO estructuraDTO) {
 		estructuraDTO.setId(estructura.getId());
 		estructuraDTO.setNombre(estructura.getNombre());
-		estructuraDTO.setMenu(estructura.getMenu() == null ? null : estructura.getMenu().getId());
 		return estructuraDTO;
 	}
 
-	private Estructura mapToEntity(final EstructuraDTO estructuraDTO, final Estructura estructura) {
+	Estructura mapToEntity(final EstructuraDTO estructuraDTO, final Estructura estructura) {
 		estructura.setNombre(estructuraDTO.getNombre());
-		final Menu menu = estructuraDTO.getMenu() == null ? null
-				: menuRepository.findById(estructuraDTO.getMenu())
-						.orElseThrow(() -> new NotFoundException("menu not found"));
-		estructura.setMenu(menu);
 		return estructura;
 	}
 
-	public ReferencedWarning getReferencedWarning(final Long id) {
-		final ReferencedWarning referencedWarning = new ReferencedWarning();
-		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
-		final Comida estructuraComida = comidaRepository.findFirstByEstructura(estructura);
-		if (estructuraComida != null) {
-			referencedWarning.setKey("estructura.comida.estructura.referenced");
-			referencedWarning.addParam(estructuraComida.getId());
-			return referencedWarning;
-		}
-		return null;
-	}
+	/*
+	 * public ReferencedWarning getReferencedWarning(final Long id) { final
+	 * ReferencedWarning referencedWarning = new ReferencedWarning(); final
+	 * Estructura estructura =
+	 * estructuraRepository.findById(id).orElseThrow(NotFoundException::new); final
+	 * Comida estructuraComida = comidaRepository.findFirstByEstructura(estructura);
+	 * if (estructuraComida != null) {
+	 * referencedWarning.setKey("estructura.comida.estructura.referenced");
+	 * referencedWarning.addParam(estructuraComida.getId()); return
+	 * referencedWarning; } return null; }
+	 */
 
-	public List<EstructuraConComidasDTO> findAllByMenu(Long menuId) {
-		final List<Estructura> estructuras = estructuraRepository.findAllByMenu_Id(menuId);
-		return estructuras.stream().map(estructura -> mapToEstructuraConComidasDTO(estructura))
-				.collect(Collectors.toList());
-	}
 
 	private EstructuraConComidasDTO mapToEstructuraConComidasDTO(Estructura estructura) {
 		EstructuraConComidasDTO estructuraDTO = new EstructuraConComidasDTO();

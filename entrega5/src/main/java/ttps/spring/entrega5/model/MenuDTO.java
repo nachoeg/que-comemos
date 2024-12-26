@@ -1,8 +1,11 @@
 package ttps.spring.entrega5.model;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import ttps.spring.entrega5.model.EstructuraDTO;
 
 public class MenuDTO {
 
@@ -15,8 +18,18 @@ public class MenuDTO {
     @NotNull
     @PositiveOrZero
     private Double precio;
+    
+    private List<EstructuraDTO> estructuras;
 
-    public Long getId() {
+    public List<EstructuraDTO> getEstructuras() {
+		return estructuras;
+	}
+
+	public void setEstructuras(List<EstructuraDTO> estructuras) {
+		this.estructuras = estructuras;
+	}
+
+	public Long getId() {
         return id;
     }
 
