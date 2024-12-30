@@ -1,23 +1,32 @@
-<mat-toolbar>
-    <button mat-icon-button (click)="emitToggleEvent()">
-      <mat-icon>menu</mat-icon>
+<nav class="navbar fixed-top navbar-expand-lg bg-body border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['/']">
+      <mat-icon class="d-inline-block align-text-top">lunch_dining</mat-icon>
+      ¿Qué comemos?
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <span>Buffet</span>
-    <span class="example-spacer"></span>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Registrarse" (click)="navigateToRegister()">
-      <mat-icon>person_add</mat-icon>
-    </button>
-    <span id="login-button-description" hidden>Iniciar sesión</span>
-<span id="logout-button-description" hidden>Cerrar sesión</span>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" routerLinkActive="active" [routerLink]="['/menus']">Menús</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/comidas']">Comidas</a>
+        </li>
+      </ul>
 
-<button *ngIf="!isLoggedIn" mat-icon-button class="example-icon favorite-icon" aria-label="Iniciar sesión" 
-        aria-describedby="login-button-description" (click)="navigateToLogin()">
-  <mat-icon>login</mat-icon>
-</button>
-
-<button *ngIf="isLoggedIn" mat-icon-button class="example-icon favorite-icon" aria-label="Cerrar sesión" 
-        aria-describedby="logout-button-description" (click)="logout()">
-  <mat-icon>logout</mat-icon>
-</button>
-  </mat-toolbar>
-  
+      <button *ngIf="!isLoggedIn" class="btn" [routerLink]="['/registrarse']">
+        Registrarse
+      </button>
+      <button *ngIf="!isLoggedIn" class="btn btn-primary" [routerLink]="['/iniciar-sesion']">
+        Iniciar sesión
+      </button>
+      <button *ngIf="isLoggedIn" class="btn" (click)="logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+</nav>

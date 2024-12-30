@@ -1,3 +1,6 @@
-<app-navbar (emiteToggleSidenav)="onToggleEvent()"></app-navbar>
-<app-sidebar [displaySidebar]="displaySideBar"></app-sidebar>
-<router-outlet />
+<app-navbar></app-navbar>
+<main style="padding-top: 56px">
+  <div class="container-fluid py-3">
+    <router-outlet />
+  </div>
+</main>
