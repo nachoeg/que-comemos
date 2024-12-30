@@ -5,13 +5,17 @@ import { MenuCreateComponent } from './components/menu/menu-create/menu-create.c
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { MenuEditComponent } from './components/menu/menu-edit/menu-edit.component';
-
+import { FoodComponent } from './components/food/food.component';
+import { FoodCreateComponent } from './components/food/food-create/food-create.component';
 
 export const routes: Routes = [
-    { path: 'menu', component: MenuComponent },
-    { path: 'home', component: HomeComponent },
-    { path: 'new-menu', component: MenuCreateComponent },
-    { path: 'login', component: LoginComponent},
-    { path: 'register', component: RegisterComponent},
-    { path: 'menu/:id/edit', component: MenuEditComponent}
+  { path: '', component: HomeComponent },
+  { path: 'iniciar-sesion', component: LoginComponent },
+  { path: 'registrarse', component: RegisterComponent },
+  { path: 'menus', component: MenuComponent },
+  { path: 'menu/crear', component: MenuCreateComponent },
+  { path: 'menu/:id/editar', component: MenuEditComponent },
+  { path: 'comidas', component: FoodComponent },
+  { path: 'comidas/crear', component: FoodCreateComponent },
+  { path: 'comidas/:id/editar', component: FoodCreateComponent },
 ];
