@@ -70,7 +70,7 @@ export class FoodEditComponent {
       foto: this.foodForm.get('foto')?.value,
     };
 
-    this.foodsService.updateFood(food).subscribe(
+    this.foodsService.updateFood(food, this.foodId).subscribe(
       (response) => {
         this.createSuccessMessage = 'Comida modificada exitosamente!';
         console.log('Comida modificada exitosamente:', response);

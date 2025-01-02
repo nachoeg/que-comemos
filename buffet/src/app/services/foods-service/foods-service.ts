@@ -21,7 +21,6 @@ export class FoodsService {
   }
 
   deleteFood(foodId: number): Observable<any> {
-    console.log('1');
     const url = `${this.baseUrl}/${foodId}`;
     return this.http.delete(url);
   }
@@ -31,7 +30,8 @@ export class FoodsService {
     return this.http.get<Food>(url);
   }
 
-  updateFood(food: NewFood): Observable<any> {
-    return this.http.put(this.baseUrl, food);
+  updateFood(food: NewFood, foodId: number): Observable<any> {
+    const url = `${this.baseUrl}/${foodId}`;
+    return this.http.put(url, food);
   }
 }
