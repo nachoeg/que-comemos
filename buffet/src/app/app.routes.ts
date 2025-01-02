@@ -7,6 +7,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { MenuEditComponent } from './components/menu/menu-edit/menu-edit.component';
 import { FoodComponent } from './components/food/food.component';
 import { FoodCreateComponent } from './components/food/food-create/food-create.component';
+import { FoodEditComponent } from './components/food/food-edit/food-edit.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,5 +18,5 @@ export const routes: Routes = [
   { path: 'menu/:id/editar', component: MenuEditComponent },
   { path: 'comidas', component: FoodComponent },
   { path: 'comidas/crear', component: FoodCreateComponent },
-  { path: 'comidas/:id/editar', component: FoodCreateComponent },
+  { path: 'comidas/:id/editar', component: FoodEditComponent },
 ];

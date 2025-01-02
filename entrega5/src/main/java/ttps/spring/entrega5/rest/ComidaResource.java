@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ttps.spring.entrega5.model.ComidaDTO;
-import ttps.spring.entrega5.service.ComidaService;
 
+import ttps.spring.entrega5.model.ComidaDTO;
+import ttps.spring.entrega5.model.ComidaGetDTO;
+import ttps.spring.entrega5.service.ComidaService;
 
 @RestController
 @RequestMapping(value = "/api/comidas", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,12 +32,12 @@ public class ComidaResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<ComidaDTO>> getAllComidas() {
+    public ResponseEntity<List<ComidaGetDTO>> getAllComidas() {
         return ResponseEntity.ok(comidaService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ComidaDTO> getComida(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<ComidaGetDTO> getComida(@PathVariable(name = "id") final Long id) {
         return ResponseEntity.ok(comidaService.get(id));
     }
 
@@ -48,10 +49,10 @@ public class ComidaResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateComida(@PathVariable(name = "id") final Long id,
+    public ResponseEntity<Void> updateComida(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final ComidaDTO comidaDTO) {
         comidaService.update(id, comidaDTO);
-        return ResponseEntity.ok(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

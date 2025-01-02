@@ -2,18 +2,15 @@ package ttps.spring.entrega5.service;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ttps.spring.entrega5.domain.Comida;
-import ttps.spring.entrega5.domain.Estructura;
 import ttps.spring.entrega5.model.ComidaDTO;
+import ttps.spring.entrega5.model.ComidaGetDTO;
 import ttps.spring.entrega5.repos.ComidaRepository;
-import ttps.spring.entrega5.repos.EstructuraRepository;
 import ttps.spring.entrega5.repos.PedidoRepository;
 import ttps.spring.entrega5.util.NotFoundException;
-
 
 @Service
 @Transactional
@@ -25,20 +22,19 @@ public class ComidaService {
     public ComidaService(final ComidaRepository comidaRepository,
             final PedidoRepository pedidoRepository) {
         this.comidaRepository = comidaRepository;
-        
         this.pedidoRepository = pedidoRepository;
     }
 
-    public List<ComidaDTO> findAll() {
+    public List<ComidaGetDTO> findAll() {
         final List<Comida> comidas = comidaRepository.findAll(Sort.by("id"));
         return comidas.stream()
-                .map(comida -> mapToDTO(comida, new ComidaDTO()))
+                .map(comida -> mapToDTO(comida, new ComidaGetDTO()))
                 .toList();
     }
 
-    public ComidaDTO get(final Long id) {
+    public ComidaGetDTO get(final Long id) {
         return comidaRepository.findById(id)
-                .map(comida -> mapToDTO(comida, new ComidaDTO()))
+                .map(comida -> mapToDTO(comida, new ComidaGetDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -64,7 +60,7 @@ public class ComidaService {
         comidaRepository.delete(comida);
     }
 
-    private ComidaDTO mapToDTO(final Comida comida, final ComidaDTO comidaDTO) {
+    private ComidaGetDTO mapToDTO(final Comida comida, final ComidaGetDTO comidaDTO) {
         comidaDTO.setId(comida.getId());
         comidaDTO.setNombre(comida.getNombre());
         comidaDTO.setPrecio(comida.getPrecio());
@@ -78,6 +74,5 @@ public class ComidaService {
         comida.setFoto(comidaDTO.getFoto());
         return comida;
     }
-    
 
 }
