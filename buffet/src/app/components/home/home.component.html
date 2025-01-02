@@ -1,17 +1,64 @@
-<mat-card class="card" appearance="outlined" >
-    <mat-card-title>¡Bienvenido al Buffet de la FI!</mat-card-title>
-    <mat-card-content>
-        <p>El buffet de la Facultad de Informática está pensado como un espacio de esparcimiento para los estudiantes.
-            Cuenta con ambiente climatizado (aire frío-calor, calefactores, ventiladores) y con las prestaciones de
-            conexiones de red de la Facultad.</p>
-    </mat-card-content>
-    <mat-card-content>
-        <p>Tiene metegoles para los tiempos libres, pero también puede constituirse en una cálida sala de estudios. El
-            buffet es gestionado por el Centro de Estudiantes y está abierto de 8 a 20 hs. Tiene servicio de cafetería y
-            matería (facilitan el préstamo de equipos de mate), así como agua caliente gratuita.</p>
-    </mat-card-content>
-    <mat-card-content>
-        <p>Posee, asimismo, becas para estudiantes (exclusivamente de la FI) que necesiten trabajar. Aquellos
-            interesados concurrir al directamente al Buffet.</p>
-    </mat-card-content>
-</mat-card>
+<div class="d-lg-flex px-4 py-5 gap-4">
+    <div class="col">
+        <h1 class="display-5 fw-bold text-body-emphasis mb-4">¡Bienvenido al Buffet de la FI!</h1>
+
+        <div class="lead mb-4">
+            <p>El buffet de la Facultad de Informática está pensado como un espacio de esparcimiento para los
+                estudiantes.
+                Cuenta con ambiente climatizado (aire frío-calor, calefactores, ventiladores) y con las prestaciones de
+                conexiones de red de la Facultad.</p>
+            <p>Tiene metegoles para los tiempos libres, pero también puede constituirse en una cálida sala de estudios.
+                El buffet es gestionado por el Centro de Estudiantes y está <b class="fw-bold">abierto de 8 a 20 hs</b>.
+                Tiene
+                servicio
+                de
+                cafetería y matería (facilitan el préstamo de equipos de mate), así como agua caliente gratuita.</p>
+            <p>Posee, asimismo, becas para estudiantes (exclusivamente de la FI) que necesiten trabajar.
+                Aquellos
+                interesados concurrir al directamente al Buffet.</p>
+        </div>
+    </div>
+    <div class="col">
+        <div id="carouselIndicators" class="carousel slide">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="3"
+                    aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="4"
+                    aria-label="Slide 5"></button>
+            </div>
+            <div class="carousel-inner rounded shadow" style="max-height: 500px">
+                <div class="carousel-item active">
+                    <video autoplay loop src="/buffet.mp4" class="d-block w-100" alt="..."></video>
+                </div>
+                <div class="carousel-item">
+                    <img src="/buffet-1.webp" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/buffet-2.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/buffet-3.webp" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/buffet-4.jpg" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div>
