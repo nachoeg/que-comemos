@@ -1,4 +1,12 @@
-<button class="btn btn-primary mb-2" [routerLink]="['/comidas', 'crear']"> Nueva Comida</button>
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-2 mb-2">
+  <h2 class="mb-0">
+    Comidas
+  </h2>
+  <button class="btn btn-primary " [routerLink]="['/comidas', 'crear']">
+    <i class="bi bi-plus-lg"></i>
+    Nueva comida
+  </button>
+</div>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
   <div class="col" *ngFor="let comida of comidas; let i = index">
     <div class="card">
@@ -11,9 +19,9 @@
         <p class="card-text">
           $ {{ comida.precio }}
         </p>
-        <div class="d-grid gap-2 d-md-flex">
-          <button (click)="editFood(comida.id)" class="btn w-100 btn-outline-secondary">Editar</button>
-          <button (click)="deleteFood(comida.id)" class="btn w-100 btn-outline-danger ">Eliminar</button>
+        <div class="btn-group" role="group" aria-label="Botones de la comida">
+          <button (click)="editFood(comida.id)" class="btn btn-sm btn-outline-secondary">Editar</button>
+          <button (click)="deleteFood(comida.id)" class="btn btn-sm btn-outline-danger ">Eliminar</button>
         </div>
       </div>
     </div>
