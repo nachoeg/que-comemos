@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,9 +25,31 @@ public class Menu {
     @Column(nullable = false)
     private Double precio;
 
+    @Column
+    private String foto;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Estructura> estructuras;
+
+    public Menu() {
+        estructuras = new ArrayList<>();
+        Estructura entrada = new Estructura();
+        Estructura principal = new Estructura();
+        Estructura postre = new Estructura();
+        Estructura bebida = new Estructura();
+        entrada.setNombre("Entrada");
+        principal.setNombre("Principal");
+        postre.setNombre("Postre");
+        bebida.setNombre("Bebida");
+        estructuras.add(entrada);
+        estructuras.add(principal);
+        estructuras.add(postre);
+        estructuras.add(bebida);
+        entrada.setMenu(this);
+        principal.setMenu(this);
+        postre.setMenu(this);
+        bebida.setMenu(this);
+    }
 
     public Long getId() {
         return id;
@@ -55,16 +78,30 @@ public class Menu {
         this.precio = precio;
     }
 
-	public List<Estructura> getEstructuras() {
-		return estructuras;
-	}
+    public List<Estructura> getEstructuras() {
+        return estructuras;
+    }
 
-	public void setEstructuras(List<Estructura> estructuras) {
-		this.estructuras = estructuras;
-	}
+    public void setEstructuras(List<Estructura> estructuras) {
+        this.estructuras = estructuras;
+    }
 
-    
-   
+    public String getFoto() {
+        return foto;
+    }
 
+    public void setFoto(final String foto) {
+        this.foto = foto;
+    }
+
+    public void addEstructura(Estructura estructura) {
+        estructuras.add(estructura);
+        estructura.setMenu(this);
+    }
+
+    public void removeEstructura(Estructura estructura) {
+        estructuras.remove(estructura);
+        estructura.setMenu(null);
+    }
 
 }

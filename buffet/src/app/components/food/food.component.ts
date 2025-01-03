@@ -3,20 +3,11 @@ import { Router, RouterModule } from '@angular/router';
 import { FoodsService } from '../../services/foods-service/foods-service';
 import { Food } from '../../models/food/food';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-food',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    RouterModule,
-  ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './food.component.html',
   styleUrls: ['./food.component.css'],
   providers: [FoodsService],
@@ -53,12 +44,10 @@ export class FoodComponent {
   deleteFood(foodId: number) {
     this.foodsService.deleteFood(foodId).subscribe(
       () => {
-        // Handle successful deletion
         this.comidas = this.comidas.filter((comida) => comida.id !== foodId);
         console.log('Comida eliminada correctamente');
       },
       (error) => {
-        // Handle errors
         console.error('Error al eliminar la comida', error);
       }
     );

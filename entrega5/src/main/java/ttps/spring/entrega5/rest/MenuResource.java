@@ -18,18 +18,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ttps.spring.entrega5.model.MenuConEstructurasDTO;
 import ttps.spring.entrega5.model.MenuDTO;
+import ttps.spring.entrega5.model.MenuGetDTO;
 import ttps.spring.entrega5.service.MenuService;
 import ttps.spring.entrega5.util.ReferencedException;
 import ttps.spring.entrega5.util.ReferencedWarning;
-
 
 @RestController
 @RequestMapping(value = "/api/menus", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "http://localhost:4200")
 public class MenuResource {
-	
 
     private final MenuService menuService;
 
@@ -37,15 +35,14 @@ public class MenuResource {
         this.menuService = menuService;
     }
 
-    
     @GetMapping
-    public ResponseEntity<List<MenuDTO>> getAllMenus() {
-        List<MenuDTO> menusDTO = menuService.findAll();
+    public ResponseEntity<List<MenuGetDTO>> getAllMenus() {
+        List<MenuGetDTO> menusDTO = menuService.findAll();
         return ResponseEntity.ok(menusDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<MenuDTO>> getMenu(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<Optional<MenuGetDTO>> getMenu(@PathVariable(name = "id") final Long id) {
         return ResponseEntity.ok(menuService.get(id));
     }
 
@@ -73,7 +70,5 @@ public class MenuResource {
         menuService.delete(id);
         return ResponseEntity.noContent().build();
     }
-    
-    
 
 }

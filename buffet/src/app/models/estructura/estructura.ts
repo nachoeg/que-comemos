@@ -1,11 +1,11 @@
-import { Comida } from "../comida/comida";
+import { Food } from '../food/food';
 
 export class Estructura {
-    id: number;
+  id: number;
   nombre: string;
-  comidas: Comida[];
+  comidas: Food[];
 
-  constructor(id: number, nombre: string, comidas: Comida[]) {
+  constructor(id: number, nombre: string, comidas: Food[]) {
     this.id = id;
     this.nombre = nombre;
     this.comidas = comidas;
