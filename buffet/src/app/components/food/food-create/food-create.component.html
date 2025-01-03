@@ -1,5 +1,5 @@
-<button class="btn" routerLink="/comidas">Volver</button>
-<form class="container-form mt-4" [formGroup]="foodForm" (ngSubmit)="onSubmit()">
+<a class="text-decoration-none" routerLink="/comidas"> <i class="bi bi-arrow-left"></i> Volver</a>
+<form class="container-form" [formGroup]="foodForm" (ngSubmit)="onSubmit()">
   <h2 class="mb-4">
     Nueva comida
   </h2>

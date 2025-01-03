@@ -1,0 +1,23 @@
+<a class="text-decoration-none" routerLink=".."> <i class="bi bi-arrow-left"></i> Volver</a>
+<form class="container-form" [formGroup]="estructuraForm" (ngSubmit)="onSubmit()">
+  <h2 class="mb-4">Nueva estructura </h2>
+  <div class="form-group mb-3">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input type="text" id="nombre" class="form-control" formControlName="nombre">
+    <div
+      *ngIf="estructuraForm.get('nombre')?.invalid && (estructuraForm.get('nombre')?.dirty || estructuraForm.get('nombre')?.touched)">
+      <div class="text-danger" *ngIf="estructuraForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Crear estructura</button>
+
+  <div *ngIf="createSuccessMessage" class="alert alert-success mt-3">
+    {{ createSuccessMessage }}
+  </div>
+
+  <div *ngIf="createErrorMessage" class="alert alert-danger mt-3">
+    {{ createErrorMessage }}
+  </div>
+</form>

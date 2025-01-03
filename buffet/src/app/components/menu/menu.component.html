@@ -1,40 +1,30 @@
-<div>
-  <button mat-flat-button (click)="navigateToNewMenu()">Nuevo Menu<i class="material-icons">add_circle</i></button>
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-2 mb-2">
+  <h2 class="mb-0">
+    Menús
+  </h2>
+  <button class="btn btn-primary " [routerLink]="['/menus', 'crear']">
+    <i class="bi bi-plus-lg"></i>
+    Nuevo menú
+  </button>
 </div>
-<div class="cards-container">
-  <div *ngFor="let menu of menus; let i = index">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>
-          <h2>{{ menu.nombre }}</h2>
-        </mat-card-title>
-        <img [src]="getImageUrl(i)" alt="Imagen del elemento {{ i + 1 }}">
-        <mat-card-subtitle>Precio: {{ menu.precio }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content *ngIf="isDetailVisible[i]">
-        <ul>
-          <li *ngFor="let estructura of menu.estructuras">
-            <h4>{{ estructura.nombre }}</h4>
-            <ul>
-              <li *ngFor="let comida of estructura.comidas">
-                {{ comida.nombre }}
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <br>
-      </mat-card-content>
-      <div class="container">
-        <button class="btn btn-celeste btn-sm" (click)="isDetailVisible[i] = !isDetailVisible[i]">
-          {{ isDetailVisible[i] ? 'Ocultar detalle' : 'Ver detalle' }}
-        </button>
-        <button class="btn btn-rosa-suave btn-sm" (click)="deleteMenu(menu.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <button class="btn btn-verde-menta btn-sm" [routerLink]="['/menu', menu.id, 'edit']">
-          <mat-icon>edit</mat-icon>
-        </button>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
+  <div class="col" *ngFor="let menu of menus; let i = index">
+    <div class="card comida">
+      <img *ngIf="!imageLoaded[i] && imageError[i]" src="/food-placeholder.png" class="card-img-top"
+        alt="{{menu.nombre}}">
+      <img *ngIf="!imageError[i]" [src]="menu.foto" class="card-img-top" alt="{{menu.nombre}}" (load)="onImageLoad(i)"
+        (error)="onImageError(i)">
+      <div class="card-body">
+        <h5 class="card-title">{{ menu.nombre }}</h5>
+        <p class="card-text">
+          $ {{ menu.precio }}
+        </p>
+        <div class="btn-group" role="group" aria-label="Botones del menú">
+          <button (click)="openMenu(menu.id)" class="btn btn-sm btn-outline-primary">Ver</button>
+          <button (click)="editMenu(menu.id)" class="btn btn-sm btn-outline-secondary">Editar</button>
+          <button (click)="deleteMenu(menu.id)" class="btn btn-sm btn-outline-danger ">Eliminar</button>
+        </div>
       </div>
-    </mat-card>
+    </div>
   </div>
 </div>

@@ -1,0 +1,33 @@
+<a class="text-decoration-none" routerLink="/menus"> <i class="bi bi-arrow-left"></i> Volver</a>
+
+<h2 class="">{{menu.nombre}}</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-2 mb-2">
+  <div class="col" *ngFor="let estructura of menu.estructuras">
+    <div class="card h-100">
+      <div class="p-2 border-bottom">
+        <h5 class="mb-0">{{estructura.nombre}} </h5>
+      </div>
+      <div class="p-2 h-100 d-flex flex-column justify-self-bottom">
+        <div class="card comida mb-2" *ngFor="let comida of estructura.comidas">
+          <img src="/food-placeholder.png" class="card-img-top" alt="{{comida.nombre}}">
+          <div class="card-body">
+            <h5 class="card-title">{{ comida.nombre }}</h5>
+          </div>
+        </div>
+        <div class="btn-group mt-auto" role="group" aria-label="Botones de la estructura">
+          <button (click)="addFoodToEstructura(estructura.id)" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-plus-lg"></i>
+            Agregar comida</button>
+          <button (click)="deleteEstructura(estructura.id)" class="btn btn-sm btn-outline-danger">Eliminar
+            estructura</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col">
+    <button (click)="addEstructura()" class="btn btn-outline-primary py-4 h-100 w-100">
+      <i class="bi bi-plus-lg"></i>
+      Agregar estructura</button>
+  </div>
+</div>

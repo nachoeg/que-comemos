@@ -1,0 +1,20 @@
+<a class="text-decoration-none" routerLink="../.."> <i class="bi bi-arrow-left"></i> Volver</a>
+
+<h2>Agregar comida a {{estructura.nombre}}</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
+  <div class="col" *ngFor="let food of foods; let i = index">
+    <div class="card comida">
+      <img *ngIf="!imageLoaded[i] && imageError[i]" src="/food-placeholder.png" class="card-img-top"
+        alt="{{food.nombre}}">
+      <img *ngIf="!imageError[i]" [src]="food.foto" class="card-img-top" alt="{{food.nombre}}" (load)="onImageLoad(i)"
+        (error)="onImageError(i)">
+      <div class="card-body">
+        <h5 class="card-title">{{ food.nombre }}</h5>
+        <p class="card-text">
+          $ {{ food.precio }}
+        </p>
+        <button (click)="addFood(food.id)" class="btn btn-sm btn-outline-primary">Añadir</button>
+      </div>
+    </div>
+  </div>
+</div>

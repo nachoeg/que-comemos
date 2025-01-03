@@ -1,79 +1,107 @@
 package ttps.spring.entrega5.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
 import ttps.spring.entrega5.domain.Comida;
 import ttps.spring.entrega5.domain.Estructura;
 import ttps.spring.entrega5.domain.Menu;
-import ttps.spring.entrega5.model.EstructuraConComidasDTO;
 import ttps.spring.entrega5.model.EstructuraDTO;
-import ttps.spring.entrega5.model.ComidaDTO;
+import ttps.spring.entrega5.model.EstructuraGetDTO;
+import ttps.spring.entrega5.model.ComidaGetDTO;
 import ttps.spring.entrega5.repos.ComidaRepository;
 import ttps.spring.entrega5.repos.EstructuraRepository;
 import ttps.spring.entrega5.repos.MenuRepository;
 import ttps.spring.entrega5.util.NotFoundException;
-import ttps.spring.entrega5.util.ReferencedWarning;
 
 @Transactional
 @Service
 public class EstructuraService {
 
 	private final EstructuraRepository estructuraRepository;
-	private final MenuRepository menuRepository;
 	private final ComidaRepository comidaRepository;
-	@Autowired
-	private final ComidaService comidaService;
+	private final MenuRepository menuRepository;
 
-	public EstructuraService(final EstructuraRepository estructuraRepository, final MenuRepository menuRepository,
-			final ComidaRepository comidaRepository) {
+	public EstructuraService(final EstructuraRepository estructuraRepository, final ComidaRepository comidaRepository,
+			final MenuRepository menuRepository) {
 		this.estructuraRepository = estructuraRepository;
-		this.menuRepository = menuRepository;
 		this.comidaRepository = comidaRepository;
-		this.comidaService = null;
+		this.menuRepository = menuRepository;
 	}
 
-	public List<EstructuraDTO> findAll() {
+	public List<EstructuraGetDTO> findAll() {
 		final List<Estructura> estructuras = estructuraRepository.findAll(Sort.by("id"));
-		return estructuras.stream().map(estructura -> mapToDTO(estructura, new EstructuraDTO())).toList();
+		return estructuras.stream().map(estructura -> mapToDTO(estructura, new EstructuraGetDTO())).toList();
 	}
 
-	public EstructuraDTO get(final Long id) {
-		return estructuraRepository.findById(id).map(estructura -> mapToDTO(estructura, new EstructuraDTO()))
-				.orElseThrow(NotFoundException::new);
+	public Optional<EstructuraGetDTO> get(final Long id) {
+		return estructuraRepository.findById(id).map(estructura -> mapToDTO(estructura, new EstructuraGetDTO()));
 	}
 
-	public Long create(final EstructuraDTO estructuraDTO) {
+	public Long create(final Long idMenu, final EstructuraDTO estructuraCrearDTO) {
+		final Menu menu = menuRepository.findById(idMenu).orElseThrow(NotFoundException::new);
 		final Estructura estructura = new Estructura();
-		mapToEntity(estructuraDTO, estructura);
-		return estructuraRepository.save(estructura).getId();
+		mapToEntity(estructuraCrearDTO, estructura);
+		menu.addEstructura(estructura); // Agrega la estructura al menú
+		menuRepository.save(menu); // Guarda el menú actualizado
+		return estructura.getId(); // Devuelve el id de la estructura creada
 	}
 
-	public void update(final Long id, final EstructuraDTO estructuraDTO) {
+	public void update(final Long id, final EstructuraGetDTO estructuraDTO) {
 		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
 		mapToEntity(estructuraDTO, estructura);
 		estructuraRepository.save(estructura);
 	}
 
 	public void delete(final Long id) {
-		estructuraRepository.deleteById(id);
-			}
+		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
+		estructuraRepository.delete(estructura);
+	}
 
-	private EstructuraDTO mapToDTO(final Estructura estructura, final EstructuraDTO estructuraDTO) {
+	public void addComida(final Long id, final Long comidaId) {
+		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
+		final Comida comida = comidaRepository.findById(comidaId).orElseThrow(NotFoundException::new);
+		estructura.getComidas().add(comida);
+		estructuraRepository.save(estructura);
+	}
+
+	public void removeComida(final Long id, final Long comidaId) {
+		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
+		final Comida comida = comidaRepository.findById(comidaId).orElseThrow(NotFoundException::new);
+		estructura.getComidas().remove(comida);
+		estructuraRepository.save(estructura);
+	}
+
+	private EstructuraGetDTO mapToDTO(final Estructura estructura, final EstructuraGetDTO estructuraDTO) {
 		estructuraDTO.setId(estructura.getId());
 		estructuraDTO.setNombre(estructura.getNombre());
+		estructuraDTO.setComidas(estructura.getComidas().stream().map(comida -> {
+			final ComidaGetDTO comidaDTO = new ComidaGetDTO();
+			comidaDTO.setId(comida.getId());
+			comidaDTO.setNombre(comida.getNombre());
+			comidaDTO.setPrecio(comida.getPrecio());
+			return comidaDTO;
+		}).collect(Collectors.toList()));
 		return estructuraDTO;
 	}
 
-	Estructura mapToEntity(final EstructuraDTO estructuraDTO, final Estructura estructura) {
+	private Estructura mapToEntity(final EstructuraGetDTO estructuraDTO, final Estructura estructura) {
+		estructura.setNombre(estructuraDTO.getNombre());
+		estructura.setComidas(estructuraDTO.getComidas().stream().map(comidaDTO -> {
+			final Comida comida = new Comida();
+			comida.setNombre(comidaDTO.getNombre());
+			comida.setPrecio(comidaDTO.getPrecio());
+			return comida;
+		}).collect(Collectors.toList()));
+		return estructura;
+	}
+
+	private Estructura mapToEntity(final EstructuraDTO estructuraDTO, final Estructura estructura) {
 		estructura.setNombre(estructuraDTO.getNombre());
 		return estructura;
 	}
@@ -90,12 +118,4 @@ public class EstructuraService {
 	 * referencedWarning; } return null; }
 	 */
 
-
-	private EstructuraConComidasDTO mapToEstructuraConComidasDTO(Estructura estructura) {
-		EstructuraConComidasDTO estructuraDTO = new EstructuraConComidasDTO();
-		estructuraDTO.setId(estructura.getId());
-		estructuraDTO.setNombre(estructura.getNombre());
-		// ... (set other relevant fields)
-		return estructuraDTO;
-	}
 }
