@@ -9,6 +9,7 @@ import ttps.spring.entrega5.domain.Comida;
 import ttps.spring.entrega5.model.ComidaDTO;
 import ttps.spring.entrega5.model.ComidaGetDTO;
 import ttps.spring.entrega5.repos.ComidaRepository;
+import ttps.spring.entrega5.repos.EstructuraRepository;
 import ttps.spring.entrega5.repos.PedidoRepository;
 import ttps.spring.entrega5.util.NotFoundException;
 
@@ -18,11 +19,13 @@ public class ComidaService {
 
     private final ComidaRepository comidaRepository;
     private final PedidoRepository pedidoRepository;
+    private final EstructuraRepository estructuraRepository;
 
     public ComidaService(final ComidaRepository comidaRepository,
-            final PedidoRepository pedidoRepository) {
+            final PedidoRepository pedidoRepository, final EstructuraRepository estructuraRepository) {
         this.comidaRepository = comidaRepository;
         this.pedidoRepository = pedidoRepository;
+        this.estructuraRepository = estructuraRepository;
     }
 
     public List<ComidaGetDTO> findAll() {
@@ -57,6 +60,8 @@ public class ComidaService {
         // remove many-to-many relations at owning side
         pedidoRepository.findAllByComidas(comida)
                 .forEach(pedido -> pedido.getComidas().remove(comida));
+        estructuraRepository.findAllByComidas(comida)
+                .forEach(estructura -> estructura.getComidas().remove(comida));
         comidaRepository.delete(comida);
     }
 
