@@ -33,7 +33,7 @@ export class EstructuraService {
     foodId: number
   ): Observable<any> {
     const url = `${this.baseUrl}/${estructuraId}/removeComida/${foodId}`;
-    return this.http.delete(url);
+    return this.http.post(url, {});
   }
 
   getEstructuraById(estructuraId: number): Observable<Estructura> {

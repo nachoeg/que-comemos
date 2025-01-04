@@ -57,6 +57,26 @@ export class MenuItemComponent implements OnInit {
     ]);
   }
 
+  removeFoodFromEstructura(estructuraId: number, comidaId: number) {
+    this.estructuraService
+      .removeFoodFromEstructura(estructuraId, comidaId)
+      .subscribe(
+        () => {
+          const estructura = this.menu.estructuras.find(
+            (estructura) => estructura.id === estructuraId
+          );
+          if (estructura) {
+            estructura.comidas = estructura.comidas.filter(
+              (comida) => comida.id !== comidaId
+            );
+          }
+        },
+        (error) => {
+          console.error('Error al eliminar la comida de la estructura', error);
+        }
+      );
+  }
+
   addEstructura() {
     this.router.navigate(['menus', this.menuId, 'crear-estructura']);
   }

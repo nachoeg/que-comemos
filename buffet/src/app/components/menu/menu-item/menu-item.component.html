@@ -12,6 +12,8 @@
           <img src="/food-placeholder.png" class="card-img-top" alt="{{comida.nombre}}">
           <div class="card-body">
             <h5 class="card-title">{{ comida.nombre }}</h5>
+            <button (click)="removeFoodFromEstructura(estructura.id, comida.id)"
+              class="btn btn-sm btn-outline-danger">Remover</button>
           </div>
         </div>
         <div class="btn-group mt-auto" role="group" aria-label="Botones de la estructura">
