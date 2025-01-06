@@ -13,6 +13,7 @@ import {
 
 @Component({
   selector: 'app-menu-edit',
+  standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './menu-edit.component.html',
   styleUrl: './menu-edit.component.css',
@@ -25,8 +26,8 @@ export class MenuEditComponent implements OnInit {
   menu: NewMenu = {
     nombre: '',
     precio: 0,
-    foto: '',
   };
+  selectedFile: File | null = null;
 
   constructor(
     private menuService: MenusService,
@@ -50,7 +51,10 @@ export class MenuEditComponent implements OnInit {
         this.menuId = +menuId;
         this.menuService.getMenuById(this.menuId).subscribe((menu: Menu) => {
           this.menu = menu;
-          this.menuForm.patchValue(this.menu);
+          this.menuForm.patchValue({
+            nombre: menu.nombre,
+            precio: menu.precio,
+          });
         });
       } else {
         console.error(
@@ -60,14 +64,32 @@ export class MenuEditComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    const menu: NewMenu = {
-      nombre: this.menuForm.get('nombre')?.value,
-      precio: this.menuForm.get('precio')?.value,
-      foto: this.menuForm.get('foto')?.value,
-    };
+  onFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0];
+    }
+  }
 
-    this.menuService.updateMenu(this.menuId, menu).subscribe(
+  onSubmit() {
+    const formData = new FormData();
+    formData.append(
+      'menu',
+      new Blob(
+        [
+          JSON.stringify({
+            nombre: this.menuForm.get('nombre')?.value,
+            precio: this.menuForm.get('precio')?.value,
+          }),
+        ],
+        { type: 'application/json' }
+      )
+    );
+
+    if (this.selectedFile) {
+      formData.append('foto', this.selectedFile);
+    }
+
+    this.menuService.updateMenu(this.menuId, formData).subscribe(
       (response) => {
         this.createSuccessMessage = 'Menú actualizado correctamente';
         this.createErrorMessage = '';

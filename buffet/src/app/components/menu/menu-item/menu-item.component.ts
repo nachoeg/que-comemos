@@ -38,7 +38,6 @@ export class MenuItemComponent implements OnInit {
         this.menuId = +menuId;
         this.menuService.getMenuById(this.menuId).subscribe((menu: Menu) => {
           this.menu = menu;
-          console.log(menu);
         });
       } else {
         console.error(

@@ -19,7 +19,6 @@ export class EstructuraService {
 
   deleteEstructura(estructuraId: number): Observable<any> {
     const url = `${this.baseUrl}/${estructuraId}`;
-    console.log('url: ' + url);
     return this.http.delete(url);
   }
 
@@ -38,7 +37,6 @@ export class EstructuraService {
 
   getEstructuraById(estructuraId: number): Observable<Estructura> {
     const url = `${this.baseUrl}/${estructuraId}`;
-    console.log(url);
     return this.http.get<Estructura>(url);
   }
 }

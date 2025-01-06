@@ -16,9 +16,6 @@ public class MenuDTO {
     @PositiveOrZero
     private Double precio;
 
-    @Size(max = 255)
-    private String foto;
-
     public String getNombre() {
         return nombre;
     }
@@ -33,14 +30,6 @@ public class MenuDTO {
 
     public void setPrecio(final Double precio) {
         this.precio = precio;
-    }
-
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(final String foto) {
-        this.foto = foto;
     }
 
 }

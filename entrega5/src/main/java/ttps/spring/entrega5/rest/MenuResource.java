@@ -2,6 +2,8 @@ package ttps.spring.entrega5.rest;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import ttps.spring.entrega5.model.ComidaDTO;
 import ttps.spring.entrega5.model.MenuDTO;
 import ttps.spring.entrega5.model.MenuGetDTO;
 import ttps.spring.entrega5.service.MenuService;
@@ -46,17 +51,19 @@ public class MenuResource {
         return ResponseEntity.ok(menuService.get(id));
     }
 
-    @PostMapping
+    @PostMapping(consumes = { "multipart/form-data" })
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createMenu(@RequestBody @Valid final MenuDTO menuDTO) {
-        final Long createdId = menuService.create(menuDTO);
+    public ResponseEntity<Long> createMenu(@RequestPart("menu") @Valid final MenuDTO menuDTO,
+            @RequestPart(value = "foto", required = false) final MultipartFile foto) throws IOException {
+        final Long createdId = menuService.create(menuDTO, foto);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<Long> updateMenu(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final MenuDTO menuDTO) {
-        menuService.update(id, menuDTO);
+            @RequestPart("menu") @Valid final MenuDTO menuDTO,
+            @RequestPart(value = "foto", required = false) final MultipartFile foto) throws IOException {
+        menuService.update(id, menuDTO, foto);
         return ResponseEntity.ok(id);
     }
 

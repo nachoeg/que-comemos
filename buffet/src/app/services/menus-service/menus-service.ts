@@ -15,7 +15,7 @@ export class MenusService {
     return this.http.get<Menu[]>(this.baseUrl);
   }
 
-  createMenu(menu: NewMenu): Observable<any> {
+  createMenu(menu: FormData): Observable<any> {
     return this.http.post(this.baseUrl, menu);
   }
 
@@ -24,7 +24,7 @@ export class MenusService {
     return this.http.delete(url);
   }
 
-  updateMenu(menuId: number, menu: NewMenu): Observable<any> {
+  updateMenu(menuId: number, menu: FormData): Observable<any> {
     const url = `${this.baseUrl}/${menuId}`;
     return this.http.put(url, menu);
   }

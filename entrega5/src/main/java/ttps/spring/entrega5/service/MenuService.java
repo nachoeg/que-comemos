@@ -2,12 +2,14 @@ package ttps.spring.entrega5.service;
 
 import jakarta.transaction.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import ttps.spring.entrega5.domain.Comida;
 import ttps.spring.entrega5.domain.Estructura;
@@ -18,6 +20,7 @@ import ttps.spring.entrega5.model.MenuDTO;
 import ttps.spring.entrega5.model.MenuGetDTO;
 import ttps.spring.entrega5.repos.MenuRepository;
 import ttps.spring.entrega5.repos.PedidoRepository;
+import ttps.spring.entrega5.util.ImgurUploader;
 import ttps.spring.entrega5.util.NotFoundException;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
@@ -27,10 +30,13 @@ public class MenuService {
 
 	private final MenuRepository menuRepository;
 	private final PedidoRepository pedidoRepository;
+	private final ImgurUploader imgurUploader;
 
-	public MenuService(final MenuRepository menuRepository, final PedidoRepository pedidoRepository) {
+	public MenuService(final MenuRepository menuRepository, final PedidoRepository pedidoRepository,
+			ImgurUploader imgurUploader) {
 		this.menuRepository = menuRepository;
 		this.pedidoRepository = pedidoRepository;
+		this.imgurUploader = imgurUploader;
 	}
 
 	public List<MenuGetDTO> findAll() {
@@ -74,15 +80,23 @@ public class MenuService {
 				});
 	}
 
-	public Long create(final MenuDTO menuDTO) {
+	public Long create(final MenuDTO menuDTO, MultipartFile foto) throws IOException {
 		final Menu menu = new Menu();
 		mapToEntity(menuDTO, menu);
+		if (foto != null && !foto.isEmpty()) {
+			String fotoUrl = imgurUploader.upload(foto);
+			menu.setFoto(fotoUrl);
+		}
 		return menuRepository.save(menu).getId();
 	}
 
-	public void update(final Long id, final MenuDTO menuDTO) {
+	public void update(final Long id, final MenuDTO menuDTO, MultipartFile foto) throws IOException {
 		final Menu menu = menuRepository.findById(id).orElseThrow(NotFoundException::new);
 		mapToEntity(menuDTO, menu);
+		if (foto != null && !foto.isEmpty()) {
+			String fotoUrl = imgurUploader.upload(foto);
+			menu.setFoto(fotoUrl);
+		}
 		menuRepository.save(menu);
 	}
 
@@ -127,7 +141,6 @@ public class MenuService {
 	private Menu mapToEntity(final MenuDTO menuDTO, final Menu menu) {
 		menu.setNombre(menuDTO.getNombre());
 		menu.setPrecio(menuDTO.getPrecio());
-		menu.setFoto(menuDTO.getFoto());
 		return menu;
 	}
 

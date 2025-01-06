@@ -19,10 +19,14 @@ export class MenuCreateComponent implements OnInit {
   menuForm: FormGroup;
   createSuccessMessage: string = '';
   createErrorMessage: string = '';
+  selectedFile: File | null = null;
 
   constructor(private menuService: MenusService, private router: Router) {
     this.menuForm = new FormGroup({
-      nombre: new FormControl('', Validators.required),
+      nombre: new FormControl('', [
+        Validators.required,
+        Validators.nullValidator,
+      ]),
       precio: new FormControl('', [Validators.required, Validators.min(0)]),
       foto: new FormControl(''),
     });
@@ -30,14 +34,32 @@ export class MenuCreateComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSubmit() {
-    const menu: NewMenu = {
-      nombre: this.menuForm.get('nombre')?.value,
-      precio: this.menuForm.get('precio')?.value,
-      foto: this.menuForm.get('foto')?.value,
-    };
+  onFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0];
+    }
+  }
 
-    this.menuService.createMenu(menu).subscribe(
+  onSubmit() {
+    const formData = new FormData();
+    formData.append(
+      'menu',
+      new Blob(
+        [
+          JSON.stringify({
+            nombre: this.menuForm.get('nombre')?.value,
+            precio: this.menuForm.get('precio')?.value,
+          }),
+        ],
+        { type: 'application/json' }
+      )
+    );
+
+    if (this.selectedFile) {
+      formData.append('foto', this.selectedFile);
+    }
+
+    this.menuService.createMenu(formData).subscribe(
       (response) => {
         let id = response;
         this.createSuccessMessage = 'Menú creado exitosamente!';

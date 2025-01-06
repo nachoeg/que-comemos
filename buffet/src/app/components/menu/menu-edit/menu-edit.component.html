@@ -26,8 +26,8 @@
     </div>
 
     <div class="mb-3">
-        <label for="formFile" class="form-label">Foto</label>
-        <input class="form-control" type="file" id="formFile">
+        <label for="foto" class="form-label">Foto</label>
+        <input class="form-control" id="foto" formControlName="foto" type="file" (change)="onFileChange($event)">
     </div>
 
 
