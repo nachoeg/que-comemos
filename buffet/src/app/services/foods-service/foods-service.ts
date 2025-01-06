@@ -16,7 +16,7 @@ export class FoodsService {
     return this.http.get<Food[]>(this.baseUrl);
   }
 
-  createFood(food: NewFood): Observable<any> {
+  createFood(food: FormData): Observable<any> {
     return this.http.post(this.baseUrl, food);
   }
 
@@ -30,7 +30,7 @@ export class FoodsService {
     return this.http.get<Food>(url);
   }
 
-  updateFood(food: NewFood, foodId: number): Observable<any> {
+  updateFood(food: FormData, foodId: number): Observable<any> {
     const url = `${this.baseUrl}/${foodId}`;
     return this.http.put(url, food);
   }

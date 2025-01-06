@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { NewFood } from '../../../models/new-food/new-food';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -15,13 +14,14 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './food-create.component.html',
-  styleUrl: './food-create.component.css',
+  styleUrls: ['./food-create.component.css'],
   providers: [FoodsService],
 })
 export class FoodCreateComponent {
   foodForm: FormGroup;
   createSuccessMessage: string = '';
   createErrorMessage: string = '';
+  selectedFile: File | null = null;
 
   constructor(private foodsService: FoodsService, private router: Router) {
     this.foodForm = new FormGroup({
@@ -36,15 +36,31 @@ export class FoodCreateComponent {
 
   ngOnInit() {}
 
-  onSubmit() {
-    // Access form values using formControlName or form.value
-    const food: NewFood = {
-      nombre: this.foodForm.get('nombre')?.value,
-      precio: this.foodForm.get('precio')?.value,
-      foto: this.foodForm.get('foto')?.value,
-    };
+  onFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0];
+    }
+  }
 
-    this.foodsService.createFood(food).subscribe(
+  onSubmit() {
+    const formData = new FormData();
+    formData.append(
+      'comida',
+      new Blob(
+        [
+          JSON.stringify({
+            nombre: this.foodForm.get('nombre')?.value,
+            precio: this.foodForm.get('precio')?.value,
+          }),
+        ],
+        { type: 'application/json' }
+      )
+    );
+    if (this.selectedFile) {
+      formData.append('foto', this.selectedFile);
+    }
+
+    this.foodsService.createFood(formData).subscribe(
       (response) => {
         this.createSuccessMessage = 'Menú creado exitosamente!';
         console.log('Menú creado exitosamente:', response);

@@ -2,6 +2,8 @@ package ttps.spring.entrega5.rest;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,9 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import ttps.spring.entrega5.model.ComidaDTO;
 import ttps.spring.entrega5.model.ComidaGetDTO;
@@ -41,17 +44,19 @@ public class ComidaResource {
         return ResponseEntity.ok(comidaService.get(id));
     }
 
-    @PostMapping
+    @PostMapping(consumes = { "multipart/form-data" })
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createComida(@RequestBody @Valid final ComidaDTO comidaDTO) {
-        final Long createdId = comidaService.create(comidaDTO);
+    public ResponseEntity<Long> createComida(@RequestPart("comida") @Valid final ComidaDTO comidaDTO,
+            @RequestPart(value = "foto", required = false) final MultipartFile foto) throws IOException {
+        final Long createdId = comidaService.create(comidaDTO, foto);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<Void> updateComida(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final ComidaDTO comidaDTO) {
-        comidaService.update(id, comidaDTO);
+            @RequestPart("comida") @Valid final ComidaDTO comidaDTO,
+            @RequestPart(value = "foto", required = false) final MultipartFile foto) throws IOException {
+        comidaService.update(id, comidaDTO, foto);
         return ResponseEntity.ok().build();
     }
 

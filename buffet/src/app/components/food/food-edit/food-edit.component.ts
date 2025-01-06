@@ -24,12 +24,11 @@ export class FoodEditComponent {
   createSuccessMessage: string = '';
   createErrorMessage: string = '';
   foodId: number = 0;
-  food: Food = {
-    id: 0,
+  food: NewFood = {
     nombre: '',
     precio: 0,
-    foto: '',
   };
+  selectedFile: File | null = null;
 
   constructor(
     private foodsService: FoodsService,
@@ -42,7 +41,7 @@ export class FoodEditComponent {
         Validators.nullValidator,
       ]),
       precio: new FormControl('', [Validators.required, Validators.min(0)]),
-      foto: new FormControl(''),
+      foto: new FormControl(),
     });
   }
 
@@ -53,7 +52,10 @@ export class FoodEditComponent {
         this.foodId = +foodId;
         this.foodsService.getFoodById(this.foodId).subscribe((food: Food) => {
           this.food = food;
-          this.foodForm.patchValue(this.food);
+          this.foodForm.patchValue({
+            nombre: food.nombre,
+            precio: food.precio,
+          });
         });
       } else {
         console.error(
@@ -63,14 +65,31 @@ export class FoodEditComponent {
     });
   }
 
-  onSubmit() {
-    const food: NewFood = {
-      nombre: this.foodForm.get('nombre')?.value,
-      precio: this.foodForm.get('precio')?.value,
-      foto: this.foodForm.get('foto')?.value,
-    };
+  onFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0];
+    }
+  }
 
-    this.foodsService.updateFood(food, this.foodId).subscribe(
+  onSubmit() {
+    const formData = new FormData();
+    formData.append(
+      'comida',
+      new Blob(
+        [
+          JSON.stringify({
+            nombre: this.foodForm.get('nombre')?.value,
+            precio: this.foodForm.get('precio')?.value,
+          }),
+        ],
+        { type: 'application/json' }
+      )
+    );
+    if (this.selectedFile) {
+      formData.append('foto', this.selectedFile);
+    }
+
+    this.foodsService.updateFood(formData, this.foodId).subscribe(
       (response) => {
         this.createSuccessMessage = 'Comida modificada exitosamente!';
         console.log('Comida modificada exitosamente:', response);

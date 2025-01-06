@@ -1,16 +1,21 @@
 package ttps.spring.entrega5.service;
 
 import jakarta.transaction.Transactional;
+
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import ttps.spring.entrega5.domain.Comida;
 import ttps.spring.entrega5.model.ComidaDTO;
 import ttps.spring.entrega5.model.ComidaGetDTO;
 import ttps.spring.entrega5.repos.ComidaRepository;
 import ttps.spring.entrega5.repos.EstructuraRepository;
 import ttps.spring.entrega5.repos.PedidoRepository;
+import ttps.spring.entrega5.util.ImgurUploader;
 import ttps.spring.entrega5.util.NotFoundException;
 
 @Service
@@ -20,12 +25,15 @@ public class ComidaService {
     private final ComidaRepository comidaRepository;
     private final PedidoRepository pedidoRepository;
     private final EstructuraRepository estructuraRepository;
+    private final ImgurUploader imgurUploader;
 
     public ComidaService(final ComidaRepository comidaRepository,
-            final PedidoRepository pedidoRepository, final EstructuraRepository estructuraRepository) {
+            final PedidoRepository pedidoRepository, final EstructuraRepository estructuraRepository,
+            ImgurUploader imgurUploader) {
         this.comidaRepository = comidaRepository;
         this.pedidoRepository = pedidoRepository;
         this.estructuraRepository = estructuraRepository;
+        this.imgurUploader = imgurUploader;
     }
 
     public List<ComidaGetDTO> findAll() {
@@ -41,16 +49,24 @@ public class ComidaService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final ComidaDTO comidaDTO) {
+    public Long create(final ComidaDTO comidaDTO, MultipartFile foto) throws IOException {
         final Comida comida = new Comida();
         mapToEntity(comidaDTO, comida);
+        if (foto != null && !foto.isEmpty()) {
+            String fotoUrl = imgurUploader.upload(foto);
+            comida.setFoto(fotoUrl);
+        }
         return comidaRepository.save(comida).getId();
     }
 
-    public void update(final Long id, final ComidaDTO comidaDTO) {
+    public void update(final Long id, final ComidaDTO comidaDTO, MultipartFile foto) throws IOException {
         final Comida comida = comidaRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(comidaDTO, comida);
+        if (foto != null && !foto.isEmpty()) {
+            String fotoUrl = imgurUploader.upload(foto);
+            comida.setFoto(fotoUrl);
+        }
         comidaRepository.save(comida);
     }
 
@@ -76,7 +92,6 @@ public class ComidaService {
     Comida mapToEntity(final ComidaDTO comidaDTO, final Comida comida) {
         comida.setNombre(comidaDTO.getNombre());
         comida.setPrecio(comidaDTO.getPrecio());
-        comida.setFoto(comidaDTO.getFoto());
         return comida;
     }
 
