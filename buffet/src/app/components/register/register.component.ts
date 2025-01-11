@@ -58,6 +58,7 @@ export class RegisterComponent {
       this.usuarioServicio.registerUser(this.usuario).subscribe(
         (response) => {
           console.log('Registro exitoso:', response);
+          this.usuarioServicio.registerSuccess('Registro de usuario exitoso')
           setTimeout(() => {
             this.router.navigate(['/iniciar-sesion']);
           }, 2000);
