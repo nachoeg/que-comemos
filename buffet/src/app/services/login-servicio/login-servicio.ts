@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Usuario } from '../../models/usuario/usuario';
 import { tap } from 'rxjs/operators';
 
@@ -23,8 +23,14 @@ interface LoginResponse {
     providedIn: "root",
 })
 export class LoginServicio {
+    private loginSuccessMessageSubject = new BehaviorSubject<string | null>(null);
+  loginSuccessMessage$ = this.loginSuccessMessageSubject.asObservable();
+
+  loginSuccess(message: string) {
+    this.loginSuccessMessageSubject.next(message);
+  }
     logout() {
-      console.log("se cerro sesion");
+      console.log("se cerró sesion");
       this.isUserLoggedIn = false;
       this.userLogged = null;
       localStorage.removeItem('currentUser');

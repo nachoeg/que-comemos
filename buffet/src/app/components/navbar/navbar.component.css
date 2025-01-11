@@ -1,0 +1,8 @@
+.user-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .user-name {
+    font-weight: bold; /* Hace que el nombre sea negrita */
+  }

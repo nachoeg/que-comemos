@@ -1,22 +1,86 @@
-<div class="register">
-    <form class="custom-form" method="post" (ngSubmit)="register()">
+<!-- <div class="register">
+    <form class="custom-form" method="post" (ngSubmit)="register()" novalidate [formGroup]="f">
         <h1>Registro</h1>
         <label>Email</label>
-        <input type="email" [(ngModel)]="usuario.email" name="email" placeholder="Email" required="required" />
-        
+        <input type="email" formControlName="email" name="email" placeholder="Email" required="required"
+        [ngClass]="{ 'invalid': submitted && f.get('email')?.errors }">     
         <label>Password</label>
-        <input type="password" [(ngModel)]="usuario.clave" name="password" placeholder="Password" required="required" />
-        <label>Ingrese nuevamente password</label>
-        <input type="password" [(ngModel)]="claveConfirmar" name="confirmPassword" placeholder="Ingrese nuevamente la password"
-            required="required" />
-        
-        <label>DNI</label>
-        <input type="number" [(ngModel)]="usuario.dni" name="dni" placeholder="DNI" required="required" />
+    <input type="password" formControlName="password" name="password" placeholder="Password" required="required"
+           [ngClass]="{ 'invalid': submitted && f.get('password')?.errors }">
 
-        <label>Nombre</label>
-        <input type="text" [(ngModel)]="usuario.nombre" name="nombre" placeholder="Nombre" required="required" />
-        <label>Apellido</label>
-        <input type="text" [(ngModel)]="usuario.apellido" name="apellido" placeholder="Apellido" required="required" />
-        <button type="submit">Registrarse</button>
+    <label>Ingrese nuevamente password</label>
+    <input type="password" formControlName="confirmPassword" name="confirmPassword" placeholder="Ingrese nuevamente la password"
+           required="required" [ngClass]="{ 'invalid': submitted && f.get('confirmPassword')?.errors }">
+
+    <label>DNI</label>
+    <input type="number" formControlName="dni" name="dni" placeholder="DNI" required="required"
+           [ngClass]="{ 'invalid': submitted && f.get('dni')?.errors }">
+
+    <label>Nombre</label>
+    <input type="text" formControlName="nombre" name="nombre" placeholder="Nombre" required="required"
+           [ngClass]="{ 'invalid': submitted && f.get('nombre')?.errors }">
+
+    <label>Apellido</label>
+    <input type="text" formControlName="apellido" name="apellido" placeholder="Apellido" required="required"
+           [ngClass]="{ 'invalid': submitted && f.get('apellido')?.errors }">
+
+    <button type="submit">Registrarse</button>
+    <div class="form-group">
+      <small class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</small>
+    </div>
     </form>
+</div> -->
+<div class="register">
+  <form class="custom-form" method="post" (ngSubmit)="register()" novalidate [formGroup]="f">
+    <h1>Registro</h1>
+    <label>Email</label>
+    <input type="email" formControlName="email" name="email" placeholder="Email" required
+           [ngClass]="{ 'invalid': submitted && f.get('email')?.errors }">
+    <small class="text-danger" *ngIf="submitted && f.get('email')?.errors">
+      <span *ngIf="f.get('email')?.hasError('required')">El email es requerido.</span>
+      <span *ngIf="f.get('email')?.hasError('email')">Email inválido.</span> 
+    </small>
+
+    <label>Password</label>
+    <input type="password" formControlName="password" name="password" placeholder="Password" required
+           [ngClass]="{ 'invalid': submitted && f.get('password')?.errors }">
+    <small class="text-danger" *ngIf="submitted && f.get('password')?.errors">
+      <span *ngIf="f.get('password')?.hasError('required')">La contraseña es requerida.</span>
+      <span *ngIf="f.get('password')?.hasError('minlength')">La contraseña debe tener al menos 8 caracteres.</span>
+    </small>
+
+    <label>Ingrese nuevamente password</label>
+    <input type="password" formControlName="confirmPassword" name="confirmPassword" placeholder="Ingrese nuevamente la password"
+           required [ngClass]="{ 'invalid': submitted && f.get('confirmPassword')?.errors }">
+    <small class="text-danger" *ngIf="submitted && f.get('confirmPassword')?.errors">
+      <span *ngIf="f.get('confirmPassword')?.hasError('required')">Confirmar contraseña es requerido.</span>
+      <span *ngIf="f.get('confirmPassword')?.hasError('matchingPasswords')">Las contraseñas no coinciden</span>
+    </small>
+
+    <label>DNI</label>
+    <input type="number" formControlName="dni" name="dni" placeholder="DNI" required
+           [ngClass]="{ 'invalid': submitted && f.get('dni')?.errors }">
+    <small class="text-danger" *ngIf="submitted && f.get('dni')?.errors">
+      <span *ngIf="f.get('dni')?.hasError('required')">El DNI es requerido.</span>
+    </small>
+
+    <label>Nombre</label>
+    <input type="text" formControlName="nombre" name="nombre" placeholder="Nombre" required
+           [ngClass]="{ 'invalid': submitted && f.get('nombre')?.errors }">
+    <small class="text-danger" *ngIf="submitted && f.get('nombre')?.errors">
+      <span *ngIf="f.get('nombre')?.hasError('required')">El nombre es requerido.</span>
+    </small>
+
+    <label>Apellido</label>
+    <input type="text" formControlName="apellido" name="apellido" placeholder="Apellido" required
+           [ngClass]="{ 'invalid': submitted && f.get('apellido')?.errors }">
+    <small class="text-danger" *ngIf="submitted && f.get('apellido')?.errors">
+      <span *ngIf="f.get('apellido')?.hasError('required')">El apellido es requerido.</span>
+    </small>
+
+    <button type="submit">Registrarse</button>
+    <div class="form-group">
+      <small class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</small>
+    </div>
+  </form>
 </div>

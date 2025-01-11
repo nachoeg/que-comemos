@@ -17,16 +17,21 @@
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/comidas']">Comidas</a>
         </li>
       </ul>
+      <div *ngIf="showSuccessAlert" class="alert alert-success" role="alert">
+        {{ alertMessage }}
+      </div>
 
-      <button *ngIf="!isLoggedIn" class="btn" [routerLink]="['/registrarse']">
-        Registrarse
-      </button>
-      <button *ngIf="!isLoggedIn" class="btn btn-primary" [routerLink]="['/iniciar-sesion']">
-        Iniciar sesión
-      </button>
-      <button *ngIf="isLoggedIn" class="btn" (click)="logout()">
-        Cerrar sesión
-      </button>
+      <div *ngIf="!isLoggedIn">
+        <button class="btn" [routerLink]="['/registrarse']">Registrarse</button>
+        <button class="btn btn-primary" [routerLink]="['/iniciar-sesion']">Iniciar sesión</button>
+      </div>
+      <div *ngIf="isLoggedIn" class="user-container">
+        <span class="user-name">¡Hola, {{ usuarioLogeado?.nombre }}!</span>
+        <button class="btn btn-danger  mx-2" (click)="logout()">
+          Cerrar sesión
+        </button>
+      </div>
+     
     </div>
   </div>
 </nav>

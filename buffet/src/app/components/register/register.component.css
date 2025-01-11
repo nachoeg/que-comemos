@@ -63,3 +63,6 @@ label {
   .custom-form label, .custom-form input {
     margin-bottom: 0.5rem;
   }
+  .invalid {
+    border-color: red;
+  }
