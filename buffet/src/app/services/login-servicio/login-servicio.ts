@@ -52,6 +52,7 @@ export class LoginServicio {
         this.isUserLoggedIn = true;
         this.userLogged = user;
         localStorage.setItem('currentUser', JSON.stringify(user));
+        
     }
     getUserLoggedIn() {
         const userString = localStorage.getItem('currentUser');
@@ -75,7 +76,7 @@ export class LoginServicio {
           .pipe(
             tap(response => {
                 if (response && response.user) { // Verifica si la respuesta contiene datos del usuario
-                    this.setUserLoggedIn(response.user); 
+                    this.setUserLoggedIn(response.user);
                   }
               console.log('Full login response:', response);
             })
