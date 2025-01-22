@@ -26,6 +26,9 @@ export class LoginServicio {
     private loginSuccessMessageSubject = new BehaviorSubject<string | null>(null);
   loginSuccessMessage$ = this.loginSuccessMessageSubject.asObservable();
 
+  private isUserLoggedInSubject = new BehaviorSubject<boolean>(false);
+  isUserLoggedIn$ = this.isUserLoggedInSubject.asObservable();
+
   loginSuccess(message: string) {
     this.loginSuccessMessageSubject.next(message);
   }
@@ -35,13 +38,33 @@ export class LoginServicio {
       this.userLogged = null;
       localStorage.removeItem('currentUser');
       localStorage.removeItem('token');
+      // Actualizar el observable para notificar a los componentes suscritos
+  this.isUserLoggedInSubject.next(false); 
     }
     private baseUrl = 'http://localhost:8080/api/autenticacion/login';
-    private isUserLoggedIn;
+    private isUserLoggedIn: boolean = false;
     public userLogged: Usuario | null = null;
 
     constructor(private http: HttpClient) {
-        this.isUserLoggedIn = false;
+    
+  const userString = localStorage.getItem('currentUser');
+
+  if (userString) {
+    try {
+      // Parse JSON and update userLogged and isUserLoggedIn
+      const user: Usuario = JSON.parse(userString);
+      this.userLogged = user;
+      this.isUserLoggedIn = true;
+      this.isUserLoggedInSubject.next(true); // Notify subscribers
+    } catch (error) {
+      // Handle errors during JSON parsing
+      console.error('Error parsing user data from localStorage:', error);
+      this.isUserLoggedIn = false;
+    }
+  } else {
+    // No user found in localStorage, set initial state
+    this.isUserLoggedIn = false;
+  }
         
        
     }
@@ -77,6 +100,7 @@ export class LoginServicio {
             tap(response => {
                 if (response && response.user) { // Verifica si la respuesta contiene datos del usuario
                     this.setUserLoggedIn(response.user);
+                    this.isUserLoggedInSubject.next(true);
                   }
               console.log('Full login response:', response);
             })

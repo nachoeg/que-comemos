@@ -21,11 +21,16 @@ import { UsuariosServicio } from '../../services/usuarios-servicio/usuarios-serv
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements OnInit {
+  private _isLoggedIn: boolean = false;
   constructor(private router: Router, 
     public loginServicio: LoginServicio, public usuarioServicio: UsuariosServicio) {}
   showSuccessAlert = false;
   alertMessage = '';
   ngOnInit() {
+    this.loginServicio.isUserLoggedIn$.subscribe(isLoggedIn => {
+      this._isLoggedIn = isLoggedIn; 
+    });
+    
     // Inicializar la variable showSuccessAlert a false al cargar el componente
     //this.showSuccessAlert = false;
     this.loginServicio.loginSuccessMessage$.subscribe(message => {
