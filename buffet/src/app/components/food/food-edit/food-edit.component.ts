@@ -77,7 +77,7 @@ export class FoodEditComponent {
         this.router.navigate(['/comidas']);
       },
       (error) => {
-        this.createErrorMessage = 'Error al modificar la comida.';
+        this.createErrorMessage = error?.error?.message ? error.error.message : 'Error al modificar la comida.';
         console.error('Error al modificar la comida:', error);
       }
     );
