@@ -3,6 +3,8 @@ package ttps.spring.entrega5.rest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,14 +45,23 @@ public class ComidaResource {
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createComida(@RequestBody @Valid final ComidaDTO comidaDTO) {
+    public ResponseEntity<?> createComida(@RequestBody @Valid final ComidaDTO comidaDTO) {
+    	if (comidaService.existsByNombre(comidaDTO.getNombre())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Ya existe una comida con el mismo nombre."));
+        }
+
         final Long createdId = comidaService.create(comidaDTO);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateComida(@PathVariable(name = "id") final Long id,
+    public ResponseEntity<?> updateComida(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final ComidaDTO comidaDTO) {
+    	if (comidaService.existsByNombre(comidaDTO.getNombre())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Ya existe una comida con el mismo nombre."));
+        }
         comidaService.update(id, comidaDTO);
         return ResponseEntity.ok().build();
     }
