@@ -24,7 +24,7 @@ export class LoginComponent {
     this.loginServicio.login(user).subscribe({
       next: (response) => {       
           console.log('Login successful!');
-          this.router.navigate(['/home']);
+          this.router.navigate(['']);
           // Redirect to a protected route or main application area
         // } else {
         //   console.error('Login failed!');
