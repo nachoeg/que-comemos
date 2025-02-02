@@ -25,8 +25,10 @@
     <input class="form-control" id="foto" formControlName="foto" type="file" (change)="onFileChange($event)">
   </div>
 
-  <button type="submit" class="btn btn-primary">Crear Menú</button>
-
+  <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+    Crear Menú
+    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  </button>
   <div *ngIf="createSuccessMessage" class="alert alert-success mt-3">
     {{ createSuccessMessage }}
   </div>

@@ -28,6 +28,7 @@ export class MenuEditComponent implements OnInit {
     precio: 0,
   };
   selectedFile: File | null = null;
+  isLoading: boolean = false;
 
   constructor(
     private menuService: MenusService,
@@ -71,6 +72,7 @@ export class MenuEditComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
     const formData = new FormData();
     formData.append(
       'menu',
@@ -94,12 +96,14 @@ export class MenuEditComponent implements OnInit {
         this.createSuccessMessage = 'Menú actualizado correctamente';
         this.createErrorMessage = '';
         console.log('Menú actualizado correctamente:', response);
+        this.isLoading = false;
         this.router.navigate(['/menus']);
       },
       (error) => {
         this.createErrorMessage = 'Error al actualizar el menú';
         this.createSuccessMessage = '';
         console.error('Error al actualizar el menú:', error);
+        this.isLoading = false;
       }
     );
   }

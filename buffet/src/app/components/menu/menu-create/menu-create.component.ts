@@ -20,6 +20,7 @@ export class MenuCreateComponent implements OnInit {
   createSuccessMessage: string = '';
   createErrorMessage: string = '';
   selectedFile: File | null = null;
+  isLoading: boolean = false;
 
   constructor(private menuService: MenusService, private router: Router) {
     this.menuForm = new FormGroup({
@@ -41,6 +42,7 @@ export class MenuCreateComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
     const formData = new FormData();
     formData.append(
       'menu',
@@ -64,11 +66,13 @@ export class MenuCreateComponent implements OnInit {
         let id = response;
         this.createSuccessMessage = 'Menú creado exitosamente!';
         console.log('Menú creado exitosamente:', id);
+        this.isLoading = false;
         this.router.navigate(['/menus/', id]);
       },
       (error) => {
         this.createErrorMessage = 'Error al crear el menú.';
         console.error('Error al crear el menú:', error);
+        this.isLoading = false;
       }
     );
   }
