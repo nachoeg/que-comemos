@@ -30,6 +30,13 @@ public class Estructura {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
+    public Estructura() {
+    }
+
+    public Estructura(final String nombre) {
+        this.nombre = nombre;
+    }
+
     public Long getId() {
         return id;
     }

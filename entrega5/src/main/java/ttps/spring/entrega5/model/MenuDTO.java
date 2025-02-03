@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import ttps.spring.entrega5.domain.DiaSemana;
 
 public class MenuDTO {
 
@@ -15,6 +16,9 @@ public class MenuDTO {
     @NotNull
     @PositiveOrZero
     private Double precio;
+
+    @NotNull
+    private DiaSemana dia;
 
     public String getNombre() {
         return nombre;
@@ -30,6 +34,14 @@ public class MenuDTO {
 
     public void setPrecio(final Double precio) {
         this.precio = precio;
+    }
+
+    public DiaSemana getDia() {
+        return dia;
+    }
+
+    public void setDia(DiaSemana dia) {
+        this.dia = dia;
     }
 
 }

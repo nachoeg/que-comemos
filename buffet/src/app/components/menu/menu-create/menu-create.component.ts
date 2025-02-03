@@ -1,17 +1,18 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { NewMenu } from '../../../models/new-menu/new-menu';
-import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MenusService } from '../../../services/menus-service/menus-service';
 import { Router, RouterModule } from '@angular/router';
+import { DIAS_SEMANA } from '../../../models/dias-semana/dias-semana.model';
 
 @Component({
   selector: 'app-menu-create',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './menu-create.component.html',
-  styleUrl: './menu-create.component.css',
+  styleUrls: ['./menu-create.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [MenusService],
 })
@@ -22,6 +23,8 @@ export class MenuCreateComponent implements OnInit {
   selectedFile: File | null = null;
   isLoading: boolean = false;
 
+  diasSemana = DIAS_SEMANA;
+
   constructor(private menuService: MenusService, private router: Router) {
     this.menuForm = new FormGroup({
       nombre: new FormControl('', [
@@ -29,6 +32,7 @@ export class MenuCreateComponent implements OnInit {
         Validators.nullValidator,
       ]),
       precio: new FormControl('', [Validators.required, Validators.min(0)]),
+      dia: new FormControl('Desactivado', Validators.required),
       foto: new FormControl(''),
     });
   }
@@ -51,6 +55,7 @@ export class MenuCreateComponent implements OnInit {
           JSON.stringify({
             nombre: this.menuForm.get('nombre')?.value,
             precio: this.menuForm.get('precio')?.value,
+            dia: this.menuForm.get('dia')?.value,
           }),
         ],
         { type: 'application/json' }

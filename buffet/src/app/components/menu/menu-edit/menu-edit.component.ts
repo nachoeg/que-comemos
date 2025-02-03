@@ -10,13 +10,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { DIAS_SEMANA } from '../../../models/dias-semana/dias-semana.model';
 
 @Component({
   selector: 'app-menu-edit',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './menu-edit.component.html',
-  styleUrl: './menu-edit.component.css',
+  styleUrls: ['./menu-edit.component.css'],
 })
 export class MenuEditComponent implements OnInit {
   menuForm: FormGroup;
@@ -30,6 +31,8 @@ export class MenuEditComponent implements OnInit {
   selectedFile: File | null = null;
   isLoading: boolean = false;
 
+  diasSemana = DIAS_SEMANA;
+
   constructor(
     private menuService: MenusService,
     private router: Router,
@@ -41,6 +44,7 @@ export class MenuEditComponent implements OnInit {
         Validators.nullValidator,
       ]),
       precio: new FormControl('', [Validators.required, Validators.min(0)]),
+      dia: new FormControl('Desactivado', Validators.required),
       foto: new FormControl(''),
     });
   }
@@ -55,6 +59,7 @@ export class MenuEditComponent implements OnInit {
           this.menuForm.patchValue({
             nombre: menu.nombre,
             precio: menu.precio,
+            dia: menu.dia,
           });
         });
       } else {
@@ -81,6 +86,7 @@ export class MenuEditComponent implements OnInit {
           JSON.stringify({
             nombre: this.menuForm.get('nombre')?.value,
             precio: this.menuForm.get('precio')?.value,
+            dia: this.menuForm.get('dia')?.value,
           }),
         ],
         { type: 'application/json' }

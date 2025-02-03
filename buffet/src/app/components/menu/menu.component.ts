@@ -18,7 +18,7 @@ import { Router, RouterModule } from '@angular/router';
     RouterModule,
   ],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css',
+  styleUrls: ['./menu.component.css'],
   providers: [MenusService],
 })
 export class MenuComponent implements OnInit {
