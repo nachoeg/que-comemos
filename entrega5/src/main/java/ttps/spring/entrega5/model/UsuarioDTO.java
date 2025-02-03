@@ -29,6 +29,8 @@ public class UsuarioDTO {
 
     @NotNull
     private Long rol;
+    
+    private String rolName;
 
     public Integer getId() {
         return id;
@@ -93,5 +95,14 @@ public class UsuarioDTO {
     public void setRol(final Long rol) {
         this.rol = rol;
     }
+
+
+	public String getRolName() {
+		return rolName;
+	}
+
+	public void setRolName(String rolName) {
+		this.rolName = rolName;
+	}
 
 }

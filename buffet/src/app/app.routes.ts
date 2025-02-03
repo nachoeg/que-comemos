@@ -12,12 +12,14 @@ import { MenuItemComponent } from './components/menu/menu-item/menu-item.compone
 import { EstructuraAddFoodComponent } from './components/menu/estructura-add-food/estructura-add-food.component';
 import { EstructuraCreateComponent } from './components/menu/estructura-create/estructura-create.component';
 import { AuthGuard } from './services/authGuard/auth-guard';
+import { ErrorComponent } from './components/error/error.component';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'iniciar-sesion', component: LoginComponent },
   { path: 'registrarse', component: RegisterComponent },
-  { path: 'menus', component: MenuComponent, canActivate: [AuthGuard], data: { roles: ['1', '2'] } },
+  { path: 'menus', component: MenuComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'menus/crear', component: MenuCreateComponent },
   { path: 'menus/:id', component: MenuItemComponent },
   { path: 'menus/:id/editar', component: MenuEditComponent },
@@ -32,5 +34,7 @@ export const routes: Routes = [
   { path: 'comidas', component: FoodComponent },
   { path: 'comidas/crear', component: FoodCreateComponent },
   { path: 'comidas/:id/editar', component: FoodEditComponent },
-  { path: '**', redirectTo: '/iniciar-sesion' }
+  { path: '**', redirectTo: '/iniciar-sesion' },
+  { path: 'error', component: ErrorComponent },
+  { path: 'forbidden', component: ForbiddenComponent }
 ];

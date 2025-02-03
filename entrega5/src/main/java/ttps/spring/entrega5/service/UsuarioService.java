@@ -76,7 +76,14 @@ public class UsuarioService {
         usuarioDTO.setEmail(usuario.getEmail());
         usuarioDTO.setClave(usuario.getClave());
         usuarioDTO.setFoto(usuario.getFoto());
-        usuarioDTO.setRol(usuario.getRol() == null ? null : usuario.getRol().getId());
+        //usuarioDTO.setRol(usuario.getRol() == null ? null : usuario.getRol().getId());
+        if (usuario.getRol() != null) {
+            usuarioDTO.setRol(usuario.getRol().getId()); // Keep the Rol ID
+            usuarioDTO.setRolName(usuario.getRol().getNombreRol()); // Set the role name
+        } else {
+            usuarioDTO.setRol(null);
+            usuarioDTO.setRolName(null);
+        }
         return usuarioDTO;
     }
 
