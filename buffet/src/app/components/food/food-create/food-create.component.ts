@@ -70,7 +70,8 @@ export class FoodCreateComponent {
         this.router.navigate(['/comidas']);
       },
       (error) => {
-        this.createErrorMessage = 'Error al crear el menú.';
+        this.createErrorMessage = error?.error?.message ? error.error.message : 'Error al crear la comida.';
+        // this.createErrorMessage = 'Error al crear el menú.';
         console.error('Error al crear el menú:', error);
         this.isLoading = false;
       }

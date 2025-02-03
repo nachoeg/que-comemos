@@ -80,6 +80,10 @@ public class ComidaService {
                 .forEach(estructura -> estructura.getComidas().remove(comida));
         comidaRepository.delete(comida);
     }
+    
+    public boolean existsByNombre(String nombre) {
+        return comidaRepository.existsByNombre(nombre);
+    }
 
     private ComidaGetDTO mapToDTO(final Comida comida, final ComidaGetDTO comidaDTO) {
         comidaDTO.setId(comida.getId());
