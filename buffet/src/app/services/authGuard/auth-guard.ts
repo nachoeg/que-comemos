@@ -25,7 +25,15 @@ export class AuthGuard implements CanActivate {
         // El usuario está autenticado, verificamos el rol
         const requiredRoles = route.data['roles'] as string[];
         const user = this.authService.getUserLoggedIn();
-        //const userRole = user.rol?.toString();
+        
+      // Verificar si user es nulo
+      // Aquí la clave: si el usuario no existe, asumimos que no tiene permisos
+      if (!user) {
+        console.log('Usuario no encontrado (no logueado). Redirigiendo a forbidden.');
+        this.router.navigate(['/forbidden']);
+        return false;
+      }
+      
         const userRole = user.rolName;
 
         console.log('Roles requeridos:', requiredRoles);
@@ -34,13 +42,14 @@ export class AuthGuard implements CanActivate {
         const hasAccess = requiredRoles.includes(userRole);
         if (!hasAccess) {
           console.log('Usuario sin permisos. Redirigiendo a forbidden.');
-          this.router.navigate(['/forbidden']); // Redirige a la página de "forbidden"
+          this.router.navigate(['/forbidden']);
           return false;
         }
 
         console.log('Usuario:', user.nombre, 'tiene acceso:', hasAccess);
         return true;
-      }
+      
+    }
     }),
     catchError(error => {
       console.error('Error en la guarda:', error);

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Usuario } from '../../models/usuario/usuario';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 interface User {
   id: number;
@@ -30,27 +31,11 @@ export class LoginServicio {
   private isUserLoggedInSubject = new BehaviorSubject<boolean>(false);
   isUserLoggedIn$ = this.isUserLoggedInSubject.asObservable();
 
-  //private userLoggedSubject = new BehaviorSubject<Usuario | null>(null); 
-  //public userLogged$ = this.userLoggedSubject.asObservable(); 
+  private userLoggedSubject = new BehaviorSubject<User | null>(null);
+  userLogged$ = this.userLoggedSubject.asObservable();
 
-  loginSuccess(message: string) {
-    this.loginSuccessMessageSubject.next(message);
-  }
-  logout() {
-    console.log("se cerró sesion");
-    this.isUserLoggedIn = false;
-    this.userLogged = null;
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('token');
-    // Actualizar el observable para notificar a los componentes suscritos
-    this.isUserLoggedInSubject.next(false);
-    //this.userLoggedSubject.next(null); // <--- Crucial: Emitir null al cerrar sesión
-  }
-  private baseUrl = 'http://localhost:8080/api/autenticacion/login';
-  private isUserLoggedIn: boolean = false;
-  public userLogged: Usuario | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
 
     const userString = localStorage.getItem('currentUser');
 
@@ -66,6 +51,7 @@ export class LoginServicio {
         // Handle errors during JSON parsing
         console.error('Error parsing user data from localStorage:', error);
         //this.isUserLoggedIn = false;
+        localStorage.removeItem("currentUser"); // Clear invalid data
         this.isUserLoggedInSubject.next(false);
       }
     } else {
@@ -74,6 +60,26 @@ export class LoginServicio {
       this.isUserLoggedInSubject.next(false);
     }
   }
+
+  loginSuccess(message: string) {
+    this.loginSuccessMessageSubject.next(message);
+  }
+  logout() {
+    console.log("se cerró sesion");
+    this.isUserLoggedIn = false;
+    this.userLogged = null;
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
+    // Actualizar el observable para notificar a los componentes suscritos
+    this.isUserLoggedInSubject.next(false);
+    this.router.navigate(['/iniciar-sesion']);
+    
+  }
+  private baseUrl = 'http://localhost:8080/api/autenticacion/login';
+  private isUserLoggedIn: boolean = false;
+  public userLogged: Usuario | null = null;
+
+  
   isLogged() {
     return this.isUserLoggedIn;
   }
@@ -92,15 +98,7 @@ export class LoginServicio {
       return null;
     }
   }
-//   getUserLoggedIn(): Usuario {
-//     return this.userLoggedSubject.value; // Acceder al valor actual del BehaviorSubject
-// }
 
-
-  // login(user: any): Observable<any> {
-  //     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  //     return this.http.post(this.baseUrl, user, { headers });
-  // }
   login(user: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 

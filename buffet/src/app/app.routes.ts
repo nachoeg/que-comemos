@@ -31,10 +31,9 @@ export const routes: Routes = [
     path: 'menus/:id/:estructuraId/agregar-comida',
     component: EstructuraAddFoodComponent,
   },
-  { path: 'comidas', component: FoodComponent },
+  { path: 'comidas', component: FoodComponent, canActivate: [AuthGuard], data: { roles: ['USER'] } },
   { path: 'comidas/crear', component: FoodCreateComponent },
   { path: 'comidas/:id/editar', component: FoodEditComponent },
-  { path: '**', redirectTo: '/iniciar-sesion' },
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent }
 ];

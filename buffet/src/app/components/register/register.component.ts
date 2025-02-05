@@ -53,7 +53,7 @@ export class RegisterComponent {
       this.usuario.dni = this.f.get('dni')?.value;
       this.usuario.nombre = this.f.get('nombre')?.value;
       this.usuario.apellido = this.f.get('apellido')?.value;
-      this.usuario.rol = 1;
+      this.usuario.rol = 3;
       console.log(this.usuario);
       this.usuarioServicio.registerUser(this.usuario).subscribe(
         (response) => {
