@@ -29,6 +29,7 @@ export class FoodEditComponent {
     precio: 0,
   };
   selectedFile: File | null = null;
+  isLoading: boolean = false;
 
   constructor(
     private foodsService: FoodsService,
@@ -72,6 +73,7 @@ export class FoodEditComponent {
   }
 
   onSubmit() {
+    this.isLoading = true;
     const formData = new FormData();
     formData.append(
       'comida',
@@ -93,11 +95,13 @@ export class FoodEditComponent {
       (response) => {
         this.createSuccessMessage = 'Comida modificada exitosamente!';
         console.log('Comida modificada exitosamente:', response);
+        this.isLoading = false;
         this.router.navigate(['/comidas']);
       },
       (error) => {
-        this.createErrorMessage = 'Error al modificar la comida.';
+        this.createErrorMessage = error?.error?.message ? error.error.message : 'Error al modificar la comida.';
         console.error('Error al modificar la comida:', error);
+        this.isLoading = false;
       }
     );
   }

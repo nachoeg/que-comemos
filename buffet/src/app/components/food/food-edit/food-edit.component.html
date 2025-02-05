@@ -30,7 +30,10 @@
   </div>
 
 
-  <button type="submit" class="btn btn-primary">Modificar comida</button>
+  <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+    Modificar comida
+    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  </button>
 
   <div *ngIf="createSuccessMessage" class="alert alert-success mt-3">
     {{ createSuccessMessage }}

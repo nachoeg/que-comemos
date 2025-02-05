@@ -25,13 +25,22 @@
         </div>
     </div>
 
+    <div class="form-group mb-3">
+        <label for="dia" class="form-label">Día</label>
+        <select id="dia" class="form-control" formControlName="dia">
+            <option *ngFor="let dia of diasSemana" [value]="dia">{{ dia }}</option>
+        </select>
+    </div>
+
     <div class="mb-3">
         <label for="foto" class="form-label">Foto</label>
         <input class="form-control" id="foto" formControlName="foto" type="file" (change)="onFileChange($event)">
     </div>
 
-
-    <button type="submit" class="btn btn-primary">Modificar menú</button>
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        Modificar menú
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
 
     <div *ngIf="createSuccessMessage" class="alert alert-success mt-3">
         {{ createSuccessMessage }}

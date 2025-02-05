@@ -21,6 +21,7 @@ export class MenuItemComponent implements OnInit {
     nombre: '',
     precio: 0,
     foto: '',
+    dia: '',
     estructuras: [],
   };
 

@@ -52,6 +52,7 @@ public class MenuService {
 					menuDTO.setId(menu.getId());
 					menuDTO.setNombre(menu.getNombre());
 					menuDTO.setPrecio(menu.getPrecio());
+					menuDTO.setDia(menu.getDia());
 
 					// Create a new list to avoid modification of the original entity's structures
 					List<EstructuraGetDTO> estructurasDto = new ArrayList<>();
@@ -113,6 +114,7 @@ public class MenuService {
 		menuDTO.setNombre(menu.getNombre());
 		menuDTO.setPrecio(menu.getPrecio());
 		menuDTO.setFoto(menu.getFoto());
+		menuDTO.setDia(menu.getDia());
 		// Create a new list to avoid modification of the original entity's structures
 		List<EstructuraGetDTO> estructurasDto = new ArrayList<>();
 		for (Estructura estructura : menu.getEstructuras()) {
@@ -141,6 +143,7 @@ public class MenuService {
 	private Menu mapToEntity(final MenuDTO menuDTO, final Menu menu) {
 		menu.setNombre(menuDTO.getNombre());
 		menu.setPrecio(menuDTO.getPrecio());
+		menu.setDia(menuDTO.getDia());
 		return menu;
 	}
 

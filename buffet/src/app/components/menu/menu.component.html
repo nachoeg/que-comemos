@@ -16,7 +16,10 @@
         (error)="onImageError(i)">
       <div class="card-body">
         <h5 class="card-title">{{ menu.nombre }}</h5>
-        <p class="card-text">
+        <p class="card-text mb-1">
+          {{ menu.dia }}
+        </p>
+        <p class="card-text fw-bold">
           $ {{ menu.precio }}
         </p>
         <div class="btn-group" role="group" aria-label="Botones del menú">

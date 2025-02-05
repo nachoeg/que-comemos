@@ -22,6 +22,7 @@ export class FoodCreateComponent {
   createSuccessMessage: string = '';
   createErrorMessage: string = '';
   selectedFile: File | null = null;
+  isLoading: boolean = false;
 
   constructor(private foodsService: FoodsService, private router: Router) {
     this.foodForm = new FormGroup({
@@ -43,6 +44,7 @@ export class FoodCreateComponent {
   }
 
   onSubmit() {
+    this.isLoading = true;
     const formData = new FormData();
     formData.append(
       'comida',
@@ -64,11 +66,14 @@ export class FoodCreateComponent {
       (response) => {
         this.createSuccessMessage = 'Menú creado exitosamente!';
         console.log('Menú creado exitosamente:', response);
+        this.isLoading = false;
         this.router.navigate(['/comidas']);
       },
       (error) => {
-        this.createErrorMessage = 'Error al crear el menú.';
+        this.createErrorMessage = error?.error?.message ? error.error.message : 'Error al crear la comida.';
+        // this.createErrorMessage = 'Error al crear el menú.';
         console.error('Error al crear el menú:', error);
+        this.isLoading = false;
       }
     );
   }

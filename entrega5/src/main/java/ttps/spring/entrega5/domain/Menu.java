@@ -3,6 +3,8 @@ package ttps.spring.entrega5.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,27 +30,19 @@ public class Menu {
     @Column
     private String foto;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DiaSemana dia;
+
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Estructura> estructuras;
 
     public Menu() {
         estructuras = new ArrayList<>();
-        Estructura entrada = new Estructura();
-        Estructura principal = new Estructura();
-        Estructura postre = new Estructura();
-        Estructura bebida = new Estructura();
-        entrada.setNombre("Entrada");
-        principal.setNombre("Principal");
-        postre.setNombre("Postre");
-        bebida.setNombre("Bebida");
-        estructuras.add(entrada);
-        estructuras.add(principal);
-        estructuras.add(postre);
-        estructuras.add(bebida);
-        entrada.setMenu(this);
-        principal.setMenu(this);
-        postre.setMenu(this);
-        bebida.setMenu(this);
+        addEstructura(new Estructura("Entrada"));
+        addEstructura(new Estructura("Principal"));
+        addEstructura(new Estructura("Postre"));
+        addEstructura(new Estructura("Bebida"));
     }
 
     public Long getId() {
@@ -92,6 +86,14 @@ public class Menu {
 
     public void setFoto(final String foto) {
         this.foto = foto;
+    }
+
+    public DiaSemana getDia() {
+        return dia;
+    }
+
+    public void setDia(DiaSemana dia) {
+        this.dia = dia;
     }
 
     public void addEstructura(Estructura estructura) {

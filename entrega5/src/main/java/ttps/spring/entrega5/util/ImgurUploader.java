@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 
 @Component
@@ -32,15 +34,8 @@ public class ImgurUploader {
       if (!response.isSuccessful()) {
         throw new IOException("Unexpected code " + response);
       }
-
-      // Parse the response to get the URL
       String responseBody = response.body().string();
-      // Assuming the response is in JSON format and contains a field "link" with the
-      // URL
-      // You can use a JSON library like Jackson or Gson to parse the response
-      // Here, we'll just extract the URL using a simple string manipulation
-      String fotoUrl = responseBody.substring(responseBody.indexOf("\"link\":\"") + 8);
-      fotoUrl = fotoUrl.substring(0, fotoUrl.indexOf("\""));
+      String fotoUrl = new ObjectMapper().readTree(responseBody).path("data").path("link").asText();
       return fotoUrl;
     }
   }

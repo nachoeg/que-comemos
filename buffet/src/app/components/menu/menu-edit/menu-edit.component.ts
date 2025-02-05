@@ -10,13 +10,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { DIAS_SEMANA } from '../../../models/dias-semana/dias-semana.model';
 
 @Component({
   selector: 'app-menu-edit',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './menu-edit.component.html',
-  styleUrl: './menu-edit.component.css',
+  styleUrls: ['./menu-edit.component.css'],
 })
 export class MenuEditComponent implements OnInit {
   menuForm: FormGroup;
@@ -28,6 +29,9 @@ export class MenuEditComponent implements OnInit {
     precio: 0,
   };
   selectedFile: File | null = null;
+  isLoading: boolean = false;
+
+  diasSemana = DIAS_SEMANA;
 
   constructor(
     private menuService: MenusService,
@@ -40,6 +44,7 @@ export class MenuEditComponent implements OnInit {
         Validators.nullValidator,
       ]),
       precio: new FormControl('', [Validators.required, Validators.min(0)]),
+      dia: new FormControl('Desactivado', Validators.required),
       foto: new FormControl(''),
     });
   }
@@ -54,6 +59,7 @@ export class MenuEditComponent implements OnInit {
           this.menuForm.patchValue({
             nombre: menu.nombre,
             precio: menu.precio,
+            dia: menu.dia,
           });
         });
       } else {
@@ -71,6 +77,7 @@ export class MenuEditComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
     const formData = new FormData();
     formData.append(
       'menu',
@@ -79,6 +86,7 @@ export class MenuEditComponent implements OnInit {
           JSON.stringify({
             nombre: this.menuForm.get('nombre')?.value,
             precio: this.menuForm.get('precio')?.value,
+            dia: this.menuForm.get('dia')?.value,
           }),
         ],
         { type: 'application/json' }
@@ -94,12 +102,14 @@ export class MenuEditComponent implements OnInit {
         this.createSuccessMessage = 'Menú actualizado correctamente';
         this.createErrorMessage = '';
         console.log('Menú actualizado correctamente:', response);
+        this.isLoading = false;
         this.router.navigate(['/menus']);
       },
       (error) => {
         this.createErrorMessage = 'Error al actualizar el menú';
         this.createSuccessMessage = '';
         console.error('Error al actualizar el menú:', error);
+        this.isLoading = false;
       }
     );
   }

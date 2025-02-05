@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -46,16 +48,25 @@ public class ComidaResource {
 
     @PostMapping(consumes = { "multipart/form-data" })
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createComida(@RequestPart("comida") @Valid final ComidaDTO comidaDTO,
+    public ResponseEntity<?> createComida(@RequestPart("comida") @Valid final ComidaDTO comidaDTO,
             @RequestPart(value = "foto", required = false) final MultipartFile foto) throws IOException {
+        if (comidaService.existsByNombre(comidaDTO.getNombre())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Ya existe una comida con el mismo nombre."));
+        }
+
         final Long createdId = comidaService.create(comidaDTO, foto);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
-    public ResponseEntity<Void> updateComida(@PathVariable(name = "id") final Long id,
+    public ResponseEntity<?> updateComida(@PathVariable(name = "id") final Long id,
             @RequestPart("comida") @Valid final ComidaDTO comidaDTO,
             @RequestPart(value = "foto", required = false) final MultipartFile foto) throws IOException {
+        if (comidaService.existsByNombre(comidaDTO.getNombre())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Ya existe una comida con el mismo nombre."));
+        }
         comidaService.update(id, comidaDTO, foto);
         return ResponseEntity.ok().build();
     }
