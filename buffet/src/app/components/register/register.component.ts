@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Usuario } from '../../models/usuario/usuario';
 import { AbstractControl, FormGroup, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UsuariosServicio } from '../../services/usuarios-servicio/usuarios-servicio';
+import { UsuariosService } from '../../services/usuarios-service/usuarios-service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,7 @@ export function MatchingPasswords(passwordControlName: string) {
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
-  providers: [UsuariosServicio]
+  providers: [UsuariosService]
 })
 export class RegisterComponent {
 
@@ -33,7 +33,7 @@ export class RegisterComponent {
   f: FormGroup;
   registerSuccessMessage: string | null = null;
 
-  constructor(private usuarioServicio: UsuariosServicio, private router: Router, private fb: FormBuilder) {
+  constructor(private usuarioServicio: UsuariosService, private router: Router, private fb: FormBuilder) {
     this.f = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3)]],

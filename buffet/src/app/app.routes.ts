@@ -11,6 +11,9 @@ import { FoodEditComponent } from './components/food/food-edit/food-edit.compone
 import { MenuItemComponent } from './components/menu/menu-item/menu-item.component';
 import { EstructuraAddFoodComponent } from './components/menu/estructura-add-food/estructura-add-food.component';
 import { EstructuraCreateComponent } from './components/menu/estructura-create/estructura-create.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { UsuarioDetalleComponent } from './components/usuarios/usuario-detalle/usuario-detalle.component';
+import { UsuarioEditarComponent } from './components/usuarios/usuario-editar/usuario-editar.component';
 import { AuthGuard } from './services/authGuard/auth-guard';
 import { ErrorComponent } from './components/error/error.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
@@ -31,9 +34,12 @@ export const routes: Routes = [
     path: 'menus/:id/:estructuraId/agregar-comida',
     component: EstructuraAddFoodComponent,
   },
-  { path: 'comidas', component: FoodComponent, canActivate: [AuthGuard], data: { roles: ['USER'] } },
+  { path: 'comidas', component: FoodComponent, canActivate: [AuthGuard], data: { roles: ['USER', 'ADMIN'] } },
   { path: 'comidas/crear', component: FoodCreateComponent },
   { path: 'comidas/:id/editar', component: FoodEditComponent },
+  { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'usuarios/:id', component: UsuarioDetalleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'usuarios/editar/:id', component: UsuarioEditarComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent }
 ];

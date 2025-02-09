@@ -8,9 +8,9 @@ export class Usuario {
         "clave": string;
         "foto": string;
         "rol": number;
-        // "rolName": string;
+        "rolName"?: string;
 
-        constructor(id: number, dni: number, nombre: string, apellido: string, email: string, clave: string, foto: string, rol: number){
+        constructor(id: number, dni: number, nombre: string, apellido: string, email: string, clave: string, foto: string, rol: number, rolName?: string) {
             this.id = id;
             this.dni = dni;
             this.nombre = nombre;
@@ -19,6 +19,6 @@ export class Usuario {
             this.clave = clave;
             this.foto = foto;
             this.rol = rol;
-            // this.rolName = rolName;
+            this.rolName = rolName;
         }
       }

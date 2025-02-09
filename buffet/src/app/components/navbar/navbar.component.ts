@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import { LoginServicio } from '../../services/login-servicio/login-servicio';
 import { CommonModule } from '@angular/common';
-import { UsuariosServicio } from '../../services/usuarios-servicio/usuarios-servicio';
+import { UsuariosService } from '../../services/usuarios-service/usuarios-service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,7 +23,7 @@ import { UsuariosServicio } from '../../services/usuarios-servicio/usuarios-serv
 export class NavbarComponent implements OnInit {
   private _isLoggedIn: boolean = false;
   constructor(private router: Router, 
-    public loginServicio: LoginServicio, public usuarioServicio: UsuariosServicio) {}
+    public loginServicio: LoginServicio, public usuarioService: UsuariosService) {}
   showSuccessAlert = false;
   alertMessage = '';
   ngOnInit() {
@@ -38,8 +38,8 @@ export class NavbarComponent implements OnInit {
         this.showAlert(message);
       }
     });
-    // Subscribe to registerSuccessMessage$ from UsuariosServicio
-    this.usuarioServicio.registerSuccessMessage$.subscribe(message => {
+    // Subscribe to registerSuccessMessage$ from UsuariosService
+    this.usuarioService.registerSuccessMessage$.subscribe(message => {
       if (message) {
         this.showSuccessAlert = true;
         this.showAlert(message);

@@ -2,6 +2,8 @@ package ttps.spring.entrega5.rest;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import ttps.spring.entrega5.model.ComidaDTO;
 import ttps.spring.entrega5.model.UsuarioDTO;
 import ttps.spring.entrega5.service.UsuarioService;
 import ttps.spring.entrega5.util.ReferencedException;
@@ -50,11 +56,16 @@ public class UsuarioResource {
         final Integer createdId = usuarioService.create(usuarioDTO);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
+    
+//    @RequestBody @Valid final UsuarioDTO usuarioDTO
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Integer> updateUsuario(@PathVariable(name = "id") final Integer id,
-            @RequestBody @Valid final UsuarioDTO usuarioDTO) {
-        usuarioService.update(id, usuarioDTO);
+    @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
+    public ResponseEntity<Integer> updateUsuario(
+    		@PathVariable(name = "id") final Integer id,
+    		@RequestPart("usuario") @Valid final UsuarioDTO usuarioDTO,
+            @RequestPart(value = "foto", required = false) final MultipartFile foto
+            ) throws IOException {
+        usuarioService.update(id, usuarioDTO, foto);
         return ResponseEntity.ok(id);
     }
 
