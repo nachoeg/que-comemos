@@ -1,0 +1,56 @@
+<!-- <a class="text-decoration-none" routerLink="/sugerencias"> 
+    <i class="bi bi-arrow-left"></i> Volver
+  </a> -->
+  
+  <form class="container-form" [formGroup]="sugerenciaForm" (ngSubmit)="onSubmit()">
+    <h2 class="mb-4">Enviar Sugerencia</h2>
+  
+    <div class="mb-3 form-group">
+      <label for="usuario" class="form-label">Usuario</label>
+      <!-- <p class="form-control">{{ usuarioLogeado?.email  }}</p> -->
+      <input type="email" id="usuario" class="form-control" formControlName="usuario" 
+        [value]="usuarioLogeado?.email" [disabled]="true" />
+      <!-- <div *ngIf="sugerenciaForm.get('usuario')?.invalid && sugerenciaForm.get('usuario')?.touched">
+        <div class="text-danger" *ngIf="sugerenciaForm.get('usuario')?.errors?.['required']">
+          El usuario es obligatorio.
+        </div>
+      </div> -->
+    </div>
+  
+    <div class="mb-3 form-group">
+      <label for="tipo" class="form-label">Tipo de Sugerencia</label>
+      <select id="tipo" class="form-select" formControlName="tipo">
+        <option value="Alimentos">Alimentos</option>
+        <option value="Infraestructura">Infraestructura</option>
+        <option value="Atención">Atención</option>
+        <option value="Otros">Otros</option>
+      </select>
+      <div *ngIf="sugerenciaForm.get('tipo')?.invalid && sugerenciaForm.get('tipo')?.touched">
+        <div class="text-danger" *ngIf="sugerenciaForm.get('tipo')?.errors?.['required']">
+          El tipo de sugerencia es obligatorio.
+        </div>
+      </div>
+    </div>
+  
+    <div class="mb-3 form-group">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea id="descripcion" class="form-control" formControlName="descripcion"></textarea>
+      <div *ngIf="sugerenciaForm.get('descripcion')?.invalid && sugerenciaForm.get('descripcion')?.touched">
+        <div class="text-danger" *ngIf="sugerenciaForm.get('descripcion')?.errors?.['required']">
+          La descripción es obligatoria.
+        </div>
+        <div class="text-danger" *ngIf="sugerenciaForm.get('descripcion')?.errors?.['maxLength']">
+          La descripción no puede tener más de 255 caracteres.
+        </div>
+      </div>
+    </div>
+  
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+      Enviar Sugerencia
+      <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
+  
+    <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+  </form>
+  

@@ -14,6 +14,9 @@ import { EstructuraCreateComponent } from './components/menu/estructura-create/e
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { UsuarioDetalleComponent } from './components/usuarios/usuario-detalle/usuario-detalle.component';
 import { UsuarioEditarComponent } from './components/usuarios/usuario-editar/usuario-editar.component';
+import { SugerenciasCrearComponent} from './components/sugerencias/sugerencias-crear/sugerencias-crear.component';
+import { SugerenciasDetalleComponent} from './components/sugerencias/sugerencias-detalle/sugerencias-detalle.component';
+import { SugerenciasComponent } from './components/sugerencias/sugerencias.component';
 import { AuthGuard } from './services/authGuard/auth-guard';
 import { ErrorComponent } from './components/error/error.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
@@ -40,6 +43,9 @@ export const routes: Routes = [
   { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'usuarios/:id', component: UsuarioDetalleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'usuarios/editar/:id', component: UsuarioEditarComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'sugerencias', component: SugerenciasComponent,  canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER', 'USER'] } },
+  { path: 'sugerencias/crear', component: SugerenciasCrearComponent,  canActivate: [AuthGuard], data: { roles: ['USER'] } },
+  { path: 'sugerencias/:id', component: SugerenciasDetalleComponent,  canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER'] } },
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent }
 ];

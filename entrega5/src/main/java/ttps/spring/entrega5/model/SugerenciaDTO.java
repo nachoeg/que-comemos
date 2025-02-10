@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public class SugerenciaDTO {
-	@JsonIgnore
+
     private Long id;
 
     @Size(max = 255)
