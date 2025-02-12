@@ -42,8 +42,8 @@ import org.springframework.context.annotation.Configuration;
 
 import jakarta.persistence.EntityManagerFactory;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Configuration
@@ -113,10 +113,10 @@ public class SpringWebApp implements WebApplicationInitializer {
         };
     }
     
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Usar BCryptPasswordEncoder
-    }
+	/*
+	 * @Bean public PasswordEncoder passwordEncoder() { return new
+	 * BCryptPasswordEncoder(); // Usar BCryptPasswordEncoder }
+	 */
 
 	
 

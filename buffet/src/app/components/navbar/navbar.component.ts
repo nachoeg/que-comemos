@@ -6,6 +6,7 @@ import { Router, RouterModule } from '@angular/router';
 import { LoginServicio } from '../../services/login-servicio/login-servicio';
 import { CommonModule } from '@angular/common';
 import { UsuariosService } from '../../services/usuarios-service/usuarios-service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -22,30 +23,57 @@ import { UsuariosService } from '../../services/usuarios-service/usuarios-servic
 })
 export class NavbarComponent implements OnInit {
   private _isLoggedIn: boolean = false;
-  constructor(private router: Router, 
-    public loginServicio: LoginServicio, public usuarioService: UsuariosService) {}
-  showSuccessAlert = false;
   alertMessage = '';
-  ngOnInit() {
-    this.loginServicio.isUserLoggedIn$.subscribe(isLoggedIn => {
-      this._isLoggedIn = isLoggedIn; 
-    });
-    
-    // Inicializar la variable showSuccessAlert a false al cargar el componente
-    //this.showSuccessAlert = false;
-    this.loginServicio.loginSuccessMessage$.subscribe(message => {
-      if (message) {
-        this.showAlert(message);
-      }
-    });
-    // Subscribe to registerSuccessMessage$ from UsuariosService
-    this.usuarioService.registerSuccessMessage$.subscribe(message => {
-      if (message) {
-        this.showSuccessAlert = true;
-        this.showAlert(message);
+  showSuccessAlert = false;
+  private destroy$ = new Subject<void>();
 
+
+  constructor(private router: Router,
+    public loginServicio: LoginServicio,
+    public usuarioService: UsuariosService) { }
+  
+  ngOnInit() {
+    // this.loginServicio.isUserLoggedIn$.subscribe(isLoggedIn => {
+    //   this._isLoggedIn = isLoggedIn;
+    // });
+
+    // // Inicializar la variable showSuccessAlert a false al cargar el componente
+    // //this.showSuccessAlert = false;
+    // this.loginServicio.loginSuccessMessage$.subscribe(message => {
+    //   if (message) {
+    //     this.showAlert(message);
+    //   }
+    // });
+    // // Subscribe to registerSuccessMessage$ from UsuariosService
+    // this.usuarioService.registerSuccessMessage$.subscribe(message => {
+    //   if (message) {
+    //     this.showSuccessAlert = true;
+    //     this.showAlert(message);
+
+    //   }
+    // });
+    this.loginServicio.isUserLoggedIn$.pipe(takeUntil(this.destroy$)).subscribe(isLoggedIn => {
+      this._isLoggedIn = isLoggedIn;
+    });
+
+    this.loginServicio.loginSuccessMessage$.pipe(takeUntil(this.destroy$)).subscribe(message => {
+      if (message) {
+        console.log("Mensaje recibido en Navbar:", message); 
+        this.showAlert(message);
       }
     });
+
+    this.usuarioService.registerSuccessMessage$.pipe(takeUntil(this.destroy$)).subscribe(message => {
+      if (message) {
+        console.log("Mensaje recibido en Navbar:", message); 
+        this.showAlert(message);
+      }
+    });
+  }
+
+  ngOnDestroy() { // Importante: Desuscribirse al destruir el componente
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   logout() {
@@ -56,7 +84,7 @@ export class NavbarComponent implements OnInit {
   showAlert(message: string) {
     this.showSuccessAlert = true;
     this.alertMessage = message;
-  
+
     // Ocultar la alerta después de 3 segundos
     setTimeout(() => {
       this.showSuccessAlert = false;
@@ -68,6 +96,6 @@ export class NavbarComponent implements OnInit {
   }
 
   get usuarioLogeado() {
-    return this.loginServicio.getUserLoggedIn(); 
+    return this.loginServicio.getUserLoggedIn();
   }
 }

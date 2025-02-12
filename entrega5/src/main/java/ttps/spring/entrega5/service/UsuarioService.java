@@ -63,9 +63,9 @@ public class UsuarioService {
 
     public Integer create(final UsuarioDTO usuarioDTO) {
         final Usuario usuario = new Usuario();
-        String encodedPassword = passwordService.hashPassword(usuarioDTO.getClave()); // Usar PasswordService
-        usuario.setClave(encodedPassword);
         mapToEntity(usuarioDTO, usuario);
+        String encodedPassword = passwordService.hashPassword(usuarioDTO.getClave()); // Usar PasswordService para hasear clave
+        usuario.setClave(encodedPassword);
         return usuarioRepository.save(usuario).getId();
     }
 
@@ -108,7 +108,7 @@ public class UsuarioService {
         usuario.setNombre(usuarioDTO.getNombre());
         usuario.setApellido(usuarioDTO.getApellido());
         usuario.setEmail(usuarioDTO.getEmail());
-        usuario.setClave(usuarioDTO.getClave());
+        //usuario.setClave(usuarioDTO.getClave()); si agrego esto se copia la clave sin hashear
         usuario.setFoto(usuarioDTO.getFoto());
         final Rol rol = usuarioDTO.getRol() == null ? null : rolRepository.findById(usuarioDTO.getRol())
                 .orElseThrow(() -> new NotFoundException("rol not found"));
@@ -142,9 +142,14 @@ public class UsuarioService {
 	public UsuarioDTO findByEmail(String email) {
 		
 		Usuario user = usuarioRepository.findByEmail(email);
-		UsuarioDTO userDTO = new UsuarioDTO();
-				this.mapToDTO(user, userDTO);
-		return userDTO;
+		/*
+		 * UsuarioDTO userDTO = new UsuarioDTO(); this.mapToDTO(user, userDTO); return
+		 * userDTO;
+		 */
+		if (user == null) {
+	        return null; // Devuelve null directamente si el usuario no existe
+	    }
+	    return mapToDTO(user, new UsuarioDTO());
 	}
 
 	

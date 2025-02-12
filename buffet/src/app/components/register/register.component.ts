@@ -47,6 +47,7 @@ export class RegisterComponent {
 
   register() {
     this.submitted = true;
+    this.errorMessage = '';
     if (this.f.valid) {
       this.usuario.email = this.f.get('email')?.value;
       this.usuario.clave = this.f.get('password')?.value;
@@ -55,20 +56,35 @@ export class RegisterComponent {
       this.usuario.apellido = this.f.get('apellido')?.value;
       this.usuario.rol = 3;
       console.log(this.usuario);
-      this.usuarioServicio.registerUser(this.usuario).subscribe(
-        (response) => {
+      // this.usuarioServicio.registerUser(this.usuario).subscribe(
+      //   (response) => {
+      //     console.log('Registro exitoso:', response);
+      //     this.usuarioServicio.registerSuccess('Registro de usuario exitoso')
+      //     setTimeout(() => {
+      //       this.router.navigate(['/iniciar-sesion']);
+      //     }, 2000);
+      //   },
+      //   (error) => {
+      //     console.error('Error al registrar usuario:', error);
+      //     this.errorMessage = 'Error al registrar usuario: ' + error.status;
+      //   }
+      // );
+      this.usuarioServicio.registerUser(this.usuario).subscribe({
+        next: (response) => {
           console.log('Registro exitoso:', response);
-          this.usuarioServicio.registerSuccess('Registro de usuario exitoso')
+          this.usuarioServicio.registerSuccess('Registro de usuario exitoso'); // <-- Llama a registerSuccess aquí
           setTimeout(() => {
             this.router.navigate(['/iniciar-sesion']);
           }, 2000);
         },
-        (error) => {
+        error: (error) => {
           console.error('Error al registrar usuario:', error);
-          this.errorMessage = 'Error al registrar usuario: ' + error.status;
+          this.errorMessage = 'Error al registrar usuario: ' + error.message; // Usa error.message
         }
-      );
+      });
     }
+    
+  
   }
 
 
