@@ -1,92 +1,80 @@
 package ttps.spring.entrega5.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
+
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ttps.spring.entrega5.model.UsuarioDTO;
 
+import java.security.Key;
+import java.util.Calendar;
+import java.util.Date;
+
+/**
+ * Servicio para gestionar los tokens de authenticacion
+ *
+ * @author manuel
+ */
 @Service
 public class JWTUtil {
-    //@Value("${security.jwt.secret-key}")
-    //private String secretKey;
-	private String secretKey="3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b";
 
-    //@Value("${security.jwt.expiration-time}")
-    //private long jwtExpiration;
-	private long jwtExpiration=3600000;
+    final static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    /**
+     * Genera el token de authorizacion para el usuario
+     *
+     * @param username Username que se guarda dentro del token
+     * @param segundos tiempo de validez del token
+     * @return token
+     */
+    public String generateToken(String username, int segundos) {
+
+        Date exp = getExpiration(new Date(), segundos);
+
+        return Jwts.builder().setSubject(username).signWith(key).setExpiration(exp).compact();
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    /**
+     * Retorna la suma de <code>segundos</code> a la <code>fecha</code>
+     *
+     * @param date
+     * @param segundos
+     * @return
+     */
+    private Date getExpiration(Date date, int segundos) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date); // Configuramos la fecha que se recibe
+        calendar.add(Calendar.SECOND, segundos);
+
+        return calendar.getTime();
     }
 
-    public String generateToken(UsuarioDTO userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
+    public static boolean validateToken(String token) {
 
-    public String generateToken(Map<String, Object> extraClaims, UsuarioDTO userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
-    }
+        String prefix = "Bearer";
+        try {
 
-    public long getExpirationTime() {
-        return jwtExpiration;
-    }
+            if (token.startsWith(prefix)) {
+                token = token.substring(prefix.length()).trim();
+            }
 
-    private String buildToken(
-            Map<String, Object> extraClaims,
-            UsuarioDTO userDetails,
-            long expiration
-    ) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getEmail())
-                
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
+            Claims claims = Jwts.parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(token).getBody();
 
-    public boolean isTokenValid(String token, UsuarioDTO userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getEmail())) && !isTokenExpired(token);
-    }
+            System.out.println("ID: " + claims.getId());
+            System.out.println("Subject: " + claims.getSubject());
+            System.out.println("Issuer: " + claims.getIssuer());
+            System.out.println("Expiration: " + claims.getExpiration());
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
+            return true;
+        } catch (ExpiredJwtException exp) {
+            System.out.println("El Token es valido, pero expiro su tiempo de validez");
+            return false;
+        } catch (JwtException e) {
+            // Algo salio mal en la verificacion
+            System.out.println("Error: " + e.getMessage());
+            return false;
+        }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
     }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-    
 }

@@ -42,12 +42,14 @@ import org.springframework.context.annotation.Configuration;
 
 import jakarta.persistence.EntityManagerFactory;
 
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Configuration
 @ComponentScan(basePackages = "ttps.spring")
 @EnableTransactionManagement
+
 public class SpringWebApp implements WebApplicationInitializer {
 	
 	@Bean
@@ -109,6 +111,11 @@ public class SpringWebApp implements WebApplicationInitializer {
                             new Schema<MediaType>().$ref("ApiErrorResponse")))));
             return operation;
         };
+    }
+    
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // Usar BCryptPasswordEncoder
     }
 
 	

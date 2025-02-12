@@ -2,8 +2,10 @@ package ttps.spring.entrega5.service;
 
 import java.io.IOException;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +20,7 @@ import ttps.spring.entrega5.repos.SugerenciaRepository;
 import ttps.spring.entrega5.repos.UsuarioRepository;
 import ttps.spring.entrega5.util.ImgurUploader;
 import ttps.spring.entrega5.util.NotFoundException;
+import ttps.spring.entrega5.util.PasswordService;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
 
@@ -29,18 +32,20 @@ public class UsuarioService {
     private final SugerenciaRepository sugerenciaRepository;
     private final PedidoRepository pedidoRepository;
     private final ImgurUploader imgurUploader;
-    //private final PasswordEncoder passwordEncoder;  // Inyectar PasswordEncoder
+    //private final PasswordService passwordService;
+    @Autowired
+    private PasswordService passwordService;
 
     public UsuarioService(final UsuarioRepository usuarioRepository,
             final RolRepository rolRepository, final SugerenciaRepository sugerenciaRepository,
 			final PedidoRepository pedidoRepository,
-			ImgurUploader imgurUploader/* , final PasswordEncoder passwordEncoder */) {
+			ImgurUploader imgurUploader /*, final PasswordService passwordService */) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
         this.sugerenciaRepository = sugerenciaRepository;
         this.pedidoRepository = pedidoRepository;
         this.imgurUploader = imgurUploader;
-		//this.passwordEncoder = passwordEncoder;
+        //this.passwordService = passwordService;
     }
 
     public List<UsuarioDTO> findAll() {
@@ -58,8 +63,8 @@ public class UsuarioService {
 
     public Integer create(final UsuarioDTO usuarioDTO) {
         final Usuario usuario = new Usuario();
-        //String encodedPassword = passwordEncoder.encode(usuarioDTO.getClave());  // Codificar contraseña
-        //usuario.setClave(encodedPassword);
+        String encodedPassword = passwordService.hashPassword(usuarioDTO.getClave()); // Usar PasswordService
+        usuario.setClave(encodedPassword);
         mapToEntity(usuarioDTO, usuario);
         return usuarioRepository.save(usuario).getId();
     }

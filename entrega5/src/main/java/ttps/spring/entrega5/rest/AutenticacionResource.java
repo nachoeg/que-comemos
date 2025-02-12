@@ -52,24 +52,14 @@ public class AutenticacionResource {
         UsuarioDTO user = autenticacionService.authenticate(request.getMail(), request.getClave());
 
         if (user != null) {
-        	String token = jwtutil.generateToken(user);
+        	String token = jwtutil.generateToken(user.getEmail(), 3600);
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
-            //response.put("nombre", user.getNombre());
-            //response.put("apellido", user.getApellido());
-            //response.put("rol", user.getRol().toString());
             response.put("user", user);
             return ResponseEntity.ok().body(response);
-            
-			/*
-			 * String token = jwtutil.generateToken(user);
-			 * 
-			 * HttpHeaders headers = new HttpHeaders(); headers.add("token", token);
-			 * //return ResponseEntity.ok().header("token", token).build(); return
-			 * ResponseEntity.ok().body(token);
-			 */
+           
         } else {
-           // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+     
         	Map<String, Object> errorResponse = new HashMap<>(); 
             errorResponse.put("error", "Invalid credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
