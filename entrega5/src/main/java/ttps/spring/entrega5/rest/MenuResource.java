@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,5 +78,11 @@ public class MenuResource {
         menuService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
+    
+    @GetMapping("/dia")
+    public ResponseEntity<List<MenuGetDTO>> getMenusByDia(
+            @RequestParam(name = "dia") final String dia) {
+        List<MenuGetDTO> menusDTO = menuService.findByDia(dia); // Llama al servicio
+        return ResponseEntity.ok(menusDTO);
+    }
 }

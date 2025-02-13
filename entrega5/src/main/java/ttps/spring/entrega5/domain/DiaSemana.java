@@ -8,5 +8,13 @@ public enum DiaSemana {
   Viernes,
   Sábado,
   Domingo,
-  Desactivado,
+  Desactivado;
+	public static DiaSemana fromString(String dia) {
+        try {
+            return DiaSemana.valueOf(dia);
+        } catch (IllegalArgumentException e) {
+            // Manejar el caso en que el string no coincide con ningún valor del enum
+            throw new IllegalArgumentException("Día de la semana inválido: " + dia);
+        }
+    }
 }

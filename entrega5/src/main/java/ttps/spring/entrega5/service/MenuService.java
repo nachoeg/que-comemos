@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import ttps.spring.entrega5.domain.Comida;
+import ttps.spring.entrega5.domain.DiaSemana;
 import ttps.spring.entrega5.domain.Estructura;
 import ttps.spring.entrega5.domain.Menu;
 import ttps.spring.entrega5.model.ComidaGetDTO;
@@ -159,6 +161,13 @@ public class MenuService {
 		 */
 		return null;
 	}
+	
+	 public List<MenuGetDTO> findByDia(final String dia) {
+	        DiaSemana diaSemana = DiaSemana.fromString(dia); // Convierte String a DiaSemana
+	        return menuRepository.findByDia(diaSemana).stream()
+	                .map(menu -> mapToDTO(menu, new MenuGetDTO()))
+	                .collect(Collectors.toList());
+	    }
 	/*
 	 * public List<MenuConEstructurasDTO> findAllWithEstructurasYComidas() { final
 	 * List<Menu> menus = menuRepository.findAll(Sort.by("id"));

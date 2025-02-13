@@ -20,7 +20,9 @@ import { SugerenciasComponent } from './components/sugerencias/sugerencias.compo
 import { AuthGuard } from './services/authGuard/auth-guard';
 import { ErrorComponent } from './components/error/error.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
-import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
+import { ShoppingCartComponent } from './components/purchase-order/shopping-cart/shopping-cart.component';
+import { PurchaseOrderComponent } from './components/purchase-order/purchase-order.component';
+import { PurchaseOrderCreateComponent } from './components/purchase-order/purchase-order-create/purchase-order-create.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -49,5 +51,7 @@ export const routes: Routes = [
   { path: 'sugerencias/:id', component: SugerenciasDetalleComponent,  canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER'] } },
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent },
-  { path: 'compras', component: ShoppingCartComponent}
+  { path: 'carrito', component: ShoppingCartComponent},
+  { path: 'pedidos', component: PurchaseOrderComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] }},
+  { path: 'pedidos/crear', component: PurchaseOrderCreateComponent}
 ];

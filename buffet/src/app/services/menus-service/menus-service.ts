@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Menu } from '../../models/menu/menu';
 import { NewMenu } from '../../models/new-menu/new-menu';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -32,5 +33,10 @@ export class MenusService {
   getMenuById(menuId: number): Observable<Menu> {
     const url = `${this.baseUrl}/${menuId}`; //url+id del menu a buscar
     return this.http.get<Menu>(url);
+  }
+
+  getMenusPorDia(dia: string): Observable<Menu[]> {
+    const params = new HttpParams().set('dia', dia);
+    return this.http.get<Menu[]>(`${this.baseUrl}/dia`, { params });
   }
 }

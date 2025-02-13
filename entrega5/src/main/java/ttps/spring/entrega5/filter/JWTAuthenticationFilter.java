@@ -78,6 +78,7 @@ public class JWTAuthenticationFilter implements Filter {
 	            path.startsWith("/api/usuarios") || // Registro
 	            path.startsWith("/swagger-ui") || // Swagger UI (si lo usas)
 	            path.startsWith("/v3/api-docs") || // Swagger API docs
+	            
 	            HttpMethod.OPTIONS.matches(req.getMethod())) { // Preflight requests
 	            chain.doFilter(request, response);
 	            return;

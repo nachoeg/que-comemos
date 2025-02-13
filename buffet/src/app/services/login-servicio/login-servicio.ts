@@ -67,6 +67,7 @@ export class LoginServicio {
     this.userLogged = null;
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
+    localStorage.removeItem('cartItems');
     // Actualizar el observable para notificar a los componentes suscritos
     this.isUserLoggedInSubject.next(false);
     this.router.navigate(['/iniciar-sesion']);

@@ -1,0 +1,107 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="menu-tab" data-bs-toggle="tab" data-bs-target="#menu-content" type="button" role="tab" aria-controls="menu-content" aria-selected="true">Menús</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="food-tab" data-bs-toggle="tab" data-bs-target="#food-content" type="button" role="tab" aria-controls="food-content" aria-selected="false">Comidas</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="menu-content" role="tabpanel" aria-labelledby="menu-tab">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-2 mb-2">
+                        <h2 class="mb-0">Menús</h2>
+                    </div>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
+                        <div class="col" *ngFor="let menu of menus; let i = index">
+                            <div class="card comida">
+                                <img *ngIf="!imageLoaded[i] && imageError[i]" src="/food-placeholder.png" class="card-img-top" alt="{{menu.nombre}}">
+                                <img *ngIf="!imageError[i]" [src]="menu.foto" class="card-img-top" alt="{{menu.nombre}}" (load)="onImageLoad(i)" (error)="onImageError(i)">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ menu.nombre }}</h5>
+                                    <p class="card-text mb-1">{{ menu.dia }}</p>
+                                    <p class="card-text fw-bold">$ {{ menu.precio }}</p>
+
+                                    <div *ngFor="let estructura of menu.estructuras">
+                                        <h6 class="card-subtitle mb-2 text-muted">{{ estructura.nombre }}</h6>
+                                        <ul class="list-unstyled">
+                                            <li *ngFor="let comida of estructura.comidas">
+                                                {{ comida.nombre }}
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <label for="quantity-{{menu.id}}">Cantidad:</label>
+                                        <input type="number" 
+                                               id="quantity-{{menu.id}}" 
+                                               class="form-control form-control-sm" 
+                                               [(ngModel)]="cantidadPorMenu[menu.id]"  min="1" 
+                                               value="1">
+
+                                        <button class="btn btn-sm btn-primary mt-2" 
+                                                (click)="agregarMenuAlPedido(menu)">  Agregar al pedido
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="food-content" role="tabpanel" aria-labelledby="food-tab">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-2 mb-2">
+                        <h2 class="mb-0">Comidas</h2>
+                      </div>
+                      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
+                        <div class="col" *ngFor="let comida of foods; let i = index">
+                          <div class="card comida">
+                            <img *ngIf="!imageLoaded[i] && imageError[i]" src="/food-placeholder.png" class="card-img-top" alt="{{comida.nombre}}">
+                            <img *ngIf="!imageError[i]" [src]="comida.foto" class="card-img-top" alt="{{comida.nombre}}" (load)="onImageLoad(i)" (error)="onImageError(i)">
+                            <div class="card-body">
+                              <h5 class="card-title">{{ comida.nombre }}</h5>
+                              <p class="card-text fw-bold">$ {{ comida.precio }}</p>
+                              <div class="mt-2">
+                                <label for="quantity-{{comida.id}}">Cantidad:</label>
+                                <input type="number" id="quantity-{{comida.id}}" class="form-control form-control-sm" [(ngModel)]="cantidadPorComida[comida.id]" min="1" value="1">
+                                <button class="btn btn-sm btn-primary mt-2" (click)="agregarComidaAlPedido(comida)">Agregar al pedido</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+              <div class="card-header">
+                <i class="bi bi-cart me-2"></i>Carrito de Compras
+              </div>
+              <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let item of order.menus; let i = index" style="display: grid; grid-template-columns: 1fr auto 30px; gap: 5px;"> 
+                        <span>{{ item.menu.nombre }} x {{ item.cantidad }}</span>
+                        <span class="text-end">$ {{ item.menu.precio * item.cantidad }}</span>
+                        <button class="btn btn-danger btn-sm btn-delete" (click)="eliminarMenu(i)">
+                            <i class="bi bi-trash"></i> 
+                          </button>
+                      </li>
+                      <li class="list-group-item" *ngFor="let item of order.comidas; let i = index" style="display: grid; grid-template-columns: 1fr auto 30px; gap: 5px;">
+                        <span>{{ item.comida.nombre }} x {{ item.cantidad }}</span>
+                        <span class="text-end">$ {{ item.comida.precio * item.cantidad }}</span>
+                        <button class="btn btn-danger btn-sm btn-delete" (click)="eliminarComida(i)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                      </li>
+                </ul>
+                <p class="mt-2 text-end">Total: ${{ order.monto }}</p>
+              </div>
+            </div>
+          </div>
+    </div>
+</div>
