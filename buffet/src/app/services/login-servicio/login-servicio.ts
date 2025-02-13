@@ -43,20 +43,17 @@ export class LoginServicio {
       try {
         // Parse JSON and update userLogged and isUserLoggedIn
         const user: Usuario = JSON.parse(userString);
-        //this.userLoggedSubject.next(user); // <--- Crucial: Emitir el usuario al inicio
         this.userLogged = user;
         this.isUserLoggedIn = true;
         this.isUserLoggedInSubject.next(true); // Notify subscribers
       } catch (error) {
         // Handle errors during JSON parsing
         console.error('Error parsing user data from localStorage:', error);
-        //this.isUserLoggedIn = false;
         localStorage.removeItem("currentUser"); // Clear invalid data
         this.isUserLoggedInSubject.next(false);
       }
     } else {
       // No user found in localStorage, set initial state
-      //this.isUserLoggedIn = false;
       this.isUserLoggedInSubject.next(false);
     }
   }
@@ -106,7 +103,6 @@ export class LoginServicio {
       .pipe(
         tap(response => {
           if (response && response.user) { // Verifica si la respuesta contiene datos del usuario
-            //this.userLoggedSubject.next(response.user);  // <--- Crucial: Emitir el usuario logueado
             this.setUserLoggedIn(response.user);
             this.isUserLoggedInSubject.next(true);
           }
@@ -114,6 +110,4 @@ export class LoginServicio {
         })
       );
   }
-
-
 }

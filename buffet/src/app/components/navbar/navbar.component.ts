@@ -27,31 +27,11 @@ export class NavbarComponent implements OnInit {
   showSuccessAlert = false;
   private destroy$ = new Subject<void>();
 
-
   constructor(private router: Router,
-    public loginServicio: LoginServicio,
-    public usuarioService: UsuariosService) { }
+    public loginServicio: LoginServicio) { }
   
   ngOnInit() {
-    // this.loginServicio.isUserLoggedIn$.subscribe(isLoggedIn => {
-    //   this._isLoggedIn = isLoggedIn;
-    // });
-
-    // // Inicializar la variable showSuccessAlert a false al cargar el componente
-    // //this.showSuccessAlert = false;
-    // this.loginServicio.loginSuccessMessage$.subscribe(message => {
-    //   if (message) {
-    //     this.showAlert(message);
-    //   }
-    // });
-    // // Subscribe to registerSuccessMessage$ from UsuariosService
-    // this.usuarioService.registerSuccessMessage$.subscribe(message => {
-    //   if (message) {
-    //     this.showSuccessAlert = true;
-    //     this.showAlert(message);
-
-    //   }
-    // });
+    
     this.loginServicio.isUserLoggedIn$.pipe(takeUntil(this.destroy$)).subscribe(isLoggedIn => {
       this._isLoggedIn = isLoggedIn;
     });
@@ -63,12 +43,7 @@ export class NavbarComponent implements OnInit {
       }
     });
 
-    this.usuarioService.registerSuccessMessage$.pipe(takeUntil(this.destroy$)).subscribe(message => {
-      if (message) {
-        console.log("Mensaje recibido en Navbar:", message); 
-        this.showAlert(message);
-      }
-    });
+    
   }
 
   ngOnDestroy() { // Importante: Desuscribirse al destruir el componente
@@ -82,6 +57,7 @@ export class NavbarComponent implements OnInit {
     this.showAlert("Sesion cerrada correctamente");
   }
   showAlert(message: string) {
+    console.log("showAlert llamado con mensaje:", message);
     this.showSuccessAlert = true;
     this.alertMessage = message;
 

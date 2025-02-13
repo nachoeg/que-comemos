@@ -1,36 +1,6 @@
-<!-- <div class="register">
-    <form class="custom-form" method="post" (ngSubmit)="register()" novalidate [formGroup]="f">
-        <h1>Registro</h1>
-        <label>Email</label>
-        <input type="email" formControlName="email" name="email" placeholder="Email" required="required"
-        [ngClass]="{ 'invalid': submitted && f.get('email')?.errors }">     
-        <label>Password</label>
-    <input type="password" formControlName="password" name="password" placeholder="Password" required="required"
-           [ngClass]="{ 'invalid': submitted && f.get('password')?.errors }">
 
-    <label>Ingrese nuevamente password</label>
-    <input type="password" formControlName="confirmPassword" name="confirmPassword" placeholder="Ingrese nuevamente la password"
-           required="required" [ngClass]="{ 'invalid': submitted && f.get('confirmPassword')?.errors }">
-
-    <label>DNI</label>
-    <input type="number" formControlName="dni" name="dni" placeholder="DNI" required="required"
-           [ngClass]="{ 'invalid': submitted && f.get('dni')?.errors }">
-
-    <label>Nombre</label>
-    <input type="text" formControlName="nombre" name="nombre" placeholder="Nombre" required="required"
-           [ngClass]="{ 'invalid': submitted && f.get('nombre')?.errors }">
-
-    <label>Apellido</label>
-    <input type="text" formControlName="apellido" name="apellido" placeholder="Apellido" required="required"
-           [ngClass]="{ 'invalid': submitted && f.get('apellido')?.errors }">
-
-    <button type="submit">Registrarse</button>
-    <div class="form-group">
-      <small class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</small>
-    </div>
-    </form>
-</div> -->
 <div class="register">
+       <div *ngIf="!registrationSuccessful">
   <form class="custom-form" method="post" (ngSubmit)="register()" novalidate [formGroup]="f">
     <h1>Registro</h1>
     <label>Email</label>
@@ -83,4 +53,13 @@
       <small class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</small>
     </div>
   </form>
+  </div>
+
+  <div *ngIf="registrationSuccessful" class="custom-form card text-center success-message">
+       <div class="card-body">
+         <h5 class="card-title">¡Registro exitoso!</h5>
+         <p class="card-text">{{ registerSuccessMessage }}</p>
+         <button type="submit" (click)="login()">Iniciar Sesión</button>
+       </div>
+     </div>
 </div>

@@ -20,6 +20,7 @@ import { SugerenciasComponent } from './components/sugerencias/sugerencias.compo
 import { AuthGuard } from './services/authGuard/auth-guard';
 import { ErrorComponent } from './components/error/error.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -47,5 +48,6 @@ export const routes: Routes = [
   { path: 'sugerencias/crear', component: SugerenciasCrearComponent,  canActivate: [AuthGuard], data: { roles: ['USER'] } },
   { path: 'sugerencias/:id', component: SugerenciasDetalleComponent,  canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER'] } },
   { path: 'error', component: ErrorComponent },
-  { path: 'forbidden', component: ForbiddenComponent }
+  { path: 'forbidden', component: ForbiddenComponent },
+  { path: 'compras', component: ShoppingCartComponent}
 ];

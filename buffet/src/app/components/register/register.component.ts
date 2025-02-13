@@ -32,6 +32,7 @@ export class RegisterComponent {
   submitted = false;
   f: FormGroup;
   registerSuccessMessage: string | null = null;
+  registrationSuccessful: boolean = false;
 
   constructor(private usuarioServicio: UsuariosService, private router: Router, private fb: FormBuilder) {
     this.f = this.fb.group({
@@ -56,37 +57,24 @@ export class RegisterComponent {
       this.usuario.apellido = this.f.get('apellido')?.value;
       this.usuario.rol = 3;
       console.log(this.usuario);
-      // this.usuarioServicio.registerUser(this.usuario).subscribe(
-      //   (response) => {
-      //     console.log('Registro exitoso:', response);
-      //     this.usuarioServicio.registerSuccess('Registro de usuario exitoso')
-      //     setTimeout(() => {
-      //       this.router.navigate(['/iniciar-sesion']);
-      //     }, 2000);
-      //   },
-      //   (error) => {
-      //     console.error('Error al registrar usuario:', error);
-      //     this.errorMessage = 'Error al registrar usuario: ' + error.status;
-      //   }
-      // );
+   
       this.usuarioServicio.registerUser(this.usuario).subscribe({
         next: (response) => {
           console.log('Registro exitoso:', response);
-          this.usuarioServicio.registerSuccess('Registro de usuario exitoso'); // <-- Llama a registerSuccess aquí
-          setTimeout(() => {
-            this.router.navigate(['/iniciar-sesion']);
-          }, 2000);
+          this.registerSuccessMessage = 'Registro de usuario exitoso';
+          this.registrationSuccessful = true; // Set the flag to true
         },
         error: (error) => {
           console.error('Error al registrar usuario:', error);
           this.errorMessage = 'Error al registrar usuario: ' + error.message; // Usa error.message
+          this.registerSuccessMessage = null;
+          this.registrationSuccessful = false; // Reset flag in case of an error
         }
       });
     }
-    
-  
   }
 
-
-
+  login(){
+    this.router.navigate(['/iniciar-sesion']);
+  }
 }

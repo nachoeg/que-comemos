@@ -16,6 +16,9 @@
         <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/comidas']">Comidas</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/compras']">Compras</a>
+        </li>
 
 
         <li class="nav-item" *ngIf="usuarioLogeado?.rolName !== 'USER'">
@@ -28,7 +31,10 @@
             *ngIf="usuarioLogeado?.rolName === 'USER'">Sugerencias</a>
         </li>
       </ul>
-      <div *ngIf="showSuccessAlert" class="alert alert-success" role="alert">
+      <!-- <div *ngIf="showSuccessAlert" class="alert alert-success" role="alert">
+        {{ alertMessage }}
+      </div> -->
+      <div class="alert alert-success" role="alert" [ngClass]="{'show-alert': showSuccessAlert}">
         {{ alertMessage }}
       </div>
 
