@@ -76,7 +76,7 @@ export const routes: Routes = [
     data: { roles: ['ADMIN', 'MANAGER', 'USER'] },
   },
   {
-    path: 'sugerencias/crear',
+    path: 'sugerencias/enviar',
     component: SugerenciasCrearComponent,
     canActivate: [AuthGuard],
     data: { roles: ['USER'] },
