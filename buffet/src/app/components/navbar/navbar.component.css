@@ -1,8 +1,15 @@
 .user-container {
-    display: flex;
-    align-items: center;
-  }
+  display: flex;
+  align-items: center;
+}
 
-  .user-name {
-    font-weight: bold; /* Hace que el nombre sea negrita */
-  }
+.user-name {
+  font-weight: bold; /* Hace que el nombre sea negrita */
+}
+
+.alert {
+  position: fixed;
+  top: 67px;
+  right: 10px;
+  z-index: 10000;
+}

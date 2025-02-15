@@ -24,13 +24,11 @@
         <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/sugerencias']"
             *ngIf="usuarioLogeado?.rolName !== 'USER'">Sugerencias</a>
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/sugerencias/crear']"
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/sugerencias/crear']"
             *ngIf="usuarioLogeado?.rolName === 'USER'">Sugerencias</a>
         </li>
       </ul>
-      <div *ngIf="showSuccessAlert" class="alert alert-success" role="alert">
-        {{ alertMessage }}
-      </div>
+
 
       <div *ngIf="!isLoggedIn">
         <button class="btn" [routerLink]="['/registrarse']">Registrarse</button>
@@ -42,7 +40,10 @@
           Cerrar sesión
         </button>
       </div>
-     
+
     </div>
   </div>
 </nav>
+<div *ngIf="showSuccessAlert" class="alert alert-success" role="alert">
+  {{ alertMessage }}
+</div>
