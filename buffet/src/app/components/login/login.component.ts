@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { LoginServicio } from '../../services/login-servicio/login-servicio';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AlertService } from '../../services/alert-service/alert.service';
 
 @Component({
   standalone: true,
@@ -17,19 +18,23 @@ export class LoginComponent {
   password = '';
   errorMessage = '';
 
-  constructor(public loginServicio: LoginServicio, private router: Router) { }
+  constructor(
+    public loginServicio: LoginServicio,
+    private router: Router,
+    private alertService: AlertService
+  ) {}
 
   login() {
     const user = {
       mail: this.email,
-      clave: this.password
+      clave: this.password,
     };
     this.loginServicio.login(user).subscribe({
       next: (response) => {
         console.log('Login successful!');
         this.router.navigate(['/']);
         if (response && response.user) {
-          this.loginServicio.loginSuccess('¡Inicio de sesión exitoso!');
+          this.alertService.showAlert('¡Inicio de sesión exitoso!', 'success');
           this.errorMessage = ''; // Clear error message on successful login
         }
       },
@@ -37,14 +42,13 @@ export class LoginComponent {
         console.error('Login failed:', error);
         let errorMessage = 'Error al iniciar sesión.'; // Mensaje genérico
 
-        if (error.error && error.error.message) { // Verifica si error.error y error.error.message existen
+        if (error.error && error.error.message) {
+          // Verifica si error.error y error.error.message existen
           errorMessage = error.error.message; // Asigna el mensaje específico del backend
         }
-        this.errorMessage = error.status + " - " + errorMessage;
+        this.errorMessage = error.status + ' - ' + errorMessage;
         //this.errorMessage = 'Error al iniciar sesión: ' + error.status + error.message;
-      }
+      },
     });
   }
-
-
 }
