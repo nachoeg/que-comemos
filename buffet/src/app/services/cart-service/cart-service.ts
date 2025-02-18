@@ -115,29 +115,36 @@ export class CartService {
     }
   }
   private saveCartToLocalStorage() {
-    const cartData = {
+    const cartItems = {
       cartItems: this.cartItemsSubject.value,
       foodQuantities: this.foodQuantities,
       menuQuantities: this.menuQuantities
     };
-    localStorage.setItem('cartData', JSON.stringify(cartData));
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }
 
   private loadCartFromLocalStorage() {
-    const storedCartData = localStorage.getItem('cartData');
-    if (storedCartData) {
-      const cartData = JSON.parse(storedCartData);
-      this.cartItemsSubject.next(cartData.cartItems);
-      this.foodQuantities = cartData.foodQuantities || {}; // Maneja el caso de que no existan aún
-      this.menuQuantities = cartData.menuQuantities || {};
+    const storedCartItems = localStorage.getItem('cartItems');
+    if (storedCartItems) {
+      const cartItems = JSON.parse(storedCartItems);
+      this.cartItemsSubject.next(cartItems.cartItems);
+      this.foodQuantities = cartItems.foodQuantities || {}; // Maneja el caso de que no existan aún
+      this.menuQuantities = cartItems.menuQuantities || {};
     }
   }
-
 
   private updateCantidadItems() {
     const cartItems = this.getCartItems();
     const cantidad = cartItems.menus.length + cartItems.foods.length;
     this.cantidadItemsSubject.next(cantidad); // Emite la nueva cantidad
+  }
+
+  clearCart() {
+    this.cartItemsSubject.next({ menus: [], foods: [] }); // Clear cart items
+    this.cantidadItemsSubject.next(0); // Reset item count
+    this.foodQuantities = {}; // Clear food quantities
+    this.menuQuantities = {}; // Clear menu quantities
+    localStorage.removeItem('cartItems'); // Remove from localStorage
   }
 
 }

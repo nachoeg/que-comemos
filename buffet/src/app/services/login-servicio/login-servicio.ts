@@ -97,6 +97,11 @@ export class LoginServicio {
     }
   }
 
+  getUserId(): number | null { // Or string | null if your IDs are strings
+    const user = this.getUserLoggedIn();
+    return user ? user.id : null; // Concise way to return id or null
+}
+
   login(user: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
