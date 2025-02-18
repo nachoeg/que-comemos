@@ -9,7 +9,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="isLoggedIn">
         <li class="nav-item">
           <a class="nav-link active" routerLinkActive="active" [routerLink]="['/menus']">Menús</a>
         </li>
@@ -24,7 +24,7 @@
         <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/sugerencias']"
             *ngIf="usuarioLogeado?.rolName !== 'USER'">Sugerencias</a>
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/sugerencias/crear']"
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/sugerencias/enviar']"
             *ngIf="usuarioLogeado?.rolName === 'USER'">Sugerencias</a>
         </li>
         <li class="nav-item">
@@ -32,21 +32,22 @@
         </li>
         
       </ul>
-      <div *ngIf="showSuccessAlert" class="alert alert-success" role="alert">
-        {{ alertMessage }}
-      </div>
 
-      <div *ngIf="!isLoggedIn">
-        <button class="btn" [routerLink]="['/registrarse']">Registrarse</button>
-        <button class="btn btn-primary" [routerLink]="['/iniciar-sesion']">Iniciar sesión</button>
+      <div class="ms-auto">
+        <div *ngIf="!isLoggedIn">
+          <button class="btn" [routerLink]="['/registrarse']">Registrarse</button>
+          <button class="btn btn-primary" [routerLink]="['/iniciar-sesion']">Iniciar sesión</button>
+        </div>
+        <div *ngIf="isLoggedIn" class="user-container">
+          <span class="user-name">¡Hola, {{ usuarioLogeado?.nombre }}!</span>
+          <button class="btn btn-danger  mx-2" (click)="logout()">
+            Cerrar sesión
+          </button>
+        </div>
       </div>
-      <div *ngIf="isLoggedIn" class="user-container">
-        <span class="user-name">¡Hola, {{ usuarioLogeado?.nombre }}!</span>
-        <button class="btn btn-danger  mx-2" (click)="logout()">
-          Cerrar sesión
-        </button>
-      </div>
-     
     </div>
   </div>
 </nav>
+<div *ngIf="showSuccessAlert" class="alert alert-success" role="alert">
+  {{ alertMessage }}
+</div>

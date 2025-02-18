@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { SugerenciasService } from '../../../services/sugerencias-service/sugerencias-service';
 import { LoginServicio } from '../../../services/login-servicio/login-servicio';
 import { Router } from '@angular/router';
@@ -9,7 +14,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-sugerencias-crear',
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './sugerencias-crear.component.html',
-  styleUrl: './sugerencias-crear.component.css'
+  styleUrl: './sugerencias-crear.component.css',
 })
 export class SugerenciasCrearComponent {
   sugerenciaForm: FormGroup;
@@ -17,11 +22,24 @@ export class SugerenciasCrearComponent {
   successMessage: string = '';
   errorMessage: string = '';
 
-  constructor(private sugerenciasService: SugerenciasService, private router: Router, public loginServicio: LoginServicio) {
+  constructor(
+    private sugerenciasService: SugerenciasService,
+    private router: Router,
+    public loginServicio: LoginServicio
+  ) {
     this.sugerenciaForm = new FormGroup({
-      usuario: new FormControl({ value: this.usuarioLogeado?.email, disabled: true }, Validators.required),
-      tipo: new FormControl('Alimentos', [Validators.required, Validators.maxLength(255)]),
-      descripcion: new FormControl('', [Validators.required, Validators.maxLength(255)]),
+      usuario: new FormControl(
+        { value: this.usuarioLogeado?.email, disabled: true },
+        Validators.required
+      ),
+      tipo: new FormControl('Alimentos', [
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
+      descripcion: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
     });
   }
 
@@ -41,10 +59,11 @@ export class SugerenciasCrearComponent {
       this.sugerenciasService.createSugerencia(nuevaSugerencia).subscribe(
         () => {
           this.successMessage = 'Sugerencia enviada correctamente';
-          setTimeout(() => this.router.navigate(['']), 2000);
+          this.isLoading = false;
         },
         (error) => {
-          this.errorMessage = error?.error?.message || 'Error al enviar la sugerencia';
+          this.errorMessage =
+            error?.error?.message || 'Error al enviar la sugerencia';
           this.isLoading = false;
         }
       );
@@ -52,6 +71,6 @@ export class SugerenciasCrearComponent {
   }
 
   get usuarioLogeado() {
-    return this.loginServicio.getUserLoggedIn(); 
+    return this.loginServicio.getUserLoggedIn();
   }
 }
