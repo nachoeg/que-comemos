@@ -27,13 +27,16 @@ export class UsuarioEditarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    // this.usuarioForm = new FormGroup({
+    //   dni: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    //   nombre: new FormControl({ value: '', disabled: true },  [Validators.required]),
+    //   apellido: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    //   email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
+    //   clave: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6)]),
+    //   foto: new FormControl(),
+    //   rol: new FormControl('', [Validators.required]),
+    // });
     this.usuarioForm = new FormGroup({
-      dni: new FormControl({ value: '', disabled: true }, [Validators.required]),
-      nombre: new FormControl('', [Validators.required]),
-      apellido: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      clave: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      foto: new FormControl(),
       rol: new FormControl('', [Validators.required]),
     });
   }
@@ -47,11 +50,6 @@ export class UsuarioEditarComponent implements OnInit {
           (usuario: Usuario) => {
             this.usuario = usuario;
             this.usuarioForm.patchValue({
-              dni: usuario.dni,
-              nombre: usuario.nombre,
-              apellido: usuario.apellido,
-              email: usuario.email,
-              clave: usuario.clave,
               rol: usuario.rol,
             });
           },
@@ -65,37 +63,40 @@ export class UsuarioEditarComponent implements OnInit {
     });
   }
 
-  onFileChange(event: any) {
-    if (event.target.files.length > 0) {
-      this.selectedFile = event.target.files[0];
-    }
-  }
+  // onFileChange(event: any) {
+  //   if (event.target.files.length > 0) {
+  //     this.selectedFile = event.target.files[0];
+  //   }
+  // }
 
   onSubmit() {
     this.isLoading = true;
     const formData = new FormData();
-    formData.append(
-      'usuario',
-      new Blob(
-        [
-          JSON.stringify({
-            dni: this.usuarioForm.get('dni')?.value,
-            nombre: this.usuarioForm.get('nombre')?.value,
-            apellido: this.usuarioForm.get('apellido')?.value,
-            email: this.usuarioForm.get('email')?.value,
-            clave: this.usuarioForm.get('clave')?.value,
-            rol: this.usuarioForm.get('rol')?.value,
-          }),
-        ],
-        { type: 'application/json' }
-      )
-    );
+    // formData.append(
+    //   'rol', this.usuarioForm.get('rol')?.value
+    // );
 
-    if (this.selectedFile) {
-      formData.append('foto', this.selectedFile);
-    }
+    // formData.append(
+    //   'rol',
+    //   new Blob(
+    //     [
+    //       JSON.stringify({
+    //         'rol': this.usuarioForm.get('rol')?.value
+    //       }),
+    //     ],
+    //     { type: 'application/json' }
+    //   )
+    // );
+    // const rol = this.usuarioForm.get('rol')?.value;
+    formData.append('rol', this.usuarioForm.get('rol')?.value.toString()); 
 
-    this.usuariosService.updateUsuario(this.usuarioId, formData).subscribe(
+    // if (this.selectedFile) {
+    //   formData.append('foto', this.selectedFile);
+    // } else {
+    //   formData.append('foto', this.usuario.foto);
+    // }
+
+    this.usuariosService.updateRolUsuario(this.usuarioId, formData).subscribe(
       (response) => {
         this.successMessage = 'Usuario actualizado exitosamente!';
         console.log('Usuario actualizado:', response);

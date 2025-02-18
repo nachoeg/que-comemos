@@ -34,6 +34,10 @@ export class UsuariosService {
     updateUsuario(id: number, usuario: FormData): Observable<Usuario> {
       return this.http.put<Usuario>(`${this.baseUrl}/${id}`, usuario);
     }
+    
+    updateRolUsuario(id: number, rol: FormData): Observable<any> {
+      return this.http.put<any>(`${this.baseUrl}/${id}/rol`, rol);
+    }
   
     deleteUsuario(id: number): Observable<string> {
       return this.http.delete<string>(`${this.baseUrl}/${id}`);

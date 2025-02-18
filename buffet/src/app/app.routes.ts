@@ -17,6 +17,8 @@ import { UsuarioEditarComponent } from './components/usuarios/usuario-editar/usu
 import { SugerenciasCrearComponent} from './components/sugerencias/sugerencias-crear/sugerencias-crear.component';
 import { SugerenciasDetalleComponent} from './components/sugerencias/sugerencias-detalle/sugerencias-detalle.component';
 import { SugerenciasComponent } from './components/sugerencias/sugerencias.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { PerfilEditarComponent } from './components/perfil/perfil-editar/perfil-editar.component';
 import { AuthGuard } from './services/authGuard/auth-guard';
 import { ErrorComponent } from './components/error/error.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
@@ -46,6 +48,8 @@ export const routes: Routes = [
   { path: 'sugerencias', component: SugerenciasComponent,  canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER', 'USER'] } },
   { path: 'sugerencias/crear', component: SugerenciasCrearComponent,  canActivate: [AuthGuard], data: { roles: ['USER'] } },
   { path: 'sugerencias/:id', component: SugerenciasDetalleComponent,  canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER'] } },
+  { path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER', 'USER'] } },
+  { path: 'perfil/editar/:id', component: PerfilEditarComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER', 'USER'] } },
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent }
 ];

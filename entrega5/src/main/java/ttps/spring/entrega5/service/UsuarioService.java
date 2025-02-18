@@ -72,11 +72,22 @@ public class UsuarioService {
     public void update(final Integer id, final UsuarioDTO usuarioDTO, MultipartFile foto)  throws IOException {
         final Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        mapToEntity(usuarioDTO, usuario);
         if (foto != null && !foto.isEmpty()) {
         	String fotoUrl = imgurUploader.upload(foto);
             usuario.setFoto(fotoUrl);
         }
+        mapToEntity(usuarioDTO, usuario);
+        usuarioRepository.save(usuario);
+    }
+    
+    public void updateRol(final Integer id, final String nuevoRolId)  throws IOException {
+        final Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        
+        final Rol rol = rolRepository.findById(Long.valueOf(nuevoRolId))
+                .orElseThrow(() -> new NotFoundException("rol not found"));
+        
+        usuario.setRol(rol);
         usuarioRepository.save(usuario);
     }
 
@@ -109,7 +120,9 @@ public class UsuarioService {
         usuario.setApellido(usuarioDTO.getApellido());
         usuario.setEmail(usuarioDTO.getEmail());
         //usuario.setClave(usuarioDTO.getClave()); si agrego esto se copia la clave sin hashear
-        usuario.setFoto(usuarioDTO.getFoto());
+        if (usuarioDTO.getFoto() != null) {
+        	usuario.setFoto(usuarioDTO.getFoto());
+        }
         final Rol rol = usuarioDTO.getRol() == null ? null : rolRepository.findById(usuarioDTO.getRol())
                 .orElseThrow(() -> new NotFoundException("rol not found"));
         usuario.setRol(rol);
