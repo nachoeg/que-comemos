@@ -42,12 +42,21 @@
         <button class="btn" [routerLink]="['/registrarse']">Registrarse</button>
         <button class="btn btn-primary" [routerLink]="['/iniciar-sesion']">Iniciar sesión</button>
       </div>
+      
       <div *ngIf="isLoggedIn" class="user-container">
+        <ul class="navbar-nav">  <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/carrito']">
+            <mat-icon>shopping_cart</mat-icon>
+            <span *ngIf="cantidadItems > 0" class="badge bg-primary rounded-pill">{{ cantidadItems }}</span>
+          </a>
+        </li>
+      </ul>
         <span class="user-name">¡Hola, {{ usuarioLogeado?.nombre }}!</span>
         <button class="btn btn-danger  mx-2" (click)="logout()">
           Cerrar sesión
         </button>
       </div>
+     
      
     </div>
   </div>

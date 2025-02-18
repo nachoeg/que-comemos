@@ -20,18 +20,18 @@ import { SugerenciasComponent } from './components/sugerencias/sugerencias.compo
 import { AuthGuard } from './services/authGuard/auth-guard';
 import { ErrorComponent } from './components/error/error.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
-import { ShoppingCartComponent } from './components/purchase-order/shopping-cart/shopping-cart.component';
+import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 import { PurchaseOrderComponent } from './components/purchase-order/purchase-order.component';
-import { PurchaseOrderCreateComponent } from './components/purchase-order/purchase-order-create/purchase-order-create.component';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'iniciar-sesion', component: LoginComponent },
   { path: 'registrarse', component: RegisterComponent },
-  { path: 'menus', component: MenuComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'menus/crear', component: MenuCreateComponent },
-  { path: 'menus/:id', component: MenuItemComponent },
-  { path: 'menus/:id/editar', component: MenuEditComponent },
+  { path: 'menus', component: MenuComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] } },
+  { path: 'menus/crear', component: MenuCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'menus/:id', component: MenuItemComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] } },
+  { path: 'menus/:id/editar', component: MenuEditComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   {
     path: 'menus/:menuId/crear-estructura',
     component: EstructuraCreateComponent,
@@ -52,6 +52,6 @@ export const routes: Routes = [
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent },
   { path: 'carrito', component: ShoppingCartComponent},
-  { path: 'pedidos', component: PurchaseOrderComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] }},
-  { path: 'pedidos/crear', component: PurchaseOrderCreateComponent}
+  { path: 'pedidos', component: PurchaseOrderComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] }}
+  
 ];

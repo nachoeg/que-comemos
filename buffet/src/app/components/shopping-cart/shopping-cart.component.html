@@ -1,0 +1,41 @@
+<div class="d-flex justify-content-center">
+    <div class="col-md-4">
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                <i class="bi bi-cart me-2"></i>Carrito de Compras
+            </div>
+            <div class="card-body">
+                <div *ngIf="cartItems.menus.length > 0">
+                    <h5>Menús</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let item of cartItems.menus; let i = index" style="display: grid; grid-template-columns: 1fr auto 30px; gap: 5px;">
+                            <span>{{ item.menu.nombre }} x {{ item.cantidad }}</span>
+                            <span class="text-end">$ {{ item.menu.precio * item.cantidad }}</span>
+                            <button class="btn btn-danger btn-sm btn-delete" (click)="eliminarMenu(i)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div *ngIf="cartItems.foods.length > 0">
+                    <h5 class="mt-2">Comidas</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let item of cartItems.foods; let i = index" style="display: grid; grid-template-columns: 1fr auto 30px; gap: 5px;">
+                            <span>{{ item.comida.nombre }} x {{ item.cantidad }}</span>
+                            <span class="text-end">$ {{ item.comida.precio * item.cantidad }}</span>
+                            <button class="btn btn-danger btn-sm btn-delete" (click)="eliminarComida(i)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <p class="mt-2">Cantidad de Comidas: {{ getCantidadComidas() }}</p>
+                <p class="mt-2">Cantidad de Menus: {{ getCantidadMenus() }}</p>
+                <p class="mt-2 text-end">Total: ${{ calcularTotal() }}</p>
+                <button class="btn btn-primary mt-2 w-100">Finalizar Pedido</button>
+            </div>
+        </div>
+    </div>
+</div>

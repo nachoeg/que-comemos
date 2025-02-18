@@ -7,6 +7,7 @@ import { LoginServicio } from '../../services/login-servicio/login-servicio';
 import { CommonModule } from '@angular/common';
 import { UsuariosService } from '../../services/usuarios-service/usuarios-service';
 import { Subject, takeUntil } from 'rxjs';
+import { CartService } from '../../services/cart-service/cart-service';
 
 @Component({
   selector: 'app-navbar',
@@ -26,9 +27,11 @@ export class NavbarComponent implements OnInit {
   alertMessage = '';
   showSuccessAlert = false;
   private destroy$ = new Subject<void>();
+  cantidadItems: number = 0;
 
   constructor(private router: Router,
-    public loginServicio: LoginServicio) { }
+    public loginServicio: LoginServicio,
+  private cartService: CartService) { }
   
   ngOnInit() {
     
@@ -41,6 +44,10 @@ export class NavbarComponent implements OnInit {
         console.log("Mensaje recibido en Navbar:", message); 
         this.showAlert(message);
       }
+    });
+
+    this.cartService.cantidadItems$.pipe(takeUntil(this.destroy$)).subscribe(cantidad => {
+      this.cantidadItems = cantidad;
     });
 
     
