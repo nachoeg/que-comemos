@@ -1,101 +1,50 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { LoginServicio } from '../../services/login-servicio/login-servicio';
+import { AlertService } from '../../services/alert-service/alert.service';
 import { CommonModule } from '@angular/common';
-import { UsuariosService } from '../../services/usuarios-service/usuarios-service';
-import { Subject, takeUntil } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    RouterModule,
-    CommonModule,
-  ],
+  imports: [RouterModule, CommonModule, MatIconModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css',
+  styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {
-  private _isLoggedIn: boolean = false;
-  alertMessage = '';
-  showSuccessAlert = false;
+export class NavbarComponent implements OnInit, OnDestroy {
+  isLoggedIn: boolean = false;
+  usuarioLogeado: any = null;
   private destroy$ = new Subject<void>();
 
+  constructor(
+    private loginServicio: LoginServicio,
+    private alertService: AlertService
+  ) {}
 
-  constructor(private router: Router,
-    public loginServicio: LoginServicio,
-    public usuarioService: UsuariosService) { }
-  
   ngOnInit() {
-    // this.loginServicio.isUserLoggedIn$.subscribe(isLoggedIn => {
-    //   this._isLoggedIn = isLoggedIn;
-    // });
+    this.loginServicio.isUserLoggedIn$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isLoggedIn) => {
+        this.isLoggedIn = isLoggedIn;
+      });
 
-    // // Inicializar la variable showSuccessAlert a false al cargar el componente
-    // //this.showSuccessAlert = false;
-    // this.loginServicio.loginSuccessMessage$.subscribe(message => {
-    //   if (message) {
-    //     this.showAlert(message);
-    //   }
-    // });
-    // // Subscribe to registerSuccessMessage$ from UsuariosService
-    // this.usuarioService.registerSuccessMessage$.subscribe(message => {
-    //   if (message) {
-    //     this.showSuccessAlert = true;
-    //     this.showAlert(message);
-
-    //   }
-    // });
-    this.loginServicio.isUserLoggedIn$.pipe(takeUntil(this.destroy$)).subscribe(isLoggedIn => {
-      this._isLoggedIn = isLoggedIn;
-    });
-
-    this.loginServicio.loginSuccessMessage$.pipe(takeUntil(this.destroy$)).subscribe(message => {
-      if (message) {
-        console.log("Mensaje recibido en Navbar:", message); 
-        this.showAlert(message);
-      }
-    });
-
-    this.usuarioService.registerSuccessMessage$.pipe(takeUntil(this.destroy$)).subscribe(message => {
-      if (message) {
-        console.log("Mensaje recibido en Navbar:", message); 
-        this.showAlert(message);
-      }
-    });
+    this.loginServicio.userLogged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        this.usuarioLogeado = user;
+      });
   }
 
-  ngOnDestroy() { // Importante: Desuscribirse al destruir el componente
+  ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   logout() {
-    this.router.navigate(['/']);
     this.loginServicio.logout();
-    this.showAlert("Sesion cerrada correctamente");
-  }
-  showAlert(message: string) {
-    this.showSuccessAlert = true;
-    this.alertMessage = message;
-
-    // Ocultar la alerta después de 3 segundos
-    setTimeout(() => {
-      this.showSuccessAlert = false;
-    }, 3000);
-  }
-
-  get isLoggedIn(): boolean {
-    return this.loginServicio.isLogged();
-  }
-
-  get usuarioLogeado() {
-    return this.loginServicio.getUserLoggedIn();
+    this.alertService.showAlert('Sesión cerrada correctamente', 'success');
   }
 }

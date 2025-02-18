@@ -1,0 +1,12 @@
+<div class="alert-container">
+  <div *ngFor="let alert of alerts" [@alertAnimation] [ngClass]="{
+    'alert-success': alert.type === 'success',
+    'alert-warning': alert.type === 'warning',
+    'alert-danger': alert.type === 'danger',
+    'alert-primary': alert.type === 'primary',
+    'alert-info': alert.type === 'info'
+  }" class="alert alert-dismissible fade show" role="alert">
+    {{ alert.message }}
+    <button type="button" class="btn-close" aria-label="Close" (click)="removeAlert(alert)"></button>
+  </div>
+</div>
