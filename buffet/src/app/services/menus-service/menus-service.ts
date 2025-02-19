@@ -16,6 +16,11 @@ export class MenusService {
     return this.http.get<Menu[]>(this.baseUrl);
   }
 
+  getMenusActive(): Observable<Menu[]> {
+    const url = `${this.baseUrl}/activos`;
+    return this.http.get<Menu[]>(url);
+  }
+
   createMenu(menu: FormData): Observable<any> {
     return this.http.post(this.baseUrl, menu);
   }

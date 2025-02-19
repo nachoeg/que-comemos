@@ -85,4 +85,10 @@ public class MenuResource {
         List<MenuGetDTO> menusDTO = menuService.findByDia(dia); // Llama al servicio
         return ResponseEntity.ok(menusDTO);
     }
+    
+    @GetMapping("/activos")
+    public ResponseEntity<List<MenuGetDTO>> getAllMenusActive() {
+        List<MenuGetDTO> menusDTO = menuService.findAllActive();
+        return ResponseEntity.ok(menusDTO);
+    }
 }

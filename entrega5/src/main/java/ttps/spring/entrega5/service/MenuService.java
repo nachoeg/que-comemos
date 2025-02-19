@@ -152,13 +152,7 @@ public class MenuService {
 	public ReferencedWarning getReferencedWarning(final Long id) {
 		final ReferencedWarning referencedWarning = new ReferencedWarning();
 		final Menu menu = menuRepository.findById(id).orElseThrow(NotFoundException::new);
-		/*
-		 * final Estructura menuEstructura = estructuraRepository.findFirstByMenu(menu);
-		 * if (menuEstructura != null) {
-		 * referencedWarning.setKey("menu.estructura.menu.referenced");
-		 * referencedWarning.addParam(menuEstructura.getId()); return referencedWarning;
-		 * }
-		 */
+		
 		return null;
 	}
 	
@@ -168,25 +162,12 @@ public class MenuService {
 	                .map(menu -> mapToDTO(menu, new MenuGetDTO()))
 	                .collect(Collectors.toList());
 	    }
-	/*
-	 * public List<MenuConEstructurasDTO> findAllWithEstructurasYComidas() { final
-	 * List<Menu> menus = menuRepository.findAll(Sort.by("id"));
-	 * 
-	 * return menus.stream() .map(menu -> { MenuConEstructurasDTO menuDTO = new
-	 * MenuConEstructurasDTO(); menuDTO.setId(menu.getId());
-	 * menuDTO.setNombre(menu.getNombre()); menuDTO.setPrecio(menu.getPrecio());
-	 * 
-	 * 
-	 * // Genera lista de esctructuras de un menu List<EstructuraConComidasDTO>
-	 * estructurasDTO = estructuraService.findAllByMenu(menu.getId());
-	 * 
-	 * // por cada estructura, genera la lista de comidas asociada if
-	 * (!estructurasDTO.isEmpty()) { for (EstructuraConComidasDTO estructuraDTO :
-	 * estructurasDTO) { List<ComidaDTO> comidasDTO =
-	 * comidaService.findAllByEstructura(estructuraDTO.getId());
-	 * estructuraDTO.setComidas(comidasDTO); } }
-	 * 
-	 * menuDTO.setEstructuras(estructurasDTO); return menuDTO; })
-	 * .collect(Collectors.toList()); }
-	 */
+	 
+	 public List<MenuGetDTO> findAllActive() { // For regular users - all active menus
+	        return menuRepository.findAll().stream()
+	                .filter(menu -> menu.getDia() != DiaSemana.Desactivado)
+	                .map(menu -> mapToDTO(menu, new MenuGetDTO()))
+	                .collect(Collectors.toList());
+	    }
+	
 }
