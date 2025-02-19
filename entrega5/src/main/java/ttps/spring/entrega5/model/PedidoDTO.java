@@ -20,9 +20,9 @@ public class PedidoDTO {
     @Size(max = 255)
     private String estado;
 
-    private List<Long> menus;
+    private List<MenuPedidoDTO> menus;
 
-    private List<Long> comidas;
+    private List<ComidaPedidoDTO> comidas;
 
     @NotNull
     private Integer usuario;
@@ -59,23 +59,25 @@ public class PedidoDTO {
         this.estado = estado;
     }
 
-    public List<Long> getMenus() {
-        return menus;
-    }
+   
 
-    public void setMenus(final List<Long> menus) {
-        this.menus = menus;
-    }
+    public List<MenuPedidoDTO> getMenus() {
+		return menus;
+	}
 
-    public List<Long> getComidas() {
-        return comidas;
-    }
+	public void setMenus(List<MenuPedidoDTO> menus) {
+		this.menus = menus;
+	}
 
-    public void setComidas(final List<Long> comidas) {
-        this.comidas = comidas;
-    }
+	public List<ComidaPedidoDTO> getComidas() {
+		return comidas;
+	}
 
-    public Integer getUsuario() {
+	public void setComidas(List<ComidaPedidoDTO> comidas) {
+		this.comidas = comidas;
+	}
+
+	public Integer getUsuario() {
         return usuario;
     }
 

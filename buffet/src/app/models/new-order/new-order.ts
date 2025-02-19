@@ -1,12 +1,16 @@
+export interface NewOrderItem { // Define una interfaz para los items del pedido
+    id: number;
+    cantidad: number;
+}
 export class NewOrder {
     fecha: Date;
     monto: number;
     estado: string;
-    menus: number[];
-    comidas: number[];
+    menus: NewOrderItem[];
+    comidas: NewOrderItem[];
     usuario: number;
   
-    constructor(fecha: Date, monto: number, estado: string, menus: number[], comidas: number[], usuario: number) 
+    constructor(fecha: Date, monto: number, estado: string, menus: NewOrderItem[], comidas: NewOrderItem[], usuario: number) 
     {
       this.fecha = fecha;
       this.monto = monto;

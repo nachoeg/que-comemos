@@ -4,12 +4,17 @@ import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ttps.spring.entrega5.domain.Comida;
 import ttps.spring.entrega5.domain.Menu;
 import ttps.spring.entrega5.domain.Pedido;
 import ttps.spring.entrega5.domain.Usuario;
+import ttps.spring.entrega5.model.ComidaPedidoDTO;
+import ttps.spring.entrega5.model.MenuPedidoDTO;
 import ttps.spring.entrega5.model.PedidoDTO;
 import ttps.spring.entrega5.repos.ComidaRepository;
 import ttps.spring.entrega5.repos.MenuRepository;
@@ -52,6 +57,8 @@ public class PedidoService {
     public Long create(final PedidoDTO pedidoDTO) {
         final Pedido pedido = new Pedido();
         mapToEntity(pedidoDTO, pedido);
+        double montoRecalculado = calcularMonto(pedidoDTO.getMenus(), pedidoDTO.getComidas());
+        pedido.setMonto(montoRecalculado);
         return pedidoRepository.save(pedido).getId();
     }
 
@@ -59,6 +66,8 @@ public class PedidoService {
         final Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(pedidoDTO, pedido);
+        double montoRecalculado = calcularMonto(pedidoDTO.getMenus(), pedidoDTO.getComidas());
+        pedido.setMonto(montoRecalculado);
         pedidoRepository.save(pedido);
     }
 
@@ -71,12 +80,18 @@ public class PedidoService {
         pedidoDTO.setFecha(pedido.getFecha());
         pedidoDTO.setMonto(pedido.getMonto());
         pedidoDTO.setEstado(pedido.getEstado());
-        pedidoDTO.setMenus(pedido.getMenus().stream()
-                .map(menu -> menu.getId())
-                .toList());
-        pedidoDTO.setComidas(pedido.getComidas().stream()
-                .map(comida -> comida.getId())
-                .toList());
+        pedidoDTO.setMenus(pedido.getMenus().stream().map(menu -> {
+            MenuPedidoDTO menuPedidoDTO = new MenuPedidoDTO();
+            menuPedidoDTO.setId(menu.getId());
+            menuPedidoDTO.setCantidad(1); // O la cantidad que corresponda si la tienes en la entidad PedidoMenu
+            return menuPedidoDTO;
+        }).toList());
+        pedidoDTO.setComidas(pedido.getComidas().stream().map(comida -> {
+            ComidaPedidoDTO comidaPedidoDTO = new ComidaPedidoDTO();
+            comidaPedidoDTO.setId(comida.getId());
+            comidaPedidoDTO.setCantidad(1); // O la cantidad que corresponda si la tienes en la entidad PedidoComida
+            return comidaPedidoDTO;
+        }).toList());
         pedidoDTO.setUsuario(pedido.getUsuario() == null ? null : pedido.getUsuario().getId());
         return pedidoDTO;
     }
@@ -85,22 +100,58 @@ public class PedidoService {
         pedido.setFecha(pedidoDTO.getFecha());
         pedido.setMonto(pedidoDTO.getMonto());
         pedido.setEstado(pedidoDTO.getEstado());
-        final List<Menu> menus = menuRepository.findAllById(
-                pedidoDTO.getMenus() == null ? Collections.emptyList() : pedidoDTO.getMenus());
-        if (menus.size() != (pedidoDTO.getMenus() == null ? 0 : pedidoDTO.getMenus().size())) {
-            throw new NotFoundException("one of menus not found");
+        Set<Menu> menus = new HashSet<>();
+        if (pedidoDTO.getMenus() != null) {
+            for (MenuPedidoDTO menuPedidoDTO : pedidoDTO.getMenus()) {
+                Menu menu = menuRepository.findById(menuPedidoDTO.getId())
+                        .orElseThrow(() -> new NotFoundException("Menu not found"));
+                menus.add(menu);
+            }
         }
-        pedido.setMenus(new HashSet<>(menus));
-        final List<Comida> comidas = comidaRepository.findAllById(
-                pedidoDTO.getComidas() == null ? Collections.emptyList() : pedidoDTO.getComidas());
-        if (comidas.size() != (pedidoDTO.getComidas() == null ? 0 : pedidoDTO.getComidas().size())) {
-            throw new NotFoundException("one of comidas not found");
+        pedido.setMenus(menus);
+
+        Set<Comida> comidas = new HashSet<>();
+        if (pedidoDTO.getComidas() != null) {
+            for (ComidaPedidoDTO comidaPedidoDTO : pedidoDTO.getComidas()) {
+                Comida comida = comidaRepository.findById(comidaPedidoDTO.getId())
+                        .orElseThrow(() -> new NotFoundException("Comida not found"));
+                comidas.add(comida);
+            }
         }
-        pedido.setComidas(new HashSet<>(comidas));
+        pedido.setComidas(comidas);
+
         final Usuario usuario = pedidoDTO.getUsuario() == null ? null : usuarioRepository.findById(pedidoDTO.getUsuario())
                 .orElseThrow(() -> new NotFoundException("usuario not found"));
         pedido.setUsuario(usuario);
         return pedido;
+    }
+    
+    private double calcularMonto(List<MenuPedidoDTO> menus, List<ComidaPedidoDTO> comidas) {
+        double total = 0;
+
+        if (menus != null) {
+            for (MenuPedidoDTO menu : menus) {
+                Optional<Menu> menuEntity = menuRepository.findById(menu.getId());
+                if (menuEntity.isPresent()) {
+                    total += menuEntity.get().getPrecio() * menu.getCantidad();
+                } else {
+                    throw new NotFoundException("Menu not found");
+                }
+            }
+        }
+
+        if (comidas != null) {
+            for (ComidaPedidoDTO comida : comidas) {
+                Optional<Comida> comidaEntity = comidaRepository.findById(comida.getId());
+                if (comidaEntity.isPresent()) {
+                    total += comidaEntity.get().getPrecio() * comida.getCantidad();
+                } else {
+                    throw new NotFoundException("Comida not found");
+                }
+            }
+        }
+
+        return total;
     }
 
 }

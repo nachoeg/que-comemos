@@ -20,12 +20,12 @@ export class OrderService {
 
       private mapToNewOrder(order: Order): NewOrder {
         return {
-          fecha: order.fecha,
-          monto: order.monto,
-          estado: order.estado,
-          menus: order.menus.map(orderMenu => orderMenu.menu.id), // envia id de Menu
-          comidas: order.comidas.map(orderFood => orderFood.comida.id), // envia id de Comida
-          usuario: order.usuario
+            fecha: order.fecha,
+            monto: order.monto,
+            estado: order.estado,
+            menus: order.menus.map(orderMenu => ({ id: orderMenu.menu.id, cantidad: orderMenu.cantidad })), // <--- Mapea a objetos {id, cantidad}
+            comidas: order.comidas.map(orderFood => ({ id: orderFood.comida.id, cantidad: orderFood.cantidad })), // <--- Mapea a objetos {id, cantidad}
+            usuario: order.usuario
         };
       }
 

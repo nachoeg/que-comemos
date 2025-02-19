@@ -9,8 +9,8 @@ export class CartService {
   private cartItemsSubject = new BehaviorSubject<{ menus: OrderMenu[], foods: OrderFood[] }>({ menus: [], foods: [] });
   public cartItems$ = this.cartItemsSubject.asObservable(); // Observable para los items del carrito
 
-  private cantidadItemsSubject = new BehaviorSubject<number>(0); // Nuevo: Subject para la cantidad
-  public cantidadItems$ = this.cantidadItemsSubject.asObservable(); // Nuevo: Observable para la cantidad
+  private cantidadItemsSubject = new BehaviorSubject<number>(0); 
+  public cantidadItems$ = this.cantidadItemsSubject.asObservable(); 
 
   private foodQuantities: { [comidaId: number]: number } = {}; // Diccionario para guardar las cantidades de comidas
   private menuQuantities: { [menuId: number]: number } = {}; //Diccionario para guardar las cantidades de menus

@@ -5,6 +5,7 @@ import { EstructuraService } from '../../../services/estructura-service/estructu
 import { Menu } from '../../../models/menu/menu';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginServicio } from '../../../services/login-servicio/login-servicio';
 
 @Component({
   selector: 'app-menu-item',
@@ -13,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './menu-item.component.css',
 })
 export class MenuItemComponent implements OnInit {
+  usuarioLogeado: any; // Store the logged-in user
   createSuccessMessage: string = '';
   createErrorMessage: string = '';
   menuId: number = 0;
@@ -24,12 +26,15 @@ export class MenuItemComponent implements OnInit {
     dia: '',
     estructuras: [],
   };
+  imageLoaded: boolean[] = [];
+  imageError: boolean[] = [];
 
   constructor(
     private menuService: MenusService,
     private estructuraService: EstructuraService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loginService: LoginServicio
   ) {}
 
   ngOnInit() {
@@ -39,6 +44,15 @@ export class MenuItemComponent implements OnInit {
         this.menuId = +menuId;
         this.menuService.getMenuById(this.menuId).subscribe((menu: Menu) => {
           this.menu = menu;
+          this.imageLoaded = [];
+          this.imageError = [];
+
+          this.menu.estructuras.forEach(estructura => {
+            estructura.comidas.forEach(comida => {
+              this.imageLoaded.push(false);
+              this.imageError.push(false);
+            });
+          });
         });
       } else {
         console.error(
@@ -46,6 +60,21 @@ export class MenuItemComponent implements OnInit {
         );
       }
     });
+
+    this.loginService.isUserLoggedIn$.subscribe(isLoggedIn => { // No need for takeUntil here
+      this.usuarioLogeado = isLoggedIn ? this.loginService.getUserLoggedIn() : null;
+    });
+
+  }
+
+  onImageLoad(index: number): void {
+    this.imageLoaded[index] = true;
+    this.imageError[index] = false;
+  }
+
+  onImageError(index: number): void {
+    this.imageLoaded[index] = false;
+    this.imageError[index] = true;
   }
 
   addFoodToEstructura(estructuraId: number) {

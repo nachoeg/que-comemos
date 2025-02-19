@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { OrderService } from '../../services/order-service/order-service';
 import { Router } from '@angular/router';
 import { LoginServicio } from '../../services/login-servicio/login-servicio';
+import { FoodsService } from '../../services/foods-service/foods-service';
+import { MenusService } from '../../services/menus-service/menus-service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -19,8 +21,16 @@ export class ShoppingCartComponent {
   private destroy$ = new Subject<void>();
   mostrarConfirmacion = false;
   orderId: number | null = null;
+  mostrarTicket: boolean = false;
+  fecha: Date | undefined;
 
-  constructor(private cartService: CartService, private orderService: OrderService, private router: Router, private loginService: LoginServicio) {}
+
+  constructor(private cartService: CartService, 
+    private orderService: OrderService, 
+    private router: Router, 
+    private loginService: LoginServicio,
+  private foodService: FoodsService,
+private menuService: MenusService) {}
 
   ngOnInit() {
     this.cartService.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
@@ -56,13 +66,14 @@ export class ShoppingCartComponent {
     return this.cartItems.menus.reduce((total, menuItem) => total + menuItem.cantidad, 0);
   }
 
-  finalizarPedido() {
+
+  realizarPedido() {
     if (this.cartItems.menus.length === 0 && this.cartItems.foods.length === 0) {
       console.error("El carrito está vacío. Agregue productos antes de finalizar el pedido.");
-      // You could also display a message to the user here.
-      return; // Stop the order process
+   
+      return; 
     }
-    const fecha = new Date(); // Current date
+    this.fecha = new Date(); // Current date
     const monto = this.calcularTotal();
     const estado = 'PENDIENTE'; // Initial state
     const usuarioId = this.loginService.getUserId();
@@ -71,7 +82,8 @@ export class ShoppingCartComponent {
       this.router.navigate(['/login']);
       return;
   }
-    const order = new Order(fecha, monto, estado, usuarioId);
+  
+    const order = new Order(this.fecha, monto, estado, usuarioId);
     order.menus = this.cartItems.menus;
     order.comidas = this.cartItems.foods;
 
@@ -79,16 +91,25 @@ export class ShoppingCartComponent {
       next: (orderId: number) => {
         console.log('Pedido creado exitosamente. ID del pedido:', orderId);
         this.orderId = orderId; // Guarda el ID del pedido
-        this.cartService.clearCart();
+        this.cartService.clearCart(); 
         this.mostrarConfirmacion = true; // Muestra la sección de confirmación
+        this.mostrarTicket = true; // Muestra el ticket con el codigo QR
+        
       },
       error: (error) => {
         console.error('Error al crear el pedido', error);
       }
     });
+  
   }
 
   cerrarConfirmacion() {  // Función para cerrar la confirmación
     this.mostrarConfirmacion = false;
+    this.mostrarTicket = false;
+ 
+  }
+
+  imprimirTicket() {
+    window.print();
   }
 }
