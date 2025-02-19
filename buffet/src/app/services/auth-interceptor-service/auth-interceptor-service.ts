@@ -26,18 +26,21 @@ export const AuthInterceptorService: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401 && error.error === 'Token expirado') {
         console.log('Error 401: Token expirado - Redirigiendo al login');
+        router.navigate(['/iniciar-sesion']);
         alertService.showAlert(
           'Su sesión ha expirado, inicie sesión nuevamente.',
           'danger'
         );
       } else if (error.status === 401) {
         console.log('Error 401: No autorizado - Redirigiendo al login');
+        router.navigate(['/iniciar-sesion']);
         alertService.showAlert(
           'No autorizado, inicie sesión nuevamente.',
           'danger'
         );
       } else if (error.status === 403) {
         console.log('Error 403: Prohibido - Redirigiendo al login');
+        router.navigate(['/iniciar-sesion']);
         alertService.showAlert(
           'Prohibido, inicie sesión nuevamente.',
           'danger'
@@ -47,7 +50,6 @@ export const AuthInterceptorService: HttpInterceptorFn = (req, next) => {
         alertService.showAlert('Problema de red o CORS.', 'danger');
         // Manejar el error de red o CORS aquí si es necesario
       }
-      router.navigate(['/iniciar-sesion']);
       console.log('El error es: ', error);
       return throwError(error);
     })

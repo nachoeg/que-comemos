@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UsuariosService } from '../../services/usuarios-service/usuarios-service';
-import { LoginServicio } from "../../services/login-servicio/login-servicio";
+import { LoginServicio } from '../../services/login-servicio/login-servicio';
 import { Usuario } from '../../models/usuario/usuario';
 import { Location, CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { RouterModule, Router } from '@angular/router';
   selector: 'app-perfil',
   imports: [RouterModule, CommonModule],
   templateUrl: './perfil.component.html',
-  styleUrl: './perfil.component.css'
+  styleUrl: './perfil.component.css',
 })
 export class PerfilComponent {
   usuario: Usuario | null = null;
@@ -21,12 +21,14 @@ export class PerfilComponent {
     private router: Router
   ) {}
 
-  ngOnInit(){
+  ngOnInit() {
     const user = this.authService.getUserLoggedIn();
-    
-    this.usuarioService.getUsuario(user.id).subscribe(usuario => {
-      this.usuario = usuario;
-    });
+
+    if (user) {
+      this.usuarioService.getUsuario(user.id).subscribe((usuario) => {
+        this.usuario = usuario;
+      });
+    }
   }
 
   goBack(): void {

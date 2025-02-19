@@ -1,31 +1,31 @@
-  <h2 class="mb-4">Detalle de la Sugerencia</h2>
-  
-  <div *ngIf="sugerencia">
+<h2 class="mb-4">Detalle de la Sugerencia</h2>
 
-  
-    <div class="mb-3 form-group">
-      <label class="form-label">Tipo de Sugerencia</label>
-      <p class="form-control">{{ sugerencia?.tipo }}</p>
-    </div>
-  
-    <div class="mb-3 form-group">
-      <label class="form-label">Fecha</label>
-      <p class="form-control">{{ formatearFecha(sugerencia?.fecha) }}</p>
-    </div>
-  
-    <div class="mb-3 form-group">
-      <label class="form-label">Email de Usuario</label>
-      <p class="form-control">{{ usuario?.email }}</p>
-    </div>
+<div *ngIf="sugerencia">
 
-    <div class="mb-3 form-group">
-        <label class="form-label">Descripción</label>
-        <p class="form-control">{{ sugerencia?.descripcion }}</p>
-    </div>
-  
-    <button class="btn mt-3 px-4 py-2 fw-bold shadow-sm rounded" (click)="volver()">
-        Volver
-    </button>
+
+  <div class="mb-3 form-group">
+    <label class="form-label">Tipo de Sugerencia</label>
+    <p class="form-control">{{ sugerencia.tipo }}</p>
   </div>
-  
-  <h3 *ngIf="!sugerencia">Sugerencia no encontrada</h3>
+
+  <div class="mb-3 form-group">
+    <label class="form-label">Fecha</label>
+    <p class="form-control">{{ formatearFecha(sugerencia.fecha) }}</p>
+  </div>
+
+  <div class="mb-3 form-group">
+    <label class="form-label">Email de Usuario</label>
+    <p class="form-control">{{ usuario?.email }}</p>
+  </div>
+
+  <div class="mb-3 form-group">
+    <label class="form-label">Descripción</label>
+    <p class="form-control">{{ sugerencia.descripcion }}</p>
+  </div>
+
+  <button class="btn mt-3 px-4 py-2 fw-bold shadow-sm rounded" (click)="volver()">
+    Volver
+  </button>
+</div>
+
+<h3 *ngIf="!sugerencia">Sugerencia no encontrada</h3>
