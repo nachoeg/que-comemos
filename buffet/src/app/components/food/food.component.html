@@ -8,12 +8,12 @@
   </button>
 </div>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
-  <div class="col" *ngFor="let comida of comidas; let i = index">
+  <div class="col" *ngFor="let comida of comidas">
     <div class="card comida">
-      <img *ngIf="!imageLoaded[i] && imageError[i]" src="/food-placeholder.png" class="card-img-top"
+      <img *ngIf="!comida.imageLoaded || comida.imageError" src="/food-placeholder.png" class="card-img-top"
         alt="{{comida.nombre}}">
-      <img *ngIf="!imageError[i]" [src]="comida.foto" class="card-img-top" alt="{{comida.nombre}}"
-        (load)="onImageLoad(i)" (error)="onImageError(i)">
+      <img *ngIf="!comida.imageError" [src]="comida.foto" class="card-img-top" alt="{{comida.nombre}}"
+        (load)="onImageLoad(comida.id)" (error)="onImageError(comida.id)">
       <div class="card-body">
         <h5 class="card-title">{{ comida.nombre }}</h5>
         <p class="card-text fw-bold">

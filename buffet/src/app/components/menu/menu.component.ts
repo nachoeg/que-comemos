@@ -23,27 +23,29 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class MenuComponent implements OnInit {
   menus: Menu[] = [];
-  imageLoaded: boolean[] = [];
-  imageError: boolean[] = [];
 
   constructor(private menuService: MenusService, private router: Router) {}
 
   ngOnInit() {
     this.menuService.getMenus().subscribe((menus) => {
       this.menus = menus;
-      this.imageLoaded = new Array(menus.length).fill(false);
-      this.imageError = new Array(menus.length).fill(false);
     });
   }
 
-  onImageLoad(index: number): void {
-    this.imageLoaded[index] = true;
-    this.imageError[index] = false;
+  onImageLoad(menuId: number): void {
+    const menu = this.menus.find((menu) => menu.id === menuId);
+    if (menu) {
+      menu.imageLoaded = true;
+      menu.imageError = false;
+    }
   }
 
   onImageError(index: number): void {
-    this.imageLoaded[index] = false;
-    this.imageError[index] = true;
+    const menu = this.menus[index];
+    if (menu) {
+      menu.imageLoaded = false;
+      menu.imageError = true;
+    }
   }
 
   deleteMenu(menuId: number) {

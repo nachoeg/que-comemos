@@ -16,14 +16,7 @@ export class MenuItemComponent implements OnInit {
   createSuccessMessage: string = '';
   createErrorMessage: string = '';
   menuId: number = 0;
-  menu: Menu = {
-    id: 0,
-    nombre: '',
-    precio: 0,
-    foto: '',
-    dia: '',
-    estructuras: [],
-  };
+  menu: Menu = new Menu(0, '', 0, '', '', []);
 
   constructor(
     private menuService: MenusService,
@@ -46,6 +39,28 @@ export class MenuItemComponent implements OnInit {
         );
       }
     });
+  }
+
+  onImageLoad(estructuraId: number, comidaId: number): void {
+    const estructura = this.menu.estructuras.find((e) => e.id === estructuraId);
+    if (estructura) {
+      const comida = estructura.comidas.find((c) => c.id === comidaId);
+      if (comida) {
+        comida.imageLoaded = true;
+        comida.imageError = false;
+      }
+    }
+  }
+
+  onImageError(estructuraId: number, comidaId: number): void {
+    const estructura = this.menu.estructuras.find((e) => e.id === estructuraId);
+    if (estructura) {
+      const comida = estructura.comidas.find((c) => c.id === comidaId);
+      if (comida) {
+        comida.imageLoaded = false;
+        comida.imageError = true;
+      }
+    }
   }
 
   addFoodToEstructura(estructuraId: number) {

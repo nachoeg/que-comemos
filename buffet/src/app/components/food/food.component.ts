@@ -14,16 +14,12 @@ import { CommonModule } from '@angular/common';
 })
 export class FoodComponent {
   comidas: Food[] = [];
-  imageLoaded: boolean[] = [];
-  imageError: boolean[] = [];
 
   constructor(private foodsService: FoodsService, private router: Router) {}
 
   ngOnInit() {
     this.foodsService.getFoods().subscribe((comidas) => {
       this.comidas = comidas;
-      this.imageLoaded = new Array(comidas.length).fill(false);
-      this.imageError = new Array(comidas.length).fill(false);
     });
   }
 
@@ -31,14 +27,20 @@ export class FoodComponent {
     this.router.navigate(['/comidas', foodId, 'editar']);
   }
 
-  onImageLoad(index: number): void {
-    this.imageLoaded[index] = true;
-    this.imageError[index] = false;
+  onImageLoad(comidaId: number): void {
+    const comida = this.comidas.find((comida) => comida.id === comidaId);
+    if (comida) {
+      comida.imageLoaded = true;
+      comida.imageError = false;
+    }
   }
 
-  onImageError(index: number): void {
-    this.imageLoaded[index] = false;
-    this.imageError[index] = true;
+  onImageError(comidaId: number): void {
+    const comida = this.comidas.find((comida) => comida.id === comidaId);
+    if (comida) {
+      comida.imageLoaded = false;
+      comida.imageError = true;
+    }
   }
 
   deleteFood(foodId: number) {

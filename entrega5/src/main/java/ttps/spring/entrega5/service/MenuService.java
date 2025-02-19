@@ -68,7 +68,7 @@ public class MenuService {
 								comidaDTO.setId(comida.getId());
 								comidaDTO.setNombre(comida.getNombre());
 								comidaDTO.setPrecio(comida.getPrecio());
-								// Map other attributes of Comida to ComidaDTO if needed
+								comidaDTO.setFoto(comida.getFoto());
 								comidasDto.add(comidaDTO);
 							}
 							estructuraDTO.setComidas(comidasDto);
