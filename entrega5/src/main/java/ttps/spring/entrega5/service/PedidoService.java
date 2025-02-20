@@ -1,14 +1,22 @@
 package ttps.spring.entrega5.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import com.google.zxing.WriterException;
+
 import ttps.spring.entrega5.domain.Comida;
 import ttps.spring.entrega5.domain.Menu;
 import ttps.spring.entrega5.domain.Pedido;
@@ -21,6 +29,7 @@ import ttps.spring.entrega5.repos.MenuRepository;
 import ttps.spring.entrega5.repos.PedidoRepository;
 import ttps.spring.entrega5.repos.UsuarioRepository;
 import ttps.spring.entrega5.util.NotFoundException;
+import ttps.spring.entrega5.util.QRService;
 
 
 @Service
@@ -31,6 +40,7 @@ public class PedidoService {
     private final MenuRepository menuRepository;
     private final ComidaRepository comidaRepository;
     private final UsuarioRepository usuarioRepository;
+   
 
     public PedidoService(final PedidoRepository pedidoRepository,
             final MenuRepository menuRepository, final ComidaRepository comidaRepository,
@@ -54,12 +64,17 @@ public class PedidoService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final PedidoDTO pedidoDTO) {
-        final Pedido pedido = new Pedido();
+	
+    public PedidoDTO create(final PedidoDTO pedidoDTO) {
+        Pedido pedido = new Pedido();
         mapToEntity(pedidoDTO, pedido);
         double montoRecalculado = calcularMonto(pedidoDTO.getMenus(), pedidoDTO.getComidas());
         pedido.setMonto(montoRecalculado);
-        return pedidoRepository.save(pedido).getId();
+
+        pedido = pedidoRepository.save(pedido); // Guarda el pedido y obtén la entidad persistida con el ID
+
+        PedidoDTO pedidoDTOConId = new PedidoDTO(); // Crea un PedidoDTO vacío
+        return mapToDTO(pedido, pedidoDTOConId);
     }
 
     public void update(final Long id, final PedidoDTO pedidoDTO) {
@@ -83,13 +98,17 @@ public class PedidoService {
         pedidoDTO.setMenus(pedido.getMenus().stream().map(menu -> {
             MenuPedidoDTO menuPedidoDTO = new MenuPedidoDTO();
             menuPedidoDTO.setId(menu.getId());
-            menuPedidoDTO.setCantidad(1); // O la cantidad que corresponda si la tienes en la entidad PedidoMenu
+            menuPedidoDTO.setCantidad(1);
+            menuPedidoDTO.setNombre(menu.getNombre());
+            menuPedidoDTO.setPrecio(menu.getPrecio());
             return menuPedidoDTO;
         }).toList());
         pedidoDTO.setComidas(pedido.getComidas().stream().map(comida -> {
             ComidaPedidoDTO comidaPedidoDTO = new ComidaPedidoDTO();
             comidaPedidoDTO.setId(comida.getId());
-            comidaPedidoDTO.setCantidad(1); // O la cantidad que corresponda si la tienes en la entidad PedidoComida
+            comidaPedidoDTO.setCantidad(1);
+            comidaPedidoDTO.setNombre(comida.getNombre());
+            comidaPedidoDTO.setPrecio(comida.getPrecio());
             return comidaPedidoDTO;
         }).toList());
         pedidoDTO.setUsuario(pedido.getUsuario() == null ? null : pedido.getUsuario().getId());

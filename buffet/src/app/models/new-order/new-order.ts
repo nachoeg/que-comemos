@@ -1,4 +1,4 @@
-export interface NewOrderItem { // Define una interfaz para los items del pedido
+export interface NewOrderItem { 
     id: number;
     cantidad: number;
 }

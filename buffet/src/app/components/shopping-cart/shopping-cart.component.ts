@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { LoginServicio } from '../../services/login-servicio/login-servicio';
 import { FoodsService } from '../../services/foods-service/foods-service';
 import { MenusService } from '../../services/menus-service/menus-service';
+import { OrderResponse, PedidoDetalles } from '../../models/order-response/order-response';
+import { NewOrder } from '../../models/new-order/new-order';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -20,9 +22,12 @@ export class ShoppingCartComponent {
   cartItems: { menus: OrderMenu[], foods: OrderFood[] } = { menus: [], foods: [] };
   private destroy$ = new Subject<void>();
   mostrarConfirmacion = false;
-  orderId: number | null = null;
+  
   mostrarTicket: boolean = false;
   fecha: Date | undefined;
+  qrCodeImage: any;
+  pedidoData: PedidoDetalles | undefined;
+  id = 0;
 
 
   constructor(private cartService: CartService, 
@@ -73,6 +78,7 @@ private menuService: MenusService) {}
    
       return; 
     }
+    
     this.fecha = new Date(); // Current date
     const monto = this.calcularTotal();
     const estado = 'PENDIENTE'; // Initial state
@@ -83,19 +89,20 @@ private menuService: MenusService) {}
       return;
   }
   
-    const order = new Order(this.fecha, monto, estado, usuarioId);
+    const order = new Order(this.id,this.fecha, monto, estado, usuarioId);
     order.menus = this.cartItems.menus;
     order.comidas = this.cartItems.foods;
 
     this.orderService.createOrder(order).subscribe({
-      next: (orderId: number) => {
-        console.log('Pedido creado exitosamente. ID del pedido:', orderId);
-        this.orderId = orderId; // Guarda el ID del pedido
-        this.cartService.clearCart(); 
-        this.mostrarConfirmacion = true; // Muestra la sección de confirmación
-        this.mostrarTicket = true; // Muestra el ticket con el codigo QR
-        
-      },
+      next: (response) => {
+        console.log('Pedido creado exitosamente', response);
+        this.qrCodeImage = "data:image/png;base64," + response.qrCodeImage;
+        this.pedidoData = response.pedido;
+
+        this.cartService.clearCart();
+        this.mostrarConfirmacion = true;
+        this.mostrarTicket = true;
+    },
       error: (error) => {
         console.error('Error al crear el pedido', error);
       }

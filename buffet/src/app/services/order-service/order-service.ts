@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Order } from '../../models/order/order';
 import { NewOrder } from '../../models/new-order/new-order';
+import { OrderResponse, PedidoDetalles } from '../../models/order-response/order-response';
 
 @Injectable({
     providedIn: 'root',
@@ -12,10 +13,38 @@ export class OrderService {
 
     constructor(private http: HttpClient) {}
 
-    createOrder(order: Order): Observable<any> {
-        const pedido = this.mapToNewOrder(order); // mapeo de pedido a nuevo pedido(contiene solo los id de comida y menu)
-        return this.http.post<number>(this.baseUrl, pedido);
-      }
+    // createOrder(order: any): Observable<OrderResponse> { 
+    //     const pedido = this.mapToNewOrder(order);
+    //     return this.http.post<OrderResponse>(this.baseUrl, pedido);
+    // }
+    createOrder(order: any): Observable<OrderResponse> {
+        const pedido = this.mapToNewOrder(order);
+        return this.http.post<OrderResponse>(this.baseUrl, pedido).pipe(
+            map(response => {
+                const pedidoDetalles: PedidoDetalles = {
+                    id: response.pedido.id,
+                    fecha: response.pedido.fecha,
+                    monto: response.pedido.monto,
+                    estado: response.pedido.estado,
+                    menus: response.pedido.menus.map(menuPedido => ({
+                        nombre: menuPedido.nombre,
+                        cantidad: menuPedido.cantidad,
+                        precio: menuPedido.precio
+                    })),
+                    comidas: response.pedido.comidas.map(comidaPedido => ({
+                        nombre: comidaPedido.nombre,
+                        cantidad: comidaPedido.cantidad,
+                        precio: comidaPedido.precio
+                    })),
+                    usuario: response.pedido.usuario
+                };
+                return {
+                    qrCodeImage: response.qrCodeImage,
+                    pedido: pedidoDetalles
+                };
+            })
+        );
+    }
       
 
       private mapToNewOrder(order: Order): NewOrder {
@@ -28,6 +57,5 @@ export class OrderService {
             usuario: order.usuario
         };
       }
-
-
+     
 }

@@ -62,21 +62,71 @@
 
                 <div *ngIf="mostrarConfirmacion && !mostrarTicket">  <h3>¡Pedido Confirmado!</h3>
                     <p>
-                        Gracias por tu compra. Tu número de pedido es:
-                        <strong>{{ orderId }}</strong>
+                        Gracias por tu compra.
                     </p>
                 </div>
 
 
-                <div class="ticket" *ngIf="mostrarTicket">
+                <div class="ticket container mt-4" *ngIf="mostrarTicket && pedidoData">
                     <div class="row">
-                        <div class="col-12 header text-center"> 
-                             
+                        <div class="col-12 header text-center">
                             <p class="fecha">Fecha: {{ fecha | date:'short' }}</p>
                             <h2>Ticket de Compra</h2>
-                            <p>Nro. de Pedido: <strong>{{ orderId }}</strong></p>
+                            <h4>ID de Compra: {{ pedidoData.id }}</h4>
+                            <p>Monto: {{ pedidoData.monto | currency }}</p>
                         </div>
                     </div>
+                
+                
+                    <div class="mt-3" *ngIf="pedidoData.menus && pedidoData.menus.length > 0">
+                        <h4>Menús:</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let menu of pedidoData.menus">
+                                    <td>{{ menu.nombre }}</td>
+                                    <td>{{ menu.cantidad }}</td>
+                                    <td>{{ menu.precio | currency }}</td>
+                                    <td>{{ menu.cantidad * menu.precio | currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                    <div class="mt-3" *ngIf="pedidoData.comidas && pedidoData.comidas.length > 0">
+                        <h4>Comidas:</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let comida of pedidoData.comidas">
+                                    <td>{{ comida.nombre }}</td>
+                                    <td>{{ comida.cantidad }}</td>
+                                    <td>{{ comida.precio | currency }}</td>
+                                    <td>{{ comida.cantidad * comida.precio | currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <img [src]="qrCodeImage" alt="Código QR" *ngIf="qrCodeImage">
+                        </div>
+                    </div>
+
 
 
 

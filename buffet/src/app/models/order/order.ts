@@ -1,7 +1,7 @@
 import { Menu } from "../menu/menu";
 import { Food } from "../food/food";
 export class Order {
-    id?: number;
+    id: number;
     fecha: Date;
     monto: number;
     estado: string;
@@ -10,11 +10,13 @@ export class Order {
     usuario: number;
 
     constructor(
+        id: number,
         fecha: Date,
         monto: number,
         estado: string,
         usuario: number
     ) {
+        this.id = 0;
         this.fecha = fecha;
         this.monto = monto;
         this.estado = estado;
