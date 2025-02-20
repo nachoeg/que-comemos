@@ -3,6 +3,7 @@ package ttps.spring.entrega5.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,22 +35,46 @@ public class GlobalExceptionHandler {
     }
 	
 	@ExceptionHandler(EmptyResultDataAccessException.class) // Ejemplo: excepción específica
-    public ResponseEntity<String> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
-        logger.error("Usuario no encontrado:", ex); // Loguea la excepción completa
-        return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+	 public ResponseEntity<ErrorResponse> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
+        logger.error("Recurso no encontrado:", ex);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Recurso no encontrado");
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 	
-	@ExceptionHandler(NotFoundException.class) // Maneja tu excepción personalizada
-    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
-        logger.error("Recurso no encontrado:", ex);
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
+	
 	@ExceptionHandler(AutenticacionService.AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AutenticacionService.AuthenticationException ex) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
+	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        logger.error("Error de integridad de datos:", ex);
+        // Verificar si el error es debido a un DNI duplicado
+        if (ex.getMessage().contains("Duplicate entry") ) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), "El DNI ingresado ya existe.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        } else {
+            // Manejar otras violaciones de integridad de datos
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), "Error de integridad de datos.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
+    }
+	
+	 @ExceptionHandler(ReferencedWarning.class)
+	    public ResponseEntity<ErrorResponse> handleReferencedWarning(ReferencedWarning referencedWarning) {
+	        logger.error("Referencia encontrada:", referencedWarning.getMessage());
+	        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), referencedWarning.getMessage());
+	        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+	    }
+	
+	 @ExceptionHandler(Exception.class) // Manejador genérico
+	    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
+	        logger.error("Error no manejado:", ex);
+	        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocurrió un error inesperado.");
+	        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 
     // Clase interna estática
     public static class ErrorResponse {

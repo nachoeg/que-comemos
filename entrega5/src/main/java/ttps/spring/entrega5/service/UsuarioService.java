@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,6 @@ import ttps.spring.entrega5.repos.RolRepository;
 import ttps.spring.entrega5.repos.SugerenciaRepository;
 import ttps.spring.entrega5.repos.UsuarioRepository;
 import ttps.spring.entrega5.util.ImgurUploader;
-import ttps.spring.entrega5.util.NotFoundException;
 import ttps.spring.entrega5.util.PasswordService;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
@@ -32,20 +32,18 @@ public class UsuarioService {
     private final SugerenciaRepository sugerenciaRepository;
     private final PedidoRepository pedidoRepository;
     private final ImgurUploader imgurUploader;
-    //private final PasswordService passwordService;
     @Autowired
     private PasswordService passwordService;
 
     public UsuarioService(final UsuarioRepository usuarioRepository,
             final RolRepository rolRepository, final SugerenciaRepository sugerenciaRepository,
 			final PedidoRepository pedidoRepository,
-			ImgurUploader imgurUploader /*, final PasswordService passwordService */) {
+			ImgurUploader imgurUploader) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
         this.sugerenciaRepository = sugerenciaRepository;
         this.pedidoRepository = pedidoRepository;
         this.imgurUploader = imgurUploader;
-        //this.passwordService = passwordService;
     }
 
     public List<UsuarioDTO> findAll() {
@@ -58,20 +56,20 @@ public class UsuarioService {
     public UsuarioDTO get(final Integer id) {
         return usuarioRepository.findById(id)
                 .map(usuario -> mapToDTO(usuario, new UsuarioDTO()))
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EmptyResultDataAccessException("Usuario no encontrado", 1));
     }
 
     public Integer create(final UsuarioDTO usuarioDTO) {
         final Usuario usuario = new Usuario();
         mapToEntity(usuarioDTO, usuario);
-        String encodedPassword = passwordService.hashPassword(usuarioDTO.getClave()); // Usar PasswordService para hasear clave
+        String encodedPassword = passwordService.hashPassword(usuarioDTO.getClave()); // Usar PasswordService para hashear clave
         usuario.setClave(encodedPassword);
         return usuarioRepository.save(usuario).getId();
     }
 
     public void update(final Integer id, final UsuarioDTO usuarioDTO, MultipartFile foto)  throws IOException {
         final Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Usuario no encontrado", 1));
         if (foto != null && !foto.isEmpty()) {
         	String fotoUrl = imgurUploader.upload(foto);
             usuario.setFoto(fotoUrl);
@@ -82,10 +80,10 @@ public class UsuarioService {
     
     public void updateRol(final Integer id, final String nuevoRolId)  throws IOException {
         final Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Usuario no encontrado", 1));
         
         final Rol rol = rolRepository.findById(Long.valueOf(nuevoRolId))
-                .orElseThrow(() -> new NotFoundException("rol not found"));
+                .orElseThrow(() -> new EmptyResultDataAccessException("rol no encontrado", 1));
         
         usuario.setRol(rol);
         usuarioRepository.save(usuario);
@@ -124,7 +122,7 @@ public class UsuarioService {
         	usuario.setFoto(usuarioDTO.getFoto());
         }
         final Rol rol = usuarioDTO.getRol() == null ? null : rolRepository.findById(usuarioDTO.getRol())
-                .orElseThrow(() -> new NotFoundException("rol not found"));
+                .orElseThrow(() -> new EmptyResultDataAccessException("rol no encontrado", 1));
         usuario.setRol(rol);
         return usuario;
     }
@@ -136,7 +134,7 @@ public class UsuarioService {
     public ReferencedWarning getReferencedWarning(final Integer id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Usuario no encontrado", 1));
         final Sugerencia usuarioSugerencia = sugerenciaRepository.findFirstByUsuario(usuario);
         if (usuarioSugerencia != null) {
             referencedWarning.setKey("usuario.sugerencia.usuario.referenced");

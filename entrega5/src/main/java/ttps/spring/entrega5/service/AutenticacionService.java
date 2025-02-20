@@ -5,9 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import ttps.spring.entrega5.model.UsuarioDTO;
-import ttps.spring.entrega5.util.NotFoundException;
 import ttps.spring.entrega5.util.PasswordService;
-import ttps.spring.entrega5.util.GlobalExceptionHandler;
 
 @Service
 public class AutenticacionService {
@@ -18,22 +16,18 @@ public class AutenticacionService {
 	private PasswordService passwordService;
 
 	public UsuarioDTO authenticate(String email, String password) {
-		 try {
+		 
 	        UsuarioDTO user = usuarioService.findByEmail(email);
 	        
 	        if (user == null) {
-	        	throw new NotFoundException("Usuario no encontrado"); // Usuario no encontrado
+	        	throw new EmptyResultDataAccessException("Usuario no encontrado con email: " + email, 1);// Usuario no encontrado
 	        }
 	        
 	        if (!passwordService.verifyPassword(password, user.getClave())) {
 	        	throw new AuthenticationException("Contraseña inválida"); // Contraseña inválida
 	        }
 
-
-	        return user;
-	    } catch (EmptyResultDataAccessException ex) {
-	    	throw new NotFoundException("Usuario no encontrado"); // Re-lanza como tu excepción
-	    }// Clase interna para excepciones de autenticación (opcional, pero recomendado)
+	        return user;  
 	}
 public static class AuthenticationException extends RuntimeException {
     public AuthenticationException(String message) {

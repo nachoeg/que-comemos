@@ -27,7 +27,6 @@ import ttps.spring.entrega5.model.ComidaDTO;
 import ttps.spring.entrega5.model.MenuDTO;
 import ttps.spring.entrega5.model.MenuGetDTO;
 import ttps.spring.entrega5.service.MenuService;
-import ttps.spring.entrega5.util.ReferencedException;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
 @RestController
@@ -73,7 +72,7 @@ public class MenuResource {
     public ResponseEntity<Void> deleteMenu(@PathVariable(name = "id") final Long id) {
         final ReferencedWarning referencedWarning = menuService.getReferencedWarning(id);
         if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
+            throw referencedWarning;
         }
         menuService.delete(id);
         return ResponseEntity.noContent().build();

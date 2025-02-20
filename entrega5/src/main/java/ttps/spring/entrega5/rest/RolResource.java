@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ttps.spring.entrega5.model.RolDTO;
 import ttps.spring.entrega5.service.RolService;
-import ttps.spring.entrega5.util.ReferencedException;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
 
@@ -59,7 +58,7 @@ public class RolResource {
     public ResponseEntity<Void> deleteRol(@PathVariable(name = "id") final Long id) {
         final ReferencedWarning referencedWarning = rolService.getReferencedWarning(id);
         if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
+            throw referencedWarning;
         }
         rolService.delete(id);
         return ResponseEntity.noContent().build();

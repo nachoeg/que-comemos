@@ -1,6 +1,8 @@
 package ttps.spring.entrega5.service;
 
 import java.util.List;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ttps.spring.entrega5.domain.Sugerencia;
@@ -8,8 +10,6 @@ import ttps.spring.entrega5.domain.Usuario;
 import ttps.spring.entrega5.model.SugerenciaDTO;
 import ttps.spring.entrega5.repos.SugerenciaRepository;
 import ttps.spring.entrega5.repos.UsuarioRepository;
-import ttps.spring.entrega5.util.NotFoundException;
-
 
 @Service
 public class SugerenciaService {
@@ -33,7 +33,7 @@ public class SugerenciaService {
     public SugerenciaDTO get(final Long id) {
         return sugerenciaRepository.findById(id)
                 .map(sugerencia -> mapToDTO(sugerencia, new SugerenciaDTO()))
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EmptyResultDataAccessException("Sugerencia no encontrada", 1));
     }
 
     public Long create(final SugerenciaDTO sugerenciaDTO) {
@@ -44,7 +44,7 @@ public class SugerenciaService {
 
     public void update(final Long id, final SugerenciaDTO sugerenciaDTO) {
         final Sugerencia sugerencia = sugerenciaRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Sugerencia no encontrada", 1));
         mapToEntity(sugerenciaDTO, sugerencia);
         sugerenciaRepository.save(sugerencia);
     }
@@ -67,7 +67,7 @@ public class SugerenciaService {
         sugerencia.setDescripcion(sugerenciaDTO.getDescripcion());
         sugerencia.setFecha(sugerenciaDTO.getFecha());
         final Usuario usuario = sugerenciaDTO.getUsuario() == null ? null : usuarioRepository.findById(sugerenciaDTO.getUsuario())
-                .orElseThrow(() -> new NotFoundException("usuario not found"));
+                .orElseThrow(() -> new EmptyResultDataAccessException("usuario no encontrado", 1));
         sugerencia.setUsuario(usuario);
         return sugerencia;
     }

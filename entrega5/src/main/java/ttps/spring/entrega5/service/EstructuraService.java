@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,6 @@ import ttps.spring.entrega5.model.ComidaGetDTO;
 import ttps.spring.entrega5.repos.ComidaRepository;
 import ttps.spring.entrega5.repos.EstructuraRepository;
 import ttps.spring.entrega5.repos.MenuRepository;
-import ttps.spring.entrega5.util.NotFoundException;
 
 @Transactional
 @Service
@@ -44,7 +44,7 @@ public class EstructuraService {
 	}
 
 	public Long create(final Long idMenu, final EstructuraDTO estructuraCrearDTO) {
-		final Menu menu = menuRepository.findById(idMenu).orElseThrow(NotFoundException::new);
+		final Menu menu = menuRepository.findById(idMenu).orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
 		final Estructura estructura = new Estructura();
 		mapToEntity(estructuraCrearDTO, estructura);
 		menu.addEstructura(estructura); // Agrega la estructura al menú
@@ -53,26 +53,26 @@ public class EstructuraService {
 	}
 
 	public void update(final Long id, final EstructuraGetDTO estructuraDTO) {
-		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
+		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Estructura no encontrada", 1));
 		mapToEntity(estructuraDTO, estructura);
 		estructuraRepository.save(estructura);
 	}
 
 	public void delete(final Long id) {
-		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
+		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Estructura no encontrada", 1));
 		estructuraRepository.delete(estructura);
 	}
 
 	public void addComida(final Long id, final Long comidaId) {
-		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
-		final Comida comida = comidaRepository.findById(comidaId).orElseThrow(NotFoundException::new);
+		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Estructura no encontrada", 1));
+		final Comida comida = comidaRepository.findById(comidaId).orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
 		estructura.getComidas().add(comida);
 		estructuraRepository.save(estructura);
 	}
 
 	public void removeComida(final Long id, final Long comidaId) {
-		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(NotFoundException::new);
-		final Comida comida = comidaRepository.findById(comidaId).orElseThrow(NotFoundException::new);
+		final Estructura estructura = estructuraRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Estructura no encontrada", 1));
+		final Comida comida = comidaRepository.findById(comidaId).orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
 		estructura.getComidas().remove(comida);
 		estructuraRepository.save(estructura);
 	}
@@ -105,17 +105,5 @@ public class EstructuraService {
 		estructura.setNombre(estructuraDTO.getNombre());
 		return estructura;
 	}
-
-	/*
-	 * public ReferencedWarning getReferencedWarning(final Long id) { final
-	 * ReferencedWarning referencedWarning = new ReferencedWarning(); final
-	 * Estructura estructura =
-	 * estructuraRepository.findById(id).orElseThrow(NotFoundException::new); final
-	 * Comida estructuraComida = comidaRepository.findFirstByEstructura(estructura);
-	 * if (estructuraComida != null) {
-	 * referencedWarning.setKey("estructura.comida.estructura.referenced");
-	 * referencedWarning.addParam(estructuraComida.getId()); return
-	 * referencedWarning; } return null; }
-	 */
 
 }

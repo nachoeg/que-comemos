@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +24,6 @@ import ttps.spring.entrega5.model.MenuGetDTO;
 import ttps.spring.entrega5.repos.MenuRepository;
 import ttps.spring.entrega5.repos.PedidoRepository;
 import ttps.spring.entrega5.util.ImgurUploader;
-import ttps.spring.entrega5.util.NotFoundException;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
 @Service
@@ -94,7 +94,7 @@ public class MenuService {
 	}
 
 	public void update(final Long id, final MenuDTO menuDTO, MultipartFile foto) throws IOException {
-		final Menu menu = menuRepository.findById(id).orElseThrow(NotFoundException::new);
+		final Menu menu = menuRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
 		mapToEntity(menuDTO, menu);
 		if (foto != null && !foto.isEmpty()) {
 			String fotoUrl = imgurUploader.upload(foto);
@@ -104,7 +104,7 @@ public class MenuService {
 	}
 
 	public void delete(final Long id) {
-		final Menu menu = menuRepository.findById(id).orElseThrow(NotFoundException::new);
+		final Menu menu = menuRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
 		menu.getEstructuras().size();
 		// remove many-to-many relations at owning side
 		pedidoRepository.findAllByMenus(menu).forEach(pedido -> pedido.getMenus().remove(menu));
@@ -151,7 +151,7 @@ public class MenuService {
 
 	public ReferencedWarning getReferencedWarning(final Long id) {
 		final ReferencedWarning referencedWarning = new ReferencedWarning();
-		final Menu menu = menuRepository.findById(id).orElseThrow(NotFoundException::new);
+		final Menu menu = menuRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
 		
 		return null;
 	}

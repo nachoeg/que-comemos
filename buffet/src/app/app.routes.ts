@@ -25,7 +25,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ShoppingCartComponent } from './components/purchase-order/shopping-cart/shopping-cart.component';
 import { PurchaseOrderComponent } from './components/purchase-order/purchase-order.component';
-import { MenuOrdersComponent } from './components/menu/menu-orders/menu-orders.component';
+//import { MenuOrdersComponent } from './components/menu/menu-orders/menu-orders.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },

@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,6 @@ import ttps.spring.entrega5.repos.ComidaRepository;
 import ttps.spring.entrega5.repos.MenuRepository;
 import ttps.spring.entrega5.repos.PedidoRepository;
 import ttps.spring.entrega5.repos.UsuarioRepository;
-import ttps.spring.entrega5.util.NotFoundException;
 import ttps.spring.entrega5.util.QRService;
 
 
@@ -61,7 +61,7 @@ public class PedidoService {
     public PedidoDTO get(final Long id) {
         return pedidoRepository.findById(id)
                 .map(pedido -> mapToDTO(pedido, new PedidoDTO()))
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EmptyResultDataAccessException("Pedido no encontrado", 1));
     }
 
 	
@@ -79,7 +79,7 @@ public class PedidoService {
 
     public void update(final Long id, final PedidoDTO pedidoDTO) {
         final Pedido pedido = pedidoRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Pedido no encontrado", 1));
         mapToEntity(pedidoDTO, pedido);
         double montoRecalculado = calcularMonto(pedidoDTO.getMenus(), pedidoDTO.getComidas());
         pedido.setMonto(montoRecalculado);
@@ -123,7 +123,7 @@ public class PedidoService {
         if (pedidoDTO.getMenus() != null) {
             for (MenuPedidoDTO menuPedidoDTO : pedidoDTO.getMenus()) {
                 Menu menu = menuRepository.findById(menuPedidoDTO.getId())
-                        .orElseThrow(() -> new NotFoundException("Menu not found"));
+                		.orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
                 menus.add(menu);
             }
         }
@@ -133,14 +133,14 @@ public class PedidoService {
         if (pedidoDTO.getComidas() != null) {
             for (ComidaPedidoDTO comidaPedidoDTO : pedidoDTO.getComidas()) {
                 Comida comida = comidaRepository.findById(comidaPedidoDTO.getId())
-                        .orElseThrow(() -> new NotFoundException("Comida not found"));
+                		.orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
                 comidas.add(comida);
             }
         }
         pedido.setComidas(comidas);
 
         final Usuario usuario = pedidoDTO.getUsuario() == null ? null : usuarioRepository.findById(pedidoDTO.getUsuario())
-                .orElseThrow(() -> new NotFoundException("usuario not found"));
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Usuario no encontrado", 1));
         pedido.setUsuario(usuario);
         return pedido;
     }
@@ -154,7 +154,7 @@ public class PedidoService {
                 if (menuEntity.isPresent()) {
                     total += menuEntity.get().getPrecio() * menu.getCantidad();
                 } else {
-                    throw new NotFoundException("Menu not found");
+                    throw new EmptyResultDataAccessException("Menu no encontrado", 1);
                 }
             }
         }
@@ -165,7 +165,7 @@ public class PedidoService {
                 if (comidaEntity.isPresent()) {
                     total += comidaEntity.get().getPrecio() * comida.getCantidad();
                 } else {
-                    throw new NotFoundException("Comida not found");
+                    throw new EmptyResultDataAccessException("Comida no encontrada", 1);
                 }
             }
         }

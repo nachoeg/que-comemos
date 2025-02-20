@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +17,6 @@ import ttps.spring.entrega5.repos.ComidaRepository;
 import ttps.spring.entrega5.repos.EstructuraRepository;
 import ttps.spring.entrega5.repos.PedidoRepository;
 import ttps.spring.entrega5.util.ImgurUploader;
-import ttps.spring.entrega5.util.NotFoundException;
 
 @Service
 @Transactional
@@ -46,7 +46,7 @@ public class ComidaService {
     public ComidaGetDTO get(final Long id) {
         return comidaRepository.findById(id)
                 .map(comida -> mapToDTO(comida, new ComidaGetDTO()))
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
     }
 
     public Long create(final ComidaDTO comidaDTO, MultipartFile foto) throws IOException {
@@ -61,7 +61,7 @@ public class ComidaService {
 
     public void update(final Long id, final ComidaDTO comidaDTO, MultipartFile foto) throws IOException {
         final Comida comida = comidaRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
         mapToEntity(comidaDTO, comida);
         if (foto != null && !foto.isEmpty()) {
             String fotoUrl = imgurUploader.upload(foto);
@@ -72,7 +72,7 @@ public class ComidaService {
 
     public void delete(final Long id) {
         final Comida comida = comidaRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
         // remove many-to-many relations at owning side
         pedidoRepository.findAllByComidas(comida)
                 .forEach(pedido -> pedido.getComidas().remove(comida));

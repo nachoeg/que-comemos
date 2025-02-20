@@ -1,6 +1,8 @@
 package ttps.spring.entrega5.service;
 
 import java.util.List;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ttps.spring.entrega5.domain.Rol;
@@ -8,7 +10,6 @@ import ttps.spring.entrega5.domain.Usuario;
 import ttps.spring.entrega5.model.RolDTO;
 import ttps.spring.entrega5.repos.RolRepository;
 import ttps.spring.entrega5.repos.UsuarioRepository;
-import ttps.spring.entrega5.util.NotFoundException;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
 
@@ -34,7 +35,7 @@ public class RolService {
     public RolDTO get(final Long id) {
         return rolRepository.findById(id)
                 .map(rol -> mapToDTO(rol, new RolDTO()))
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EmptyResultDataAccessException("Rol no encontrado", 1));
     }
 
     public Long create(final RolDTO rolDTO) {
@@ -45,7 +46,7 @@ public class RolService {
 
     public void update(final Long id, final RolDTO rolDTO) {
         final Rol rol = rolRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Rol no encontrado", 1));
         mapToEntity(rolDTO, rol);
         rolRepository.save(rol);
     }
@@ -68,7 +69,7 @@ public class RolService {
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Rol rol = rolRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+        		.orElseThrow(() -> new EmptyResultDataAccessException("Rol no encontrado", 1));
         final Usuario rolUsuario = usuarioRepository.findFirstByRol(rol);
         if (rolUsuario != null) {
             referencedWarning.setKey("rol.usuario.rol.referenced");

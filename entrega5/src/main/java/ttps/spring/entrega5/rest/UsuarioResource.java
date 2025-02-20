@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ttps.spring.entrega5.model.ComidaDTO;
 import ttps.spring.entrega5.model.UsuarioDTO;
 import ttps.spring.entrega5.service.UsuarioService;
-import ttps.spring.entrega5.util.ReferencedException;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
 
@@ -58,7 +57,6 @@ public class UsuarioResource {
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
     
-//    @RequestBody @Valid final UsuarioDTO usuarioDTO
 
     @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<Integer> updateUsuario(
@@ -85,17 +83,11 @@ public class UsuarioResource {
     public ResponseEntity<Void> deleteUsuario(@PathVariable(name = "id") final Integer id) {
         final ReferencedWarning referencedWarning = usuarioService.getReferencedWarning(id);
         if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
+            throw referencedWarning;
         }
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
     }
     
-	/*
-	 * @ExceptionHandler(MethodArgumentNotValidException.class) public
-	 * ResponseEntity<String>
-	 * handleValidationExceptions(MethodArgumentNotValidException ex) { return new
-	 * ResponseEntity<>("Datos de entrada inválidos", HttpStatus.BAD_REQUEST); }
-	 */
 
 }
