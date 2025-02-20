@@ -8,12 +8,15 @@ import { CommonModule } from '@angular/common';
   selector: 'app-usuarios-component',
   imports: [RouterModule, CommonModule],
   templateUrl: './usuarios.component.html',
-  styleUrl: './usuarios.component.css'
+  styleUrl: './usuarios.component.css',
 })
 export class UsuariosComponent {
   usuarios: Usuario[] = [];
 
-  constructor(private usuarioService: UsuariosService, private router: Router) {}
+  constructor(
+    private usuarioService: UsuariosService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -21,7 +24,7 @@ export class UsuariosComponent {
 
   cargarUsuarios(): void {
     console.log('Cargando usuarios...');
-    this.usuarioService.getUsuarios().subscribe(data => {
+    this.usuarioService.getUsuarios().subscribe((data) => {
       this.usuarios = data;
     });
   }
@@ -41,9 +44,5 @@ export class UsuariosComponent {
         this.cargarUsuarios();
       });
     }
-  }
-
-  nuevoUsuario(): void {
-    this.router.navigate(['/usuarios/nuevo']); // Redirige a la vista de creación
   }
 }

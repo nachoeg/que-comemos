@@ -1,14 +1,14 @@
 <nav class="navbar fixed-top navbar-expand-lg bg-body border-bottom">
   <div class="container-fluid">
-    <a class="navbar-brand" [routerLink]="['/']">
-      <mat-icon class="d-inline-block align-text-top">lunch_dining</mat-icon>
-      ¿Qué comemos?
-    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <a class="navbar-brand" [routerLink]="['/']">
+      <mat-icon class="d-inline-block align-text-top">lunch_dining</mat-icon>
+      ¿Qué comemos?
+    </a>
+    <div class="collapse navbar-collapse order-1 order-lg-0" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="isLoggedIn">
         <li class="nav-item">
           <a class="nav-link active" routerLinkActive="active" [routerLink]="['/menus']">Menús</a>
@@ -30,36 +30,48 @@
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/sugerencias/enviar']"
             *ngIf="usuarioLogeado?.rolName === 'USER'">Sugerencias</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/perfil']">Perfil</a>
-        </li>
-        
       </ul>
-
-      <div class="ms-auto">
-        <div *ngIf="!isLoggedIn">
-          <button class="btn" [routerLink]="['/registrarse']">Registrarse</button>
-          <button class="btn btn-primary" [routerLink]="['/iniciar-sesion']">Iniciar sesión</button>
-        </div>
-      
-        <div *ngIf="isLoggedIn" class="user-container">
-          <div *ngIf="usuarioLogeado?.rolName === 'USER'">
-            <ul class="navbar-nav">  <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/carrito']">
-                <mat-icon>shopping_cart</mat-icon>
-                <span *ngIf="cantidadItems > 0" class="badge bg-primary rounded-pill">{{ cantidadItems }}</span>
-              </a>
-            </li>
-          </ul>
-          </div>
-        
-          <span class="user-name">¡Hola, {{ usuarioLogeado?.nombre }}!</span>
-          <button class="btn btn-danger  mx-2" (click)="logout()">
-            Cerrar sesión
-          </button>
-        </div>
+      <div class="ms-auto" *ngIf="!isLoggedIn">
+        <button class="btn" [routerLink]="['/registrarse']">Registrarse</button>
+        <button class="btn btn-primary" [routerLink]="['/iniciar-sesion']">Iniciar sesión</button>
       </div>
-     
+
     </div>
+
+    <!-- Este div solo sirve para acomodar el titulo de la pagina al centro en resoluciones pequeñas (cuando no está logueado) -->
+    <div *ngIf="!isLoggedIn"></div>
+
+    <div *ngIf="isLoggedIn" class="user-container">
+      <a class="position-relative d-inline-block position link-secondary" routerLinkActive="active"
+        [routerLink]="['/carrito']" *ngIf="usuarioLogeado?.rolName === 'USER'">
+        <mat-icon class="align-middle">shopping_cart</mat-icon>
+        <span *ngIf="cantidadItems > 0"
+          class="position-absolute top-0 start-100 translate-middle badge  rounded-pill bg-danger">{{
+          cantidadItems
+          }}</span>
+      </a>
+      <div class="dropdown">
+        <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
+          <img [src]="usuarioLogeado.foto ? usuarioLogeado.foto : '/usuario.png'" alt="mdo" width="40" height="40"
+            class="rounded-circle dropdown-toggle border">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li class="mx-3 d-flex flex-column">
+            <span class="d-block">{{ usuarioLogeado?.nombre }} {{usuarioLogeado?.apellido}}</span>
+            <span class="small text-muted">{{ usuarioLogeado?.rolName }}</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" [routerLink]="['/perfil']">Perfil</a></li>
+          <li><button class="dropdown-item" (click)="logout()">
+              Cerrar sesión
+            </button></li>
+        </ul>
+      </div>
+    </div>
+
+
   </div>
+
 </nav>

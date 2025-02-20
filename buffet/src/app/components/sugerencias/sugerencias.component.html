@@ -1,31 +1,26 @@
-<div class="container">
-  <!-- <button *ngIf="rolName === 'USER'" class="btn btn-primary mb-3" (click)="nuevaSugerencia()">Nuevo Sugerencia</button> -->
-  
-  <div *ngIf="rolName !== 'USER'">
-    <h2 class="mb-4">Lista de Sugerencias</h2>
-    <table class="table table-bordered" *ngIf="sugerencias.length > 0; else noSugerencias">
-      <thead>
-        <tr>
-          <th>Tipo</th>
-          <th>Descripción</th>
-          <th>Fecha</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let sugerencia of sugerencias">
-          <td>{{ sugerencia.tipo }}</td>
-          <td>{{ sugerencia.descripcion }}</td>
-          <td>{{ formatearFecha(sugerencia.fecha) }}</td>
-          <td>
-            <button class="btn btn-info" (click)="sugerencia.id !== undefined && verDetalle(sugerencia.id)">Ver</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <ng-template #noSugerencias>
-      <h3 class="text-center">No hay sugerencias cargados en el sistema</h3>
-    </ng-template>
-  </div>
-</div>
+<h2 class="mb-2">Sugerencias</h2>
+<table class="table table-bordered" *ngIf="sugerencias.length > 0; else noSugerencias">
+  <thead>
+    <tr>
+      <th>Tipo</th>
+      <th>Descripción</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let sugerencia of sugerencias">
+      <td>{{ sugerencia.tipo }}</td>
+      <td>{{ sugerencia.descripcion }}</td>
+      <td>{{ formatearFecha(sugerencia.fecha) }}</td>
+      <td>
+        <button class="btn btn-sm btn-outline-primary"
+          (click)="sugerencia.id !== undefined && verDetalle(sugerencia.id)">Ver</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noSugerencias>
+  <h3 class="text-center">No hay sugerencias cargados en el sistema</h3>
+</ng-template>

@@ -2,7 +2,7 @@
   <h2 class="mb-0">
     Comidas
   </h2>
-  <button *ngIf="usuarioLogeado?.rolName !== 'USER'" class="btn btn-primary " [routerLink]="['/comidas', 'crear']">
+  <button *ngIf="usuarioLogeado?.rolName === 'ADMIN'" class="btn btn-primary " [routerLink]="['/comidas', 'crear']">
     <i class="bi bi-plus-lg"></i>
     Nueva comida
   </button>
@@ -10,7 +10,7 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
   <div class="col" *ngFor="let comida of comidas">
     <div class="card comida">
-      <img *ngIf="!comida.imageLoaded || comida.imageError" src="/food-placeholder.png" class="card-img-top"
+      <img *ngIf="!comida.imageLoaded && comida.imageError" src="/food-placeholder.png" class="card-img-top"
         alt="{{comida.nombre}}">
       <img *ngIf="!comida.imageError" [src]="comida.foto" class="card-img-top" alt="{{comida.nombre}}"
         (load)="onImageLoad(comida.id)" (error)="onImageError(comida.id)">
@@ -19,12 +19,15 @@
         <p class="card-text fw-bold">
           $ {{ comida.precio }}
         </p>
-        <div *ngIf="usuarioLogeado?.rolName !== 'USER'" class="btn-group" role="group" aria-label="Botones de la comida">
+        <div *ngIf="usuarioLogeado?.rolName === 'ADMIN'" class="btn-group" role="group"
+          aria-label="Botones de la comida">
           <button (click)="editFood(comida.id)" class="btn btn-sm btn-outline-secondary">Editar</button>
           <button (click)="deleteFood(comida.id)" class="btn btn-sm btn-outline-danger ">Eliminar</button>
         </div>
-        <div *ngIf="usuarioLogeado?.rolName === 'USER'" class="mt-2">  <label for="quantity-{{comida.id}}">Cantidad:</label>
-          <input type="number" id="quantity-{{comida.id}}" class="form-control form-control-sm" [(ngModel)]="cantidadPorComida[comida.id]" min="1" value="1">
+        <div *ngIf="usuarioLogeado?.rolName === 'USER'" class="mt-2"> <label
+            for="quantity-{{comida.id}}">Cantidad:</label>
+          <input type="number" id="quantity-{{comida.id}}" class="form-control form-control-sm"
+            [(ngModel)]="cantidadPorComida[comida.id]" min="1" value="1">
           <button class="btn btn-sm btn-primary mt-2" (click)="agregarComidaAlPedido(comida)">Agregar al pedido</button>
         </div>
       </div>

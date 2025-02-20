@@ -25,16 +25,36 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ShoppingCartComponent } from './components/purchase-order/shopping-cart/shopping-cart.component';
 import { PurchaseOrderComponent } from './components/purchase-order/purchase-order.component';
-
+import { MenuOrdersComponent } from './components/menu/menu-orders/menu-orders.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'iniciar-sesion', component: LoginComponent },
   { path: 'registrarse', component: RegisterComponent },
-  { path: 'menus', component: MenuComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] } },
-  { path: 'menus/crear', component: MenuCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'menus/:id', component: MenuItemComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] } },
-  { path: 'menus/:id/editar', component: MenuEditComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  {
+    path: 'menus',
+    component: MenuComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN', 'USER', 'MANAGER'] },
+  },
+  {
+    path: 'menus/crear',
+    component: MenuCreateComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
+  },
+  {
+    path: 'menus/:id',
+    component: MenuItemComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN', 'USER', 'MANAGER'] },
+  },
+  {
+    path: 'menus/:id/editar',
+    component: MenuEditComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
+  },
   {
     path: 'menus/:menuId/crear-estructura',
     component: EstructuraCreateComponent,
@@ -47,18 +67,10 @@ export const routes: Routes = [
     path: 'comidas',
     component: FoodComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['USER', 'ADMIN'] },
+    data: { roles: ['USER', 'ADMIN', 'MANAGER'] },
   },
   { path: 'comidas/crear', component: FoodCreateComponent },
   { path: 'comidas/:id/editar', component: FoodEditComponent },
-  { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'usuarios/:id', component: UsuarioDetalleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'usuarios/editar/:id', component: UsuarioEditarComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'sugerencias', component: SugerenciasComponent,  canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER', 'USER'] } },
-  { path: 'sugerencias/enviar', component: SugerenciasCrearComponent,  canActivate: [AuthGuard], data: { roles: ['USER'] } },
-  { path: 'sugerencias/:id', component: SugerenciasDetalleComponent,  canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER'] } },
-  { path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER', 'USER'] } },
-  { path: 'perfil/editar/:id', component: PerfilEditarComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'MANAGER', 'USER'] } },
   {
     path: 'usuarios',
     component: UsuariosComponent,
@@ -77,11 +89,67 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: ['ADMIN'] },
   },
-  { path: 'carrito', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { roles: ['USER']}},
-  { path: 'pedidos', component: PurchaseOrderComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] }},
+  {
+    path: 'sugerencias',
+    component: SugerenciasComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN', 'MANAGER'] },
+  },
+  {
+    path: 'sugerencias/enviar',
+    component: SugerenciasCrearComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['USER'] },
+  },
+  {
+    path: 'sugerencias/:id',
+    component: SugerenciasDetalleComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN', 'MANAGER'] },
+  },
+  {
+    path: 'perfil',
+    component: PerfilComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN', 'MANAGER', 'USER'] },
+  },
+  {
+    path: 'perfil/editar/:id',
+    component: PerfilEditarComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN', 'MANAGER', 'USER'] },
+  },
+  {
+    path: 'usuarios',
+    component: UsuariosComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
+  },
+  {
+    path: 'usuarios/:id',
+    component: UsuarioDetalleComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
+  },
+  {
+    path: 'usuarios/editar/:id',
+    component: UsuarioEditarComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
+  },
+  {
+    path: 'carrito',
+    component: ShoppingCartComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['USER'] },
+  },
+  {
+    path: 'pedidos',
+    component: PurchaseOrderComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN', 'USER'] },
+  },
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent },
-  { path: '**', component: PageNotFoundComponent }
-  
-  
+  { path: '**', component: PageNotFoundComponent },
 ];
