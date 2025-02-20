@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CartService } from '../../services/cart-service/cart-service';
-import { Order, OrderMenu, OrderFood } from '../../models/order/order';
+import { CartService } from '../../../services/cart-service/cart-service';
+import { Order, OrderMenu, OrderFood } from '../../../models/order/order';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { OrderService } from '../../services/order-service/order-service';
+import { OrderService } from '../../../services/order-service/order-service';
 import { Router } from '@angular/router';
-import { LoginServicio } from '../../services/login-servicio/login-servicio';
-import { FoodsService } from '../../services/foods-service/foods-service';
-import { MenusService } from '../../services/menus-service/menus-service';
-import { OrderResponse, PedidoDetalles } from '../../models/order-response/order-response';
-import { NewOrder } from '../../models/new-order/new-order';
+import { LoginServicio } from '../../../services/login-servicio/login-servicio';
+import { FoodsService } from '../../../services/foods-service/foods-service';
+import { MenusService } from '../../../services/menus-service/menus-service';
+import { OrderResponse, PedidoDetalles } from '../../../models/order-response/order-response';
+import { NewOrder } from '../../../models/new-order/new-order';
 
 @Component({
   selector: 'app-shopping-cart',

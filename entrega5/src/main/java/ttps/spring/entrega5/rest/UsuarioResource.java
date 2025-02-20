@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,6 +67,16 @@ public class UsuarioResource {
             @RequestPart(value = "foto", required = false) final MultipartFile foto
             ) throws IOException {
         usuarioService.update(id, usuarioDTO, foto);
+        return ResponseEntity.ok(id);
+    }
+    
+    
+    @PutMapping(value = "/{id}/rol", consumes = { "multipart/form-data" })
+    public ResponseEntity<Integer> updateRolUsuario(
+    		@PathVariable(name = "id") final Integer id,
+    		@RequestPart("rol") final String rol
+            ) throws IOException {
+        usuarioService.updateRol(id, rol);
         return ResponseEntity.ok(id);
     }
 

@@ -59,14 +59,20 @@ export class FoodComponent {
     this.router.navigate(['/comidas', foodId, 'editar']);
   }
 
-  onImageLoad(index: number): void {
-    this.imageLoaded[index] = true;
-    this.imageError[index] = false;
+  onImageLoad(comidaId: number): void {
+    const comida = this.comidas.find((comida) => comida.id === comidaId);
+    if (comida) {
+      comida.imageLoaded = true;
+      comida.imageError = false;
+    }
   }
 
-  onImageError(index: number): void {
-    this.imageLoaded[index] = false;
-    this.imageError[index] = true;
+  onImageError(comidaId: number): void {
+    const comida = this.comidas.find((comida) => comida.id === comidaId);
+    if (comida) {
+      comida.imageLoaded = false;
+      comida.imageError = true;
+    }
   }
 
   deleteFood(foodId: number) {

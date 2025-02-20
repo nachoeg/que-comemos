@@ -29,8 +29,6 @@ import { OrderMenu } from '../../models/order/order';
 })
 export class MenuComponent implements OnInit {
   menus: Menu[] = [];
-  imageLoaded: boolean[] = [];
-  imageError: boolean[] = [];
   usuarioLogeado: any; 
   private destroy$ = new Subject<void>();
   cantidadPorMenu: { [menuId: number]: number } = {};
@@ -63,8 +61,8 @@ export class MenuComponent implements OnInit {
   }
 
   initializeImageArrays() {
-    this.imageLoaded = new Array(this.menus.length).fill(false);
-    this.imageError = new Array(this.menus.length).fill(false);
+    // this.imageLoaded = new Array(this.menus.length).fill(false);
+    // this.imageError = new Array(this.menus.length).fill(false);
     this.menus.forEach(menu => {
       this.cantidadPorMenu[menu.id] = this.cartService.getMenuQuantity(menu.id);
     });
@@ -75,14 +73,20 @@ export class MenuComponent implements OnInit {
     this.destroy$.complete();
   }
 
-  onImageLoad(index: number): void {
-    this.imageLoaded[index] = true;
-    this.imageError[index] = false;
+  onImageLoad(menuId: number): void {
+    const menu = this.menus.find((menu) => menu.id === menuId);
+    if (menu) {
+      menu.imageLoaded = true;
+      menu.imageError = false;
+    }
   }
 
   onImageError(index: number): void {
-    this.imageLoaded[index] = false;
-    this.imageError[index] = true;
+    const menu = this.menus[index];
+    if (menu) {
+      menu.imageLoaded = false;
+      menu.imageError = true;
+    }
   }
 
   deleteMenu(menuId: number) {

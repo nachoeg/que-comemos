@@ -7,6 +7,8 @@ export class Menu {
   foto: string;
   dia: string;
   estructuras: Estructura[];
+  imageLoaded: boolean = false;
+  imageError: boolean = false;
 
   constructor(
     id: number,

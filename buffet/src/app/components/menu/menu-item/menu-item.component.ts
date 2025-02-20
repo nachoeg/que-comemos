@@ -18,16 +18,7 @@ export class MenuItemComponent implements OnInit {
   createSuccessMessage: string = '';
   createErrorMessage: string = '';
   menuId: number = 0;
-  menu: Menu = {
-    id: 0,
-    nombre: '',
-    precio: 0,
-    foto: '',
-    dia: '',
-    estructuras: [],
-  };
-  imageLoaded: boolean[] = [];
-  imageError: boolean[] = [];
+  menu: Menu = new Menu(0, '', 0, '', '', []);
 
   constructor(
     private menuService: MenusService,
@@ -44,15 +35,15 @@ export class MenuItemComponent implements OnInit {
         this.menuId = +menuId;
         this.menuService.getMenuById(this.menuId).subscribe((menu: Menu) => {
           this.menu = menu;
-          this.imageLoaded = [];
-          this.imageError = [];
+          // this.imageLoaded = [];
+          // this.imageError = [];
 
-          this.menu.estructuras.forEach(estructura => {
-            estructura.comidas.forEach(comida => {
-              this.imageLoaded.push(false);
-              this.imageError.push(false);
-            });
-          });
+          // this.menu.estructuras.forEach(estructura => {
+          //   estructura.comidas.forEach(comida => {
+          //     this.imageLoaded.push(false);
+          //     this.imageError.push(false);
+          //   });
+          // });
         });
       } else {
         console.error(
@@ -60,21 +51,31 @@ export class MenuItemComponent implements OnInit {
         );
       }
     });
-
     this.loginService.isUserLoggedIn$.subscribe(isLoggedIn => { // No need for takeUntil here
       this.usuarioLogeado = isLoggedIn ? this.loginService.getUserLoggedIn() : null;
     });
-
   }
 
-  onImageLoad(index: number): void {
-    this.imageLoaded[index] = true;
-    this.imageError[index] = false;
+  onImageLoad(estructuraId: number, comidaId: number): void {
+    const estructura = this.menu.estructuras.find((e) => e.id === estructuraId);
+    if (estructura) {
+      const comida = estructura.comidas.find((c) => c.id === comidaId);
+      if (comida) {
+        comida.imageLoaded = true;
+        comida.imageError = false;
+      }
+    }
   }
 
-  onImageError(index: number): void {
-    this.imageLoaded[index] = false;
-    this.imageError[index] = true;
+  onImageError(estructuraId: number, comidaId: number): void {
+    const estructura = this.menu.estructuras.find((e) => e.id === estructuraId);
+    if (estructura) {
+      const comida = estructura.comidas.find((c) => c.id === comidaId);
+      if (comida) {
+        comida.imageLoaded = false;
+        comida.imageError = true;
+      }
+    }
   }
 
   addFoodToEstructura(estructuraId: number) {

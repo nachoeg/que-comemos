@@ -1,61 +1,77 @@
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from "@angular/router";
-import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { LoginServicio } from "../login-servicio/login-servicio";
-import { catchError, map, Observable, of, switchMap, take } from "rxjs";
+import { Injectable } from '@angular/core';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { LoginServicio } from '../login-servicio/login-servicio';
+import { AlertService } from '../alert-service/alert.service';
+
 @Injectable({
-    providedIn: 'root',  // Lo proveemos globalmente para que esté disponible en toda la aplicación
-  })
+  providedIn: 'root',
+})
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private authService: LoginServicio) {}
+  constructor(
+    private router: Router,
+    private loginServicio: LoginServicio,
+    private alertService: AlertService
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
-
-    return this.authService.isUserLoggedIn$.pipe(
-      take(1), // Tomar solo el primer valor emitido
-      map(isLoggedIn => { 
+  ): Observable<boolean> {
+    return this.loginServicio.isUserLoggedIn$.pipe(
+      take(1),
+      switchMap((isLoggedIn) => {
         if (!isLoggedIn) {
-          console.log('El usuario no está autenticado. Redirigiendo a inicio de sesión.');
+          console.log(
+            'El usuario no está autenticado. Redirigiendo a inicio de sesión.'
+          );
+          this.alertService.showAlert(
+            'Inicie sesión para continuar',
+            'warning'
+          );
           this.router.navigate(['/iniciar-sesion']);
-          return false;
-        }else{          
-        // El usuario está autenticado, verificamos el rol
-        const requiredRoles = route.data['roles'] as string[];
-        const user = this.authService.getUserLoggedIn();
-        
-      // Verificar si user es nulo
-      // Aquí la clave: si el usuario no existe, asumimos que no tiene permisos
-      if (!user) {
-        console.log('Usuario no encontrado (no logueado). Redirigiendo a forbidden.');
-        this.router.navigate(['/forbidden']);
-        return false;
-      }
-      
-        const userRole = user.rolName;
-
-        console.log('Roles requeridos:', requiredRoles);
-        console.log('Rol del usuario:', userRole);
-
-        const hasAccess = requiredRoles.includes(userRole);
-        if (!hasAccess) {
-          console.log('Usuario sin permisos. Redirigiendo a forbidden.');
-          this.router.navigate(['/forbidden']);
-          return false;
+          return of(false);
         }
 
-        console.log('Usuario:', user.nombre, 'tiene acceso:', hasAccess);
-        return true;
-      
-    }
-    }),
-    catchError(error => {
-      console.error('Error en la guarda:', error);
-      this.router.navigate(['/error']); // Redirige a una página de error genérica
-      return of(false); // Importante: Retorna un Observable<boolean>
-    })
-  );
-}
+        const requiredRoles = route.data['roles'] as string[];
+        return this.loginServicio.userLogged$.pipe(
+          take(1),
+          map((user) => {
+            if (!user) {
+              console.log(
+                'Usuario no encontrado (no logueado). Redirigiendo a forbidden.'
+              );
+              this.router.navigate(['/forbidden']);
+              return false;
+            }
+
+            const userRole = user.rolName;
+            console.log('Roles requeridos:', requiredRoles);
+            console.log('Rol del usuario:', userRole);
+
+            const hasAccess = requiredRoles.includes(userRole);
+            if (!hasAccess) {
+              console.log('Usuario sin permisos. Redirigiendo a forbidden.');
+              this.router.navigate(['/forbidden']);
+              return false;
+            }
+
+            console.log('Usuario:', user.nombre, 'tiene acceso:', hasAccess);
+            return true;
+          })
+        );
+      }),
+      catchError((error) => {
+        console.error('Error en la guarda:', error);
+        this.router.navigate(['/error']);
+        return of(false);
+      })
+    );
+  }
 }

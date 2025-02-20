@@ -9,11 +9,10 @@
       </div>
       <div class="p-2 h-100 d-flex flex-column justify-self-bottom">
         <div class="card comida mb-2" *ngFor="let comida of estructura.comidas; let i = index">
-          <!-- <img src="/food-placeholder.png" class="card-img-top" alt="{{comida.nombre}}"> -->
-          <img *ngIf="!imageLoaded[i] && imageError[i]" src="/food-placeholder.png" class="card-img-top"
+          <img *ngIf="!comida.imageLoaded || comida.imageError" src="/food-placeholder.png" class="card-img-top"
           alt="{{comida.nombre}}">
-        <img *ngIf="!imageError[i]" [src]="comida.foto" class="card-img-top" alt="{{comida.nombre}}"
-          (load)="onImageLoad(i)" (error)="onImageError(i)">
+        <img *ngIf="!comida.imageError" [src]="comida.foto" class="card-img-top" alt="{{comida.nombre}}"
+          (load)="onImageLoad(estructura.id, comida.id)" (error)="onImageError(estructura.id, comida.id)">
           <div class="card-body">
             <h5 class="card-title">{{ comida.nombre }}</h5>
             <div *ngIf="usuarioLogeado?.rolName !== 'USER'">

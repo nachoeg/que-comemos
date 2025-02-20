@@ -51,8 +51,7 @@
                     
                     <p class="mt-2">Cantidad de Comidas: {{ getCantidadComidas() }}</p>
                     <p class="mt-2">Cantidad de Menus: {{ getCantidadMenus() }}</p>
-                    <p class="mt-2 text-end">Total: ${{ calcularTotal() }}</p>
-
+                    
                     <button class="btn btn-primary mt-2 w-100" (click)="realizarPedido()"
                         [disabled]="cartItems.menus.length === 0 && cartItems.foods.length === 0">
                         Realizar Pedido
