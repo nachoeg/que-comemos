@@ -36,7 +36,6 @@ import ttps.spring.entrega5.repos.UsuarioRepository;
 import ttps.spring.entrega5.util.EmailService;
 import ttps.spring.entrega5.util.QRService;
 
-
 @Service
 @Transactional
 public class PedidoService {
@@ -52,7 +51,7 @@ public class PedidoService {
     
     private final Map<Long, Integer> menuCantidades = new HashMap<>();
     private final Map<Long, Integer> comidaCantidades = new HashMap<>();
-   
+
 
     public PedidoService(final PedidoRepository pedidoRepository,
             final MenuRepository menuRepository, final ComidaRepository comidaRepository,
@@ -79,7 +78,6 @@ public class PedidoService {
                 .orElseThrow(() -> new EmptyResultDataAccessException("Pedido no encontrado", 1));
     }
 
-	
     public PedidoDTO create(final PedidoDTO pedidoDTO) {
         Pedido pedido = new Pedido();
         mapToEntity(pedidoDTO, pedido);
@@ -94,7 +92,7 @@ public class PedidoService {
 
     public void update(final Long id, final PedidoDTO pedidoDTO) {
         final Pedido pedido = pedidoRepository.findById(id)
-        		.orElseThrow(() -> new EmptyResultDataAccessException("Pedido no encontrado", 1));
+                .orElseThrow(() -> new EmptyResultDataAccessException("Pedido no encontrado", 1));
         mapToEntity(pedidoDTO, pedido);
         double montoRecalculado = calcularMonto(pedidoDTO.getMenus(), pedidoDTO.getComidas());
         pedido.setMonto(montoRecalculado);
@@ -138,7 +136,7 @@ public class PedidoService {
         if (pedidoDTO.getMenus() != null) {
             for (MenuPedidoDTO menuPedidoDTO : pedidoDTO.getMenus()) {
                 Menu menu = menuRepository.findById(menuPedidoDTO.getId())
-                		.orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
+                        .orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
                 menus.add(menu);
                 menuCantidades.put(menu.getId(), menuPedidoDTO.getCantidad());
             }
@@ -149,19 +147,20 @@ public class PedidoService {
         if (pedidoDTO.getComidas() != null) {
             for (ComidaPedidoDTO comidaPedidoDTO : pedidoDTO.getComidas()) {
                 Comida comida = comidaRepository.findById(comidaPedidoDTO.getId())
-                		.orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
+                        .orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
                 comidas.add(comida);
                 comidaCantidades.put(comida.getId(), comidaPedidoDTO.getCantidad());
             }
         }
         pedido.setComidas(comidas);
 
-        final Usuario usuario = pedidoDTO.getUsuario() == null ? null : usuarioRepository.findById(pedidoDTO.getUsuario())
-        		.orElseThrow(() -> new EmptyResultDataAccessException("Usuario no encontrado", 1));
+        final Usuario usuario = pedidoDTO.getUsuario() == null ? null
+                : usuarioRepository.findById(pedidoDTO.getUsuario())
+                        .orElseThrow(() -> new EmptyResultDataAccessException("Usuario no encontrado", 1));
         pedido.setUsuario(usuario);
         return pedido;
     }
-    
+
     private double calcularMonto(List<MenuPedidoDTO> menus, List<ComidaPedidoDTO> comidas) {
         double total = 0;
 
@@ -242,6 +241,13 @@ public class PedidoService {
         String asunto = "Comprobante de Pedido #" + response.getPedido().getId();
         String mensaje = "Adjunto encontrarás el comprobante de tu pedido.";
         emailService.enviarEmailConQR(destinatario, asunto, mensaje, response.getQrCodeImage(), emailContent);
+    }
+
+    public void updateEstado(final Long id, final String estado) {
+        final Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new EmptyResultDataAccessException("Pedido no encontrado", 1));
+        pedido.setEstado(estado);
+        pedidoRepository.save(pedido);
     }
 
 }

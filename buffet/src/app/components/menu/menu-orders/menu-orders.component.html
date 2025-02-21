@@ -1,0 +1,49 @@
+<h2 class="mb-2">Pedidos</h2>
+
+<input type="date" class="form-control mb-2" style="max-width: 140px" placeholder="Fecha" aria-label="Fecha"
+  (change)="onFechaChange($event)">
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th *ngIf="!fechaFiltro">Fecha</th>
+      <th>Pedidos</th>
+      <th>Usuario</th>
+      <th>Total</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let pedido of pedidosFiltrados">
+      <td>{{pedido.id}}</td>
+      <td *ngIf="!fechaFiltro">{{formatearFecha(pedido.fecha)}}</td>
+      <td>
+        <ul>
+          <li class="" *ngFor="let menu of pedido.menus">{{menu.cantidad}} x {{menu.nombre}}</li>
+          <li *ngFor="let comida of pedido.comidas">{{comida.cantidad}} x {{comida.nombre}}</li>
+        </ul>
+      </td>
+      <td>{{pedido.usuario}}</td>
+      <td>${{pedido.monto}}</td>
+      <td>
+        <button type="button" class="btn border dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <span class="badge me-2 bg-secondary" *ngIf="pedido.estado === 'PENDIENTE'">Pendiente</span>
+          <span class="badge me-2 bg-warning" *ngIf="pedido.estado === 'PREPARACION'">En preparación</span>
+          <span class="badge me-2 bg-primary" *ngIf="pedido.estado === 'LISTO'">Listo para retirar</span>
+          <span class="badge me-2 bg-success" *ngIf="pedido.estado === 'ENTREGADO'">Entregado</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><button class="dropdown-item" (click)="cambiarEstado(pedido, 'PENDIENTE')"><span
+                class="badge me-2 bg-secondary">Pendiente</span></button></li>
+          <li><button class="dropdown-item" (click)="cambiarEstado(pedido, 'PREPARACION')"> <span
+                class="badge me-2 bg-warning">En preparación</span></button></li>
+          <li><button class="dropdown-item" (click)="cambiarEstado(pedido, 'LISTO')"><span
+                class="badge me-2 bg-primary">Listo para retirar</span></button></li>
+          <li><button class="dropdown-item" (click)="cambiarEstado(pedido, 'ENTREGADO')"> <span
+                class="badge me-2 bg-success">Entregado</span></button></li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>

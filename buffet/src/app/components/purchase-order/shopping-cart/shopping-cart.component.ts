@@ -8,7 +8,10 @@ import { Router } from '@angular/router';
 import { LoginServicio } from '../../../services/login-servicio/login-servicio';
 import { FoodsService } from '../../../services/foods-service/foods-service';
 import { MenusService } from '../../../services/menus-service/menus-service';
-import { OrderResponse, PedidoDetalles } from '../../../models/order-response/order-response';
+import {
+  OrderResponse,
+  PedidoDetalles,
+} from '../../../models/order-response/order-response';
 import { NewOrder } from '../../../models/new-order/new-order';
 import { AlertService } from '../../../services/alert-service/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,11 +20,13 @@ import { HttpErrorResponse } from '@angular/common/http';
   selector: 'app-shopping-cart',
   imports: [CommonModule],
   templateUrl: './shopping-cart.component.html',
-  styleUrl: './shopping-cart.component.css'
+  styleUrl: './shopping-cart.component.css',
 })
 export class ShoppingCartComponent {
-
-  cartItems: { menus: OrderMenu[], foods: OrderFood[] } = { menus: [], foods: [] };
+  cartItems: { menus: OrderMenu[]; foods: OrderFood[] } = {
+    menus: [],
+    foods: [],
+  };
   private destroy$ = new Subject<void>();
   mostrarConfirmacion = false;
 
@@ -31,8 +36,8 @@ export class ShoppingCartComponent {
   pedidoData: PedidoDetalles | undefined;
   id = 0;
 
-
-  constructor(private cartService: CartService,
+  constructor(
+    private cartService: CartService,
     private orderService: OrderService,
     private router: Router,
     private loginService: LoginServicio,
@@ -41,9 +46,11 @@ export class ShoppingCartComponent {
     private alertService: AlertService) { }
 
   ngOnInit() {
-    this.cartService.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
-      this.cartItems = items;
-    });
+    this.cartService.cartItems$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items) => {
+        this.cartItems = items;
+      });
   }
 
   ngOnDestroy() {
@@ -61,19 +68,28 @@ export class ShoppingCartComponent {
 
   calcularTotal() {
     let total = 0;
-    this.cartItems.menus.forEach(item => total += item.menu.precio * item.cantidad);
-    this.cartItems.foods.forEach(item => total += item.comida.precio * item.cantidad);
+    this.cartItems.menus.forEach(
+      (item) => (total += item.menu.precio * item.cantidad)
+    );
+    this.cartItems.foods.forEach(
+      (item) => (total += item.comida.precio * item.cantidad)
+    );
     return total;
   }
 
   getCantidadComidas() {
-    return this.cartItems.foods.reduce((total, foodItem) => total + foodItem.cantidad, 0);
+    return this.cartItems.foods.reduce(
+      (total, foodItem) => total + foodItem.cantidad,
+      0
+    );
   }
 
   getCantidadMenus() {
-    return this.cartItems.menus.reduce((total, menuItem) => total + menuItem.cantidad, 0);
+    return this.cartItems.menus.reduce(
+      (total, menuItem) => total + menuItem.cantidad,
+      0
+    );
   }
-
 
   realizarPedido() {
     if (this.cartItems.menus.length === 0 && this.cartItems.foods.length === 0) {
@@ -101,7 +117,7 @@ export class ShoppingCartComponent {
     this.orderService.createOrder(order).subscribe({
       next: (response) => {
         console.log('Pedido creado exitosamente', response);
-        this.qrCodeImage = "data:image/png;base64," + response.qrCodeImage;
+        this.qrCodeImage = 'data:image/png;base64,' + response.qrCodeImage;
         this.pedidoData = response.pedido;
 
         this.cartService.clearCart();
@@ -121,7 +137,8 @@ export class ShoppingCartComponent {
 
   }
 
-  cerrarConfirmacion() {  // Función para cerrar la confirmación
+  cerrarConfirmacion() {
+    // Función para cerrar la confirmación
     this.mostrarConfirmacion = false;
     this.mostrarTicket = false;
 

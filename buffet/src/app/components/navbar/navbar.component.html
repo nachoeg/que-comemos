@@ -17,10 +17,11 @@
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/comidas']">Comidas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/pedidos']">Pedidos</a>
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/pedidos']"
+            *ngIf="usuarioLogeado?.rolName !== 'MANAGER'">Pedidos</a>
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/pedidos/manager']"
+            *ngIf="usuarioLogeado?.rolName === 'MANAGER'">Pedidos</a>
         </li>
-
-
         <li class="nav-item" *ngIf="usuarioLogeado?.rolName !== 'USER'">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios']">Usuarios</a>
         </li>

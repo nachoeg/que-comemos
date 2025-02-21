@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,6 +63,7 @@ public class PedidoResource {
 		PedidoResponseDTO response = pedidoService.createPedidoWithQR(pedidoDTO);
 		pedidoService.enviarCorreoComprobante(response);
 
+
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
@@ -78,5 +80,12 @@ public class PedidoResource {
 		pedidoService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<Void> updatePedidoEstado(@PathVariable(name = "id") final Long id,
+            @RequestBody @Valid final Map<String, String> estado) {
+        pedidoService.updateEstado(id, estado.get("estado"));
+        return ResponseEntity.ok().build();
+    }
 
 }
