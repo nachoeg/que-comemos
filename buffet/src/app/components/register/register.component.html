@@ -1,64 +1,79 @@
-<div class="register">
-       <div *ngIf="!registrationSuccessful">
-  <form class="custom-form" method="post" (ngSubmit)="register()" novalidate [formGroup]="f">
-    <h1>Registro</h1>
-    <label>Email</label>
-    <input type="email" formControlName="email" name="email" placeholder="Email" required
-           [ngClass]="{ 'invalid': submitted && f.get('email')?.errors }">
-    <small class="text-danger" *ngIf="submitted && f.get('email')?.errors">
-      <span *ngIf="f.get('email')?.hasError('required')">El email es requerido.</span>
-      <span *ngIf="f.get('email')?.hasError('email')">Email inválido.</span> 
-    </small>
+<div class="container-form">
+  <div *ngIf="!registrationSuccessful">
+    <form class="py-4" method="post" (ngSubmit)="register()" novalidate [formGroup]="f">
+      <h2 class="mb-4">Registro</h2>
 
-    <label>Password</label>
-    <input type="password" formControlName="password" name="password" placeholder="Password" required
-           [ngClass]="{ 'invalid': submitted && f.get('password')?.errors }">
-    <small class="text-danger" *ngIf="submitted && f.get('password')?.errors">
-      <span *ngIf="f.get('password')?.hasError('required')">La contraseña es requerida.</span>
-      <span *ngIf="f.get('password')?.hasError('minlength')">La contraseña debe tener al menos 8 caracteres.</span>
-    </small>
+      <div class="mb-3 form-group">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" formControlName="email" name="email" placeholder="Email" required
+          [ngClass]="{ 'invalid': submitted && f.get('email')?.errors }" class="form-control">
+        <small class="text-danger" *ngIf="submitted && f.get('email')?.errors">
+          <span *ngIf="f.get('email')?.hasError('required')">El email es requerido.</span>
+          <span *ngIf="f.get('email')?.hasError('email')">Email inválido.</span>
+        </small>
+      </div>
 
-    <label>Ingrese nuevamente password</label>
-    <input type="password" formControlName="confirmPassword" name="confirmPassword" placeholder="Ingrese nuevamente la password"
-           required [ngClass]="{ 'invalid': submitted && f.get('confirmPassword')?.errors }">
-    <small class="text-danger" *ngIf="submitted && f.get('confirmPassword')?.errors">
-      <span *ngIf="f.get('confirmPassword')?.hasError('required')">Confirmar contraseña es requerido.</span>
-      <span *ngIf="f.get('confirmPassword')?.hasError('matchingPasswords')">Las contraseñas no coinciden</span>
-    </small>
+      <div class="mb-3 form-group">
+        <label for="password" class="form-label">Constraseña</label>
+        <input type="password" formControlName="password" name="password" placeholder="Password" required
+          [ngClass]="{ 'invalid': submitted && f.get('password')?.errors }" class="form-control">
+        <small class="text-danger" *ngIf="submitted && f.get('password')?.errors">
+          <span *ngIf="f.get('password')?.hasError('required')">La contraseña es requerida.</span>
+          <span *ngIf="f.get('password')?.hasError('minlength')">La contraseña debe tener al menos 8 caracteres.</span>
+        </small>
+      </div>
 
-    <label>DNI</label>
-    <input type="number" formControlName="dni" name="dni" placeholder="DNI" required
-           [ngClass]="{ 'invalid': submitted && f.get('dni')?.errors }">
-    <small class="text-danger" *ngIf="submitted && f.get('dni')?.errors">
-      <span *ngIf="f.get('dni')?.hasError('required')">El DNI es requerido.</span>
-    </small>
+      <div class="mb-3 form-group">
+        <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+        <input type="password" formControlName="confirmPassword" name="confirmPassword"
+          placeholder="Ingrese nuevamente la password" required
+          [ngClass]="{ 'invalid': submitted && f.get('confirmPassword')?.errors }" class="form-control">
+        <small class="text-danger" *ngIf="submitted && f.get('confirmPassword')?.errors">
+          <span *ngIf="f.get('confirmPassword')?.hasError('required')">Confirmar contraseña es requerido.</span>
+          <span *ngIf="f.get('confirmPassword')?.hasError('matchingPasswords')">Las contraseñas no coinciden</span>
+        </small>
+      </div>
 
-    <label>Nombre</label>
-    <input type="text" formControlName="nombre" name="nombre" placeholder="Nombre" required
-           [ngClass]="{ 'invalid': submitted && f.get('nombre')?.errors }">
-    <small class="text-danger" *ngIf="submitted && f.get('nombre')?.errors">
-      <span *ngIf="f.get('nombre')?.hasError('required')">El nombre es requerido.</span>
-    </small>
+      <div class="mb-3 form-group">
+        <label for="dni" class="form-label">DNI</label>
+        <input type="number" formControlName="dni" name="dni" placeholder="DNI" required
+          [ngClass]="{ 'invalid': submitted && f.get('dni')?.errors }" class="form-control">
+        <small class="text-danger" *ngIf="submitted && f.get('dni')?.errors">
+          <span *ngIf="f.get('dni')?.hasError('required')">El DNI es requerido.</span>
+        </small>
+      </div>
 
-    <label>Apellido</label>
-    <input type="text" formControlName="apellido" name="apellido" placeholder="Apellido" required
-           [ngClass]="{ 'invalid': submitted && f.get('apellido')?.errors }">
-    <small class="text-danger" *ngIf="submitted && f.get('apellido')?.errors">
-      <span *ngIf="f.get('apellido')?.hasError('required')">El apellido es requerido.</span>
-    </small>
+      <div class="mb-3 form-group">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" formControlName="nombre" name="nombre" placeholder="Nombre" required
+          [ngClass]="{ 'invalid': submitted && f.get('nombre')?.errors }" class="form-control">
+        <small class="text-danger" *ngIf="submitted && f.get('nombre')?.errors">
+          <span *ngIf="f.get('nombre')?.hasError('required')">El nombre es requerido.</span>
+        </small>
+      </div>
 
-    <button type="submit">Registrarse</button>
-    <div class="form-group">
-      <small class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</small>
-    </div>
-  </form>
+      <div class="mb-3 form-group">
+        <label for="apellido" class="form-label">Apellido</label>
+        <input type="text" formControlName="apellido" name="apellido" placeholder="Apellido" required
+          [ngClass]="{ 'invalid': submitted && f.get('apellido')?.errors }" class="form-control">
+        <small class="text-danger" *ngIf="submitted && f.get('apellido')?.errors">
+          <span *ngIf="f.get('apellido')?.hasError('required')">El apellido es requerido.</span>
+        </small>
+      </div>
+
+
+      <button type="submit" class="btn btn-primary">Registrarse</button>
+      <div class="form-group">
+        <small class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</small>
+      </div>
+    </form>
   </div>
 
   <div *ngIf="registrationSuccessful" class="custom-form card text-center success-message">
-       <div class="card-body">
-         <h5 class="card-title">¡Registro exitoso!</h5>
-         <p class="card-text">{{ registerSuccessMessage }}</p>
-         <button type="submit" (click)="login()">Iniciar Sesión</button>
-       </div>
-     </div>
+    <div class="card-body">
+      <h5 class="card-title">¡Registro exitoso!</h5>
+      <p class="card-text">{{ registerSuccessMessage }}</p>
+      <button type="submit" class="btn btn-primary" (click)="login()">Iniciar Sesión</button>
+    </div>
+  </div>
 </div>

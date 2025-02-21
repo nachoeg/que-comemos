@@ -1,11 +1,18 @@
-<div class="login">
-    <form class="custom-form" method="post">
-        <h1>Login</h1>
-        <label for="email">Email</label>
-        <input type="email" [(ngModel)]="email" id="email" name="email" placeholder="Email" autocomplete="on" required="required" />
-        <label for="password">Password</label>
-        <input type="password" [(ngModel)]="password" id="password" name="password" placeholder="Password" required="required" />
-        <button type="submit" (click)="login()">Log in</button>
+<div class="centrar">
+    <form method="post">
+        <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
+        <div class="form-floating">
+            <input type="email" [(ngModel)]="email" class="form-control rounded-bottom-0" id="email" name="email"
+                placeholder="nombre@ejemplo.com" autocomplete="on" required="required" />
+            <label for="email">Email</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" [(ngModel)]="password" class="form-control rounded-top-0 border-top-0" id="password"
+                name="password" placeholder="Password" required="required" />
+            <label for="password">Password</label>
+        </div>
+
+        <button class="btn btn-primary w-100 mt-3" type="submit" (click)="login()">Iniciar sesión</button>
         <div class="form-group">
             <small class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</small>
         </div>
