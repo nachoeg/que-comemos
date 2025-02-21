@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Usuario } from '../../models/usuario/usuario';
 import { AbstractControl, FormGroup, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UsuariosService } from '../../services/usuarios-service/usuarios-service';
+
+import { RegisterService } from '../../services/register-service/register-service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -24,7 +25,7 @@ export function MatchingPasswords(passwordControlName: string) {
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
-  providers: [UsuariosService]
+  providers: []
 })
 export class RegisterComponent {
 
@@ -36,7 +37,7 @@ export class RegisterComponent {
   registerSuccessMessage: string | null = null;
   registrationSuccessful: boolean = false;
 
-  constructor(private usuarioServicio: UsuariosService, private router: Router, private fb: FormBuilder,  private alertService: AlertService) {
+  constructor(private registerService: RegisterService, private router: Router, private fb: FormBuilder,  private alertService: AlertService) {
     this.f = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3)]],
@@ -60,7 +61,7 @@ export class RegisterComponent {
       this.usuario.rol = 3;
       console.log(this.usuario);
    
-      this.usuarioServicio.registerUser(this.usuario).subscribe({
+      this.registerService.registerUser(this.usuario).subscribe({
         next: (response) => {
           console.log('Registro exitoso:', response);
           this.registerSuccessMessage = 'El usuario se registro exitosamente, ya puede acceder al sistema';

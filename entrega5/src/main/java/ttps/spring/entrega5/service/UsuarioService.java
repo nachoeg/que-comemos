@@ -153,11 +153,7 @@ public class UsuarioService {
 	public UsuarioDTO findByEmail(String email) {
 		
 		Usuario user = usuarioRepository.findByEmail(email);
-		/*
-		 * UsuarioDTO userDTO = new UsuarioDTO(); this.mapToDTO(user, userDTO); return
-		 * userDTO;
-		 */
-		if (user == null) {
+			if (user == null) {
 	        return null; // Devuelve null directamente si el usuario no existe
 	    }
 	    return mapToDTO(user, new UsuarioDTO());

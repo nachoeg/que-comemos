@@ -43,9 +43,10 @@ export class LoginServicio {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('token');
-    localStorage.removeItem('cartItems');
+    // localStorage.removeItem('currentUser');
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('cartItems');
+    localStorage.clear();
     this.userLoggedSubject.next(null);
     this.isUserLoggedInSubject.next(false);
     this.router.navigate(['/iniciar-sesion']);
@@ -64,6 +65,8 @@ export class LoginServicio {
     return user ? user.id : null; // Concise way to return id or null
 }
 
+
+
   login(user: any): Observable<LoginResponse> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -74,9 +77,36 @@ export class LoginServicio {
           localStorage.setItem('token', response.token);
           this.userLoggedSubject.next(response.user);
           this.isUserLoggedInSubject.next(true);
-          console.log('Login successful!');
+          console.log('Login successful! User info:', response.user);
+          console.log('User in localStorage:', JSON.parse(localStorage.getItem('currentUser') || 'null'));
         }
       })
     );
+  }
+
+  // Nuevo método para recargar la información del usuario desde localStorage
+  reloadUserInfoFromLocalStorage() {
+    this.loadUserFromLocalStorage();
+  }
+
+  private loadUserFromLocalStorage() {
+    const userString = localStorage.getItem('currentUser');
+    if (userString) {
+      try {
+        const user: User = JSON.parse(userString);
+        this.userLoggedSubject.next(user);
+        this.isUserLoggedInSubject.next(true);
+        console.log('User loaded from localStorage:', user);
+      } catch (error) {
+        console.error('Error parsing user from localStorage:', error);
+        this.userLoggedSubject.next(null);
+        this.isUserLoggedInSubject.next(false);
+        localStorage.removeItem('currentUser'); // Limpia si hay un error al parsear
+      }
+    } else {
+      console.log('No user found in localStorage.');
+      this.userLoggedSubject.next(null);
+      this.isUserLoggedInSubject.next(false);
+    }
   }
 }

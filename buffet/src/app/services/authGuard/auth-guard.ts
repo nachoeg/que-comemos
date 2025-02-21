@@ -40,6 +40,8 @@ export class AuthGuard implements CanActivate {
         }
 
         const requiredRoles = route.data['roles'] as string[];
+        // Recarga la información del usuario desde localStorage
+        this.loginServicio.reloadUserInfoFromLocalStorage();
         return this.loginServicio.userLogged$.pipe(
           take(1),
           map((user) => {
