@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import jakarta.mail.MessagingException;
 import ttps.spring.entrega5.service.AutenticacionService;
 
 import org.slf4j.Logger;
@@ -67,6 +68,13 @@ public class GlobalExceptionHandler {
 	        logger.error("Referencia encontrada:", referencedWarning.getMessage());
 	        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), referencedWarning.getMessage());
 	        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+	    }
+	 
+	 @ExceptionHandler(MessagingException.class)
+	    public ResponseEntity<ErrorResponse> handleMessagingException(MessagingException ex) {
+	        logger.error("Error al enviar el correo:", ex);
+	        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al enviar el correo. Por favor, inténtelo de nuevo más tarde.");
+	        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	
 	 @ExceptionHandler(Exception.class) // Manejador genérico

@@ -1,7 +1,7 @@
 package ttps.spring.entrega5.rest;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
@@ -25,6 +25,7 @@ import com.google.zxing.WriterException;
 import ttps.spring.entrega5.model.PedidoDTO;
 import ttps.spring.entrega5.model.PedidoResponseDTO;
 import ttps.spring.entrega5.service.PedidoService;
+import ttps.spring.entrega5.util.EmailService;
 import ttps.spring.entrega5.util.QRService;
 
 
@@ -36,6 +37,8 @@ public class PedidoResource {
     private final PedidoService pedidoService;
     @Autowired
     private QRService qrService;
+    @Autowired
+    private EmailService emailService;
 
     public PedidoResource(final PedidoService pedidoService) {
         this.pedidoService = pedidoService;
@@ -51,38 +54,25 @@ public class PedidoResource {
         return ResponseEntity.ok(pedidoService.get(id));
     }
 
-	
-	/*
-	 * @PostMapping
-	 * 
-	 * @ApiResponse(responseCode = "201") public ResponseEntity<Long>
-	 * createPedido(@RequestBody @Valid final PedidoDTO pedidoDTO) { final Long
-	 * createdId = pedidoService.create(pedidoDTO); return new
-	 * ResponseEntity<>(createdId, HttpStatus.CREATED); }
-	 */
-    
-	/*
-	 * @PostMapping(produces = MediaType.IMAGE_PNG_VALUE) // Importante: Indica que
-	 * produce una imagen PNG
-	 * 
-	 * @ApiResponse(responseCode = "201") public ResponseEntity<byte[]>
-	 * createPedido(@RequestBody @Valid final PedidoDTO pedidoDTO) throws
-	 * WriterException, IOException { byte[] qrImageBytes =
-	 * pedidoService.create(pedidoDTO);
-	 * 
-	 * if (qrImageBytes != null) { return new ResponseEntity<>(qrImageBytes,
-	 * HttpStatus.CREATED); } else { return new
-	 * ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // Manejo de error } }
-	 */
 	 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE) 
-    public ResponseEntity<PedidoResponseDTO> createPedido(@RequestBody @Valid final PedidoDTO pedidoDTO) throws WriterException, IOException {
+    public ResponseEntity<PedidoResponseDTO> createPedido(@RequestBody @Valid final PedidoDTO pedidoDTO) throws WriterException, IOException, MessagingException {
 
         PedidoDTO pedidoDTOConId = pedidoService.create(pedidoDTO);
         pedidoDTOConId = pedidoService.get(pedidoDTOConId.getId());
         String textoQR = String.format("ID Pedido: %d\nFecha: %s\nMonto: %.2f", pedidoDTOConId.getId(), pedidoDTOConId.getFecha(), pedidoDTOConId.getMonto());
         byte[] qrImageBytes = qrService.generarQr(textoQR);
         PedidoResponseDTO response = new PedidoResponseDTO(qrImageBytes, pedidoDTOConId);
+        
+     // Generate email content
+        String emailContent = pedidoService.generateEmailContent(pedidoDTOConId);
+
+        // Send email
+        String destinatario = "lofap63881@lxheir.com";//https://temp-mail.org/ agregar un email para que lleguen los mensajes o utilizar los del id del usuario del pedido
+        String asunto = "Comprobante de Pedido #" + pedidoDTOConId.getId();
+        String mensaje = "Adjunto encontrarás el comprobante de tu pedido.";
+        emailService.enviarEmailConQR(destinatario, asunto, mensaje, qrImageBytes, emailContent);
+        
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
       

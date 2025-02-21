@@ -172,5 +172,43 @@ public class PedidoService {
 
         return total;
     }
+    
+    public String generateEmailContent(PedidoDTO pedidoDTO) {
+        StringBuilder content = new StringBuilder();
+        content.append("<h2>Resumen del Pedido</h2>");
+        content.append("<table style='border-collapse: collapse; width: 100%;'>");
+        content.append("<thead><tr><th style='border: 1px solid black; padding: 8px;'>Producto</th><th style='border: 1px solid black; padding: 8px;'>Cantidad</th><th style='border: 1px solid black; padding: 8px;'>Precio Unitario</th><th style='border: 1px solid black; padding: 8px;'>Subtotal</th></tr></thead>");
+        content.append("<tbody>");
+
+        if (pedidoDTO.getMenus() != null) {
+            for (MenuPedidoDTO item : pedidoDTO.getMenus()) {
+                content.append("<tr>");
+                content.append("<td style='border: 1px solid black; padding: 8px;'>").append(item.getNombre()).append("</td>");
+                content.append("<td style='border: 1px solid black; padding: 8px;'>").append(item.getCantidad()).append("</td>");
+                content.append("<td style='border: 1px solid black; padding: 8px;'>$ ").append(item.getPrecio()).append("</td>");
+                content.append("<td style='border: 1px solid black; padding: 8px;'>$ ").append(item.getPrecio() * item.getCantidad()).append("</td>");
+                content.append("</tr>");
+            }
+        }
+
+        if (pedidoDTO.getComidas() != null) {
+            for (ComidaPedidoDTO item : pedidoDTO.getComidas()) {
+                content.append("<tr>");
+                content.append("<td style='border: 1px solid black; padding: 8px;'>").append(item.getNombre()).append("</td>");
+                content.append("<td style='border: 1px solid black; padding: 8px;'>").append(item.getCantidad()).append("</td>");
+                content.append("<td style='border: 1px solid black; padding: 8px;'>$ ").append(item.getPrecio()).append("</td>");
+                content.append("<td style='border: 1px solid black; padding: 8px;'>$ ").append(item.getPrecio() * item.getCantidad()).append("</td>");
+                content.append("</tr>");
+            }
+        }
+
+        content.append("</tbody></table>");
+        content.append("<p>Total: $ ").append(pedidoDTO.getMonto()).append("</p>");
+        content.append("<p>Cantidad de Comidas: ").append(pedidoDTO.getComidas() != null ? pedidoDTO.getComidas().size() : 0).append("</p>");
+        content.append("<p>Cantidad de Menus: ").append(pedidoDTO.getMenus() != null ? pedidoDTO.getMenus().size() : 0).append("</p>");
+        content.append("<p>Gracias por tu compra.</p>");
+
+        return content.toString();
+    }
 
 }
