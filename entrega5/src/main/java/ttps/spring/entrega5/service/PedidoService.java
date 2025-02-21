@@ -43,6 +43,8 @@ public class PedidoService {
     private final MenuRepository menuRepository;
     private final ComidaRepository comidaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final Map<Long, Integer> menuCantidades = new HashMap<>();
+    private final Map<Long, Integer> comidaCantidades = new HashMap<>();
 
     public PedidoService(final PedidoRepository pedidoRepository,
             final MenuRepository menuRepository, final ComidaRepository comidaRepository,
@@ -99,7 +101,7 @@ public class PedidoService {
         pedidoDTO.setMenus(pedido.getMenus().stream().map(menu -> {
             MenuPedidoDTO menuPedidoDTO = new MenuPedidoDTO();
             menuPedidoDTO.setId(menu.getId());
-            menuPedidoDTO.setCantidad(1);
+            menuPedidoDTO.setCantidad(menuCantidades.getOrDefault(menu.getId(), 1));
             menuPedidoDTO.setNombre(menu.getNombre());
             menuPedidoDTO.setPrecio(menu.getPrecio());
             return menuPedidoDTO;
@@ -107,7 +109,7 @@ public class PedidoService {
         pedidoDTO.setComidas(pedido.getComidas().stream().map(comida -> {
             ComidaPedidoDTO comidaPedidoDTO = new ComidaPedidoDTO();
             comidaPedidoDTO.setId(comida.getId());
-            comidaPedidoDTO.setCantidad(1);
+            comidaPedidoDTO.setCantidad(comidaCantidades.getOrDefault(comida.getId(), 1));
             comidaPedidoDTO.setNombre(comida.getNombre());
             comidaPedidoDTO.setPrecio(comida.getPrecio());
             return comidaPedidoDTO;
@@ -126,6 +128,7 @@ public class PedidoService {
                 Menu menu = menuRepository.findById(menuPedidoDTO.getId())
                         .orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
                 menus.add(menu);
+                menuCantidades.put(menu.getId(), menuPedidoDTO.getCantidad());
             }
         }
         pedido.setMenus(menus);
@@ -136,6 +139,7 @@ public class PedidoService {
                 Comida comida = comidaRepository.findById(comidaPedidoDTO.getId())
                         .orElseThrow(() -> new EmptyResultDataAccessException("Comida no encontrada", 1));
                 comidas.add(comida);
+                comidaCantidades.put(comida.getId(), comidaPedidoDTO.getCantidad());
             }
         }
         pedido.setComidas(comidas);
