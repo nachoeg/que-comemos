@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -316,5 +317,12 @@ public class PedidoService {
         return null;
     }
     
+
+    public List<PedidoDTO> findPedidosByUsuario(final int userId) {
+        final Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+        List<Pedido> pedidos = pedidoRepository.findAllByUsuario(usuario);
+        return pedidos.stream().map(pedido -> mapToDTO(pedido, new PedidoDTO())).collect(Collectors.toList());
+    }
 
 }

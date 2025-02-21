@@ -12,17 +12,15 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>1</td>
-            <td>2024-05-16</td>
-            <td>Enviado</td>
-            <td>$100</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>2024-05-15</td>
-            <td>Entregado</td>
-            <td>$50</td>
+        <tr *ngFor="let pedido of pedidos">
+            <td>{{pedido.id}}</td>
+            <td>{{formatearFecha(pedido.fecha)}}</td>
+            <td><span class="badge me-2 bg-secondary" *ngIf="pedido.estado === 'PENDIENTE'">Pendiente</span>
+                <span class="badge me-2 bg-warning" *ngIf="pedido.estado === 'PREPARACION'">En preparación</span>
+                <span class="badge me-2 bg-primary" *ngIf="pedido.estado === 'LISTO'">Listo para retirar</span>
+                <span class="badge me-2 bg-success" *ngIf="pedido.estado === 'ENTREGADO'">Entregado</span>
+            </td>
+            <td>${{pedido.monto}}</td>
         </tr>
     </tbody>
 </table>

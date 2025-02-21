@@ -8,7 +8,6 @@ import ttps.spring.entrega5.domain.Menu;
 import ttps.spring.entrega5.domain.Pedido;
 import ttps.spring.entrega5.domain.Usuario;
 
-
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     Pedido findFirstByMenus(Menu menu);
@@ -21,6 +20,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     List<Pedido> findAllByComidas(Comida comida);
 
-	List<Pedido> findByFechaBetween(LocalDate startDate, LocalDate today);
+    List<Pedido> findAllByUsuario(Usuario usuario);
+
+    List<Pedido> findByFechaBetween(LocalDate startDate, LocalDate today);
 
 }

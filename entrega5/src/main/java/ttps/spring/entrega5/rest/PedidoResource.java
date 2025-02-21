@@ -117,4 +117,10 @@ public class PedidoResource {
 	 * ResponseEntity.ok(pedidoService.generarReporteMontos()); }
 	 */
 
+    @GetMapping("/usuario/{userId}")
+    public ResponseEntity<List<PedidoDTO>> getPedidosByUsuario(@PathVariable(name = "userId") final int userId) {
+        List<PedidoDTO> pedidos = pedidoService.findPedidosByUsuario(userId);
+        return ResponseEntity.ok(pedidos);
+    }
+
 }
