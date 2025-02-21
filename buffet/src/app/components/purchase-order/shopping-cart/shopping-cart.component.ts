@@ -13,6 +13,8 @@ import {
   PedidoDetalles,
 } from '../../../models/order-response/order-response';
 import { NewOrder } from '../../../models/new-order/new-order';
+import { AlertService } from '../../../services/alert-service/alert.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -40,8 +42,8 @@ export class ShoppingCartComponent {
     private router: Router,
     private loginService: LoginServicio,
     private foodService: FoodsService,
-    private menuService: MenusService
-  ) {}
+    private menuService: MenusService,
+    private alertService: AlertService) { }
 
   ngOnInit() {
     this.cartService.cartItems$
@@ -90,13 +92,9 @@ export class ShoppingCartComponent {
   }
 
   realizarPedido() {
-    if (
-      this.cartItems.menus.length === 0 &&
-      this.cartItems.foods.length === 0
-    ) {
-      console.error(
-        'El carrito está vacío. Agregue productos antes de finalizar el pedido.'
-      );
+    if (this.cartItems.menus.length === 0 && this.cartItems.foods.length === 0) {
+      console.error("El carrito está vacío. Agregue productos antes de finalizar el pedido.");
+      this.alertService.showAlert('El carrito está vacío. Agregue productos antes de finalizar el pedido.', 'danger'); 
 
       return;
     }
@@ -106,7 +104,8 @@ export class ShoppingCartComponent {
     const estado = 'PENDIENTE'; // Initial state
     const usuarioId = this.loginService.getUserId();
     if (!usuarioId) {
-      console.error('User not logged in. Cannot create order.');
+      console.error("User not logged in. Cannot create order.");
+      this.alertService.showAlert('Debe iniciar sesión para realizar un pedido.', 'danger');
       this.router.navigate(['/login']);
       return;
     }
@@ -124,17 +123,25 @@ export class ShoppingCartComponent {
         this.cartService.clearCart();
         this.mostrarConfirmacion = true;
         this.mostrarTicket = true;
+        this.alertService.showAlert('¡Pedido creado con exito! Se ha enviado un mail con el comprobante.', 'success');
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error al crear el pedido', error);
-      },
+    if (error.error && error.error.message) {
+        this.alertService.showAlert(error.error.message, 'danger');
+    } else {
+        this.alertService.showAlert('Ocurrió un error inesperado.', 'danger');
+    }
+      }
     });
+
   }
 
   cerrarConfirmacion() {
     // Función para cerrar la confirmación
     this.mostrarConfirmacion = false;
     this.mostrarTicket = false;
+
   }
 
   imprimirTicket() {

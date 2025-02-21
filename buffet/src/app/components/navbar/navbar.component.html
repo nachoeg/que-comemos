@@ -22,8 +22,11 @@
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/pedidos/manager']"
             *ngIf="usuarioLogeado?.rolName === 'MANAGER'">Pedidos</a>
         </li>
-        <li class="nav-item" *ngIf="usuarioLogeado?.rolName !== 'USER'">
+        <li class="nav-item" *ngIf="usuarioLogeado?.rolName == 'ADMIN'">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios']">Usuarios</a>
+        </li>
+        <li class="nav-item" *ngIf="usuarioLogeado?.rolName == 'ADMIN'">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/reportes']">Reportes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/sugerencias']"

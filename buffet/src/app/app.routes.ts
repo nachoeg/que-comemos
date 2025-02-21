@@ -26,6 +26,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { ShoppingCartComponent } from './components/purchase-order/shopping-cart/shopping-cart.component';
 import { PurchaseOrderComponent } from './components/purchase-order/purchase-order.component';
 import { MenuOrdersComponent } from './components/menu/menu-orders/menu-orders.component';
+import { ReportComponent } from './components/report/report.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -154,6 +155,12 @@ export const routes: Routes = [
     component: MenuOrdersComponent,
     canActivate: [AuthGuard],
     data: { roles: ['MANAGER'] },
+  },
+  {
+    path: 'reportes',
+    component: ReportComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
   },
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent },

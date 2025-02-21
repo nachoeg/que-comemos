@@ -17,10 +17,6 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  // createOrder(order: any): Observable<OrderResponse> {
-  //     const pedido = this.mapToNewOrder(order);
-  //     return this.http.post<OrderResponse>(this.baseUrl, pedido);
-  // }
   createOrder(order: any): Observable<OrderResponse> {
     const pedido = this.mapToNewOrder(order);
     return this.http.post<OrderResponse>(this.baseUrl, pedido).pipe(
