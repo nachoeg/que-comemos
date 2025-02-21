@@ -28,7 +28,6 @@ import ttps.spring.entrega5.model.UsuarioDTO;
 import ttps.spring.entrega5.service.UsuarioService;
 import ttps.spring.entrega5.util.ReferencedWarning;
 
-
 @RestController
 @RequestMapping(value = "/api/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "http://localhost:4200")
@@ -56,24 +55,20 @@ public class UsuarioResource {
         final Integer createdId = usuarioService.create(usuarioDTO);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
-    
 
     @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<Integer> updateUsuario(
-    		@PathVariable(name = "id") final Integer id,
-    		@RequestPart("usuario") @Valid final UsuarioDTO usuarioDTO,
-            @RequestPart(value = "foto", required = false) final MultipartFile foto
-            ) throws IOException {
+            @PathVariable(name = "id") final Integer id,
+            @RequestPart("usuario") @Valid final UsuarioDTO usuarioDTO,
+            @RequestPart(value = "foto", required = false) final MultipartFile foto) throws IOException {
         usuarioService.update(id, usuarioDTO, foto);
         return ResponseEntity.ok(id);
     }
-    
-    
+
     @PutMapping(value = "/{id}/rol", consumes = { "multipart/form-data" })
     public ResponseEntity<Integer> updateRolUsuario(
-    		@PathVariable(name = "id") final Integer id,
-    		@RequestPart("rol") final String rol
-            ) throws IOException {
+            @PathVariable(name = "id") final Integer id,
+            @RequestPart("rol") final String rol) throws IOException {
         usuarioService.updateRol(id, rol);
         return ResponseEntity.ok(id);
     }
@@ -88,6 +83,5 @@ public class UsuarioResource {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
     }
-    
 
 }

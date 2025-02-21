@@ -15,7 +15,9 @@ export function MatchingPasswords(passwordControlName: string) {
     const password = control.root?.get(passwordControlName)?.value;
     const confirmPassword = control.value;
 
-    return (password === confirmPassword) ? null : { matchingPasswords: { required: true } };
+    return password === confirmPassword
+      ? null
+      : { matchingPasswords: { required: true } };
   };
 }
 
@@ -25,11 +27,10 @@ export function MatchingPasswords(passwordControlName: string) {
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
-  providers: []
+  providers: [],
 })
 export class RegisterComponent {
-
-  usuario: Usuario;;
+  usuario: Usuario;
   claveConfirmar = '';
   errorMessage = '';
   submitted = false;
@@ -37,14 +38,22 @@ export class RegisterComponent {
   registerSuccessMessage: string | null = null;
   registrationSuccessful: boolean = false;
 
-  constructor(private registerService: RegisterService, private router: Router, private fb: FormBuilder,  private alertService: AlertService) {
+  constructor(
+    private registerService: RegisterService,
+    private router: Router,
+    private fb: FormBuilder,
+    private alertService: AlertService
+  ) {
     this.f = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3)]],
-      confirmPassword: ['', [Validators.required, MatchingPasswords('password')]],
+      confirmPassword: [
+        '',
+        [Validators.required, MatchingPasswords('password')],
+      ],
       dni: ['', Validators.required],
       nombre: ['', Validators.required],
-      apellido: ['', Validators.required]
+      apellido: ['', Validators.required],
     });
     this.usuario = new Usuario(0, 0, '', '', '', '', '', 0);
   }
@@ -60,31 +69,40 @@ export class RegisterComponent {
       this.usuario.apellido = this.f.get('apellido')?.value;
       this.usuario.rol = 3;
       console.log(this.usuario);
-   
+
       this.registerService.registerUser(this.usuario).subscribe({
         next: (response) => {
           console.log('Registro exitoso:', response);
-          this.registerSuccessMessage = 'El usuario se registro exitosamente, ya puede acceder al sistema';
+          this.registerSuccessMessage =
+            'El usuario se registro exitosamente, ya puede acceder al sistema';
           this.registrationSuccessful = true; // Set the flag to true
-          this.alertService.showAlert('¡Usuario registrado exitosamente!', 'success');
+          this.alertService.showAlert(
+            '¡Usuario registrado exitosamente!',
+            'success'
+          );
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error al registrar usuario:', error);
           if (error.status === 409) {
-              this.errorMessage = error.error.message || 'Error al registrar usuario. DNI duplicado.';
-              this.alertService.showAlert('DNI duplicado, no se pudo crear usuario', 'danger');
+            this.errorMessage =
+              error.error.message ||
+              'Error al registrar usuario. DNI duplicado.';
+            this.alertService.showAlert(this.errorMessage, 'danger');
           } else {
-              this.errorMessage = 'Error al registrar usuario: ';
-              this.alertService.showAlert('No se pudo registrar el usuario', 'danger');
+            this.errorMessage = 'Error al registrar usuario: ';
+            this.alertService.showAlert(
+              'No se pudo registrar el usuario',
+              'danger'
+            );
           }
           this.registerSuccessMessage = null;
           this.registrationSuccessful = false;
-      }
+        },
       });
     }
   }
 
-  login(){
+  login() {
     this.router.navigate(['/iniciar-sesion']);
   }
 }

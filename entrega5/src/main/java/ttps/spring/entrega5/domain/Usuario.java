@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.Set;
 
-
 @Entity
 public class Usuario {
 
@@ -29,7 +28,7 @@ public class Usuario {
     @Column
     private String apellido;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column
