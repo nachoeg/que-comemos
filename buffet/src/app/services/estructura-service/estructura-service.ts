@@ -3,12 +3,13 @@ import { Observable } from 'rxjs';
 import { NewEstructura } from '../../models/new-estructura/new-estructura';
 import { Injectable } from '@angular/core';
 import { Estructura } from '../../models/estructura/estructura';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EstructuraService {
-  private baseUrl = 'http://localhost:8080/api/estructuras';
+  private baseUrl = environment.apiUrl + '/estructuras';
 
   constructor(private http: HttpClient) {}
 

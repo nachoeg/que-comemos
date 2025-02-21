@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 export interface User {
   id: number;
@@ -31,7 +32,7 @@ export class LoginServicio {
   private userLoggedSubject = new BehaviorSubject<User | null>(null);
   userLogged$ = this.userLoggedSubject.asObservable();
 
-  private baseUrl = 'http://localhost:8080/api/autenticacion/login';
+  private baseUrl = environment.apiUrl + '/autenticacion/login';
 
   constructor(private http: HttpClient, private router: Router) {
     const userString = localStorage.getItem('currentUser');
@@ -43,9 +44,6 @@ export class LoginServicio {
   }
 
   logout() {
-    // localStorage.removeItem('currentUser');
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('cartItems');
     localStorage.clear();
     this.userLoggedSubject.next(null);
     this.isUserLoggedInSubject.next(false);

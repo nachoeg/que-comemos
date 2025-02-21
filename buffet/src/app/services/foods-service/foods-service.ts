@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Food } from '../../models/food/food';
 import { NewFood } from '../../models/new-food/new-food';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FoodsService {
-  private baseUrl = 'http://localhost:8080/api/comidas'; // API comida
+  private baseUrl = environment.apiUrl + '/comidas'; // API comida
 
   constructor(private http: HttpClient) {}
 
