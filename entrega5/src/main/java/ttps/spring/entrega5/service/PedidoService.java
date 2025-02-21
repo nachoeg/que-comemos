@@ -31,7 +31,6 @@ import ttps.spring.entrega5.repos.UsuarioRepository;
 import ttps.spring.entrega5.util.NotFoundException;
 import ttps.spring.entrega5.util.QRService;
 
-
 @Service
 @Transactional
 public class PedidoService {
@@ -40,7 +39,6 @@ public class PedidoService {
     private final MenuRepository menuRepository;
     private final ComidaRepository comidaRepository;
     private final UsuarioRepository usuarioRepository;
-   
 
     public PedidoService(final PedidoRepository pedidoRepository,
             final MenuRepository menuRepository, final ComidaRepository comidaRepository,
@@ -64,7 +62,6 @@ public class PedidoService {
                 .orElseThrow(NotFoundException::new);
     }
 
-	
     public PedidoDTO create(final PedidoDTO pedidoDTO) {
         Pedido pedido = new Pedido();
         mapToEntity(pedidoDTO, pedido);
@@ -139,12 +136,13 @@ public class PedidoService {
         }
         pedido.setComidas(comidas);
 
-        final Usuario usuario = pedidoDTO.getUsuario() == null ? null : usuarioRepository.findById(pedidoDTO.getUsuario())
-                .orElseThrow(() -> new NotFoundException("usuario not found"));
+        final Usuario usuario = pedidoDTO.getUsuario() == null ? null
+                : usuarioRepository.findById(pedidoDTO.getUsuario())
+                        .orElseThrow(() -> new NotFoundException("usuario not found"));
         pedido.setUsuario(usuario);
         return pedido;
     }
-    
+
     private double calcularMonto(List<MenuPedidoDTO> menus, List<ComidaPedidoDTO> comidas) {
         double total = 0;
 
@@ -171,6 +169,13 @@ public class PedidoService {
         }
 
         return total;
+    }
+
+    public void updateEstado(final Long id, final String estado) {
+        final Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        pedido.setEstado(estado);
+        pedidoRepository.save(pedido);
     }
 
 }

@@ -149,6 +149,12 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: ['ADMIN', 'USER'] },
   },
+  {
+    path: 'pedidos/manager',
+    component: MenuOrdersComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['MANAGER'] },
+  },
   { path: 'error', component: ErrorComponent },
   { path: 'forbidden', component: ForbiddenComponent },
   { path: '**', component: PageNotFoundComponent },
