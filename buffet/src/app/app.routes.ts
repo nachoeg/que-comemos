@@ -147,7 +147,7 @@ export const routes: Routes = [
     path: 'pedidos',
     component: PurchaseOrderComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['ADMIN', 'USER'] },
+    data: { roles: ['USER'] },
   },
   {
     path: 'pedidos/manager',
