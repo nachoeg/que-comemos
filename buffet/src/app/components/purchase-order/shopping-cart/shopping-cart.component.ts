@@ -10,6 +10,8 @@ import { FoodsService } from '../../../services/foods-service/foods-service';
 import { MenusService } from '../../../services/menus-service/menus-service';
 import { OrderResponse, PedidoDetalles } from '../../../models/order-response/order-response';
 import { NewOrder } from '../../../models/new-order/new-order';
+import { AlertService } from '../../../services/alert-service/alert.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -22,7 +24,7 @@ export class ShoppingCartComponent {
   cartItems: { menus: OrderMenu[], foods: OrderFood[] } = { menus: [], foods: [] };
   private destroy$ = new Subject<void>();
   mostrarConfirmacion = false;
-  
+
   mostrarTicket: boolean = false;
   fecha: Date | undefined;
   qrCodeImage: any;
@@ -30,12 +32,13 @@ export class ShoppingCartComponent {
   id = 0;
 
 
-  constructor(private cartService: CartService, 
-    private orderService: OrderService, 
-    private router: Router, 
+  constructor(private cartService: CartService,
+    private orderService: OrderService,
+    private router: Router,
     private loginService: LoginServicio,
-  private foodService: FoodsService,
-private menuService: MenusService) {}
+    private foodService: FoodsService,
+    private menuService: MenusService,
+    private alertService: AlertService) { }
 
   ngOnInit() {
     this.cartService.cartItems$.pipe(takeUntil(this.destroy$)).subscribe(items => {
@@ -75,21 +78,23 @@ private menuService: MenusService) {}
   realizarPedido() {
     if (this.cartItems.menus.length === 0 && this.cartItems.foods.length === 0) {
       console.error("El carrito está vacío. Agregue productos antes de finalizar el pedido.");
-   
-      return; 
+      this.alertService.showAlert('El carrito está vacío. Agregue productos antes de finalizar el pedido.', 'danger'); 
+
+      return;
     }
-    
+
     this.fecha = new Date(); // Current date
     const monto = this.calcularTotal();
     const estado = 'PENDIENTE'; // Initial state
     const usuarioId = this.loginService.getUserId();
     if (!usuarioId) {
       console.error("User not logged in. Cannot create order.");
+      this.alertService.showAlert('Debe iniciar sesión para realizar un pedido.', 'danger');
       this.router.navigate(['/login']);
       return;
-  }
-  
-    const order = new Order(this.id,this.fecha, monto, estado, usuarioId);
+    }
+
+    const order = new Order(this.id, this.fecha, monto, estado, usuarioId);
     order.menus = this.cartItems.menus;
     order.comidas = this.cartItems.foods;
 
@@ -102,18 +107,24 @@ private menuService: MenusService) {}
         this.cartService.clearCart();
         this.mostrarConfirmacion = true;
         this.mostrarTicket = true;
-    },
-      error: (error) => {
+        this.alertService.showAlert('¡Pedido creado con exito! Se ha enviado un mail con el comprobante.', 'success');
+      },
+      error: (error: HttpErrorResponse) => {
         console.error('Error al crear el pedido', error);
+    if (error.error && error.error.message) {
+        this.alertService.showAlert(error.error.message, 'danger');
+    } else {
+        this.alertService.showAlert('Ocurrió un error inesperado.', 'danger');
+    }
       }
     });
-  
+
   }
 
   cerrarConfirmacion() {  // Función para cerrar la confirmación
     this.mostrarConfirmacion = false;
     this.mostrarTicket = false;
- 
+
   }
 
   imprimirTicket() {

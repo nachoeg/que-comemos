@@ -71,9 +71,9 @@ public class GlobalExceptionHandler {
 	    }
 	 
 	 @ExceptionHandler(MessagingException.class)
-	    public ResponseEntity<ErrorResponse> handleMessagingException(MessagingException ex) {
-	        logger.error("Error al enviar el correo:", ex);
-	        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al enviar el correo. Por favor, inténtelo de nuevo más tarde.");
+	    public ResponseEntity<ErrorResponse> handleMessagingException(MessagingException messagingException) {
+	        logger.error("Error al enviar el correo:", messagingException);
+	        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), messagingException.getMessage());
 	        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	
