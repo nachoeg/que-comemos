@@ -106,5 +106,34 @@ public class PedidoResource {
         pedidoService.updateEstado(id, estado.get("estado"));
         return ResponseEntity.ok().build();
     }
+    
+    @GetMapping("/reporte-menus/{periodo}")
+    public ResponseEntity<Map<String, Integer>> getReporteMenusPorPeriodo(@PathVariable String periodo) {
+        return ResponseEntity.ok(pedidoService.generarReporteMenusPorPeriodo(periodo));
+    }
+
+    @GetMapping("/reporte-comidas/{periodo}")
+    public ResponseEntity<Map<String, Integer>> getReporteComidasPorPeriodo(@PathVariable String periodo) {
+        return ResponseEntity.ok(pedidoService.generarReporteComidasPorPeriodo(periodo));
+    }
+
+    @GetMapping("/reporte-montos/{periodo}")
+    public ResponseEntity<Map<String, Double>> getReporteMontosPorPeriodo(@PathVariable String periodo) {
+        return ResponseEntity.ok(pedidoService.generarReporteMontosPorPeriodo(periodo));
+    }
+    
+	/*
+	 * @GetMapping("/reporte-menus") public ResponseEntity<Map<String, Integer>>
+	 * getReporteMenus() { return
+	 * ResponseEntity.ok(pedidoService.generarReporteMenus()); }
+	 * 
+	 * @GetMapping("/reporte-comidas") public ResponseEntity<Map<String, Integer>>
+	 * getReporteComidas() { return
+	 * ResponseEntity.ok(pedidoService.generarReporteComidas()); }
+	 * 
+	 * @GetMapping("/reporte-montos") public ResponseEntity<Map<String, Integer>>
+	 * getReporteMontos() { return
+	 * ResponseEntity.ok(pedidoService.generarReporteMontos()); }
+	 */
 
 }

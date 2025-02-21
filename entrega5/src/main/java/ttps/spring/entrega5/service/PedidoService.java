@@ -4,10 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -177,5 +181,71 @@ public class PedidoService {
         pedido.setEstado(estado);
         pedidoRepository.save(pedido);
     }
+    
+    public Map<String, Integer> generarReporteMenusPorPeriodo(String periodo) {
+        return generarReportePorPeriodo(periodo, pedido -> pedido.getMenus().stream().map(Menu::getNombre).toList());
+    }
+
+    public Map<String, Integer> generarReporteComidasPorPeriodo(String periodo) {
+        return generarReportePorPeriodo(periodo, pedido -> pedido.getComidas().stream().map(Comida::getNombre).toList());
+    }
+
+    public Map<String, Double> generarReporteMontosPorPeriodo(String periodo) {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        Map<String, Double> reporteMontos = new HashMap<>();
+        LocalDate ahora = LocalDate.now();
+
+        for (Pedido pedido : pedidos) {
+            LocalDate fechaPedido = pedido.getFecha();
+            String key = obtenerClavePeriodo(periodo, ahora, fechaPedido);
+
+            if (key != null) {
+                reporteMontos.put(key, reporteMontos.getOrDefault(key, 0.0) + pedido.getMonto());
+            }
+        }
+
+        return reporteMontos;
+    }
+
+    private Map<String, Integer> generarReportePorPeriodo(String periodo, java.util.function.Function<Pedido, List<String>> obtenerNombres) {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        Map<String, Integer> reporte = new HashMap<>();
+        LocalDate ahora = LocalDate.now();
+
+        for (Pedido pedido : pedidos) {
+            LocalDate fechaPedido = pedido.getFecha();
+            String key = obtenerClavePeriodo(periodo, ahora, fechaPedido);
+
+            if (key != null) {
+                obtenerNombres.apply(pedido).forEach(nombre -> {
+                    reporte.put(nombre, reporte.getOrDefault(nombre, 0) + 1);
+                });
+            }
+        }
+
+        return reporte;
+    }
+
+    private String obtenerClavePeriodo(String periodo, LocalDate ahora, LocalDate fechaPedido) {
+        switch (periodo.toLowerCase()) {
+            case "diario":
+                if (ChronoUnit.DAYS.between(fechaPedido, ahora) == 0) {
+                    return fechaPedido.toString();
+                }
+                break;
+            case "semanal":
+                if (ChronoUnit.WEEKS.between(fechaPedido, ahora) == 0) {
+                    return "Semana de " + ahora.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY)).toString();
+                }
+                break;
+            case "mensual":
+                if (ChronoUnit.MONTHS.between(fechaPedido, ahora) == 0) {
+                    return "Mes de " + ahora.getMonth().toString();
+                }
+                break;
+        }
+        return null;
+    }
+    
 
 }
