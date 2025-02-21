@@ -1,6 +1,8 @@
-<h2 class="mb-4">Detalle de la Sugerencia</h2>
+<a class="text-decoration-none" routerLink="/sugerencias"> <i class="bi bi-arrow-left"></i> Volver</a>
 
-<div *ngIf="sugerencia">
+
+<div class="container-form" *ngIf="sugerencia">
+  <h2 class="mb-4">Detalle de la Sugerencia</h2>
 
 
   <div class="mb-3 form-group">
@@ -23,9 +25,6 @@
     <p class="form-control">{{ sugerencia.descripcion }}</p>
   </div>
 
-  <button class="btn mt-3 px-4 py-2 fw-bold shadow-sm rounded" (click)="volver()">
-    Volver
-  </button>
 </div>
 
 <h3 *ngIf="!sugerencia">Sugerencia no encontrada</h3>

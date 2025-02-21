@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SugerenciasService } from '../../../services/sugerencias-service/sugerencias-service';
 import { Sugerencia } from '../../../models/sugerencias/sugerencias';
 import { Usuario } from '../../../models/usuario/usuario';
@@ -9,9 +9,9 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sugerencias-detalle',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sugerencias-detalle.component.html',
-  styleUrl: './sugerencias-detalle.component.css'
+  styleUrl: './sugerencias-detalle.component.css',
 })
 export class SugerenciasDetalleComponent {
   sugerencia: Sugerencia | null = null;
@@ -21,8 +21,7 @@ export class SugerenciasDetalleComponent {
     private route: ActivatedRoute,
     public loginServicio: LoginServicio,
     private sugerenciasService: SugerenciasService,
-    private usuarioService: UsuariosService,
-    private router: Router
+    private usuarioService: UsuariosService
   ) {}
 
   ngOnInit() {
@@ -31,7 +30,7 @@ export class SugerenciasDetalleComponent {
       this.sugerenciasService.getSugerencia(id).subscribe(
         (data) => {
           this.sugerencia = data;
-          this.usuarioService.getUsuario(data.usuario).subscribe(usuario => {
+          this.usuarioService.getUsuario(data.usuario).subscribe((usuario) => {
             this.usuario = usuario;
           });
         },
@@ -42,18 +41,16 @@ export class SugerenciasDetalleComponent {
     }
   }
 
-  volver() {
-    this.router.navigate(['/sugerencias']);
-  }
-
   get usuarioLogeado() {
-    return this.loginServicio.getUserLoggedIn(); 
+    return this.loginServicio.getUserLoggedIn();
   }
 
   formatearFecha(fechaArray: any): string {
     if (!fechaArray || fechaArray.length < 3) return '';
 
     const [year, month, day] = fechaArray;
-    return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+    return `${day.toString().padStart(2, '0')}/${month
+      .toString()
+      .padStart(2, '0')}/${year}`;
   }
 }

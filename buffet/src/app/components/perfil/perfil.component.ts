@@ -31,10 +31,6 @@ export class PerfilComponent {
     }
   }
 
-  goBack(): void {
-    this.router.navigate(['/perfil']);
-  }
-
   editarUsuario(id: number): void {
     this.router.navigate(['/perfil/editar', id]);
   }

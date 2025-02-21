@@ -1,61 +1,61 @@
+<a class="text-decoration-none" routerLink="/perfil"> <i class="bi bi-arrow-left"></i> Volver</a>
 <form class="container-form" [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
-    <h2 class="mb-4">Modificar Perfil</h2>
-  
-    <div class="mb-3 form-group">
-      <label for="dni" class="form-label">DNI</label>
-      <input type="text" id="dni" class="form-control" formControlName="dni" [attr.disabled]="true">
-    </div>
-  
-    <div class="mb-3 form-group">
-      <label for="nombre" class="form-label">Nombre</label>
-      <input type="text" id="nombre" class="form-control" formControlName="nombre">
-      <div *ngIf="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched">
-        <div class="text-danger" *ngIf="usuarioForm.get('nombre')?.errors?.['required']">
-          El nombre es obligatorio.
-        </div>
-      </div>
-    </div>
-  
-    <div class="mb-3 form-group">
-      <label for="apellido" class="form-label">Apellido</label>
-      <input type="text" id="apellido" class="form-control" formControlName="apellido">
-      <div *ngIf="usuarioForm.get('apellido')?.invalid && usuarioForm.get('apellido')?.touched">
-        <div class="text-danger" *ngIf="usuarioForm.get('apellido')?.errors?.['required']">
-          El apellido es obligatorio.
-        </div>
-      </div>
-    </div>
-  
-    <div class="mb-3 form-group">
-      <label for="email" class="form-label">Correo Electrónico</label>
-      <input type="email" id="email" class="form-control" formControlName="email">
-      <div *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
-        <div class="text-danger" *ngIf="usuarioForm.get('email')?.errors?.['required']">
-          El correo es obligatorio.
-        </div>
-        <div class="text-danger" *ngIf="usuarioForm.get('email')?.errors?.['email']">
-          El correo no es válido.
-        </div>
-      </div>
-    </div>
+  <h2 class="mb-4">Modificar Perfil</h2>
 
-    <div class="mb-3">
-      <label for="foto" class="form-label">Foto</label>
-      <input class="form-control" id="foto" formControlName="foto" type="file" (change)="onFileChange($event)">
+  <div class="mb-3 form-group">
+    <label for="dni" class="form-label">DNI</label>
+    <input type="text" id="dni" class="form-control" formControlName="dni" [attr.disabled]="true">
+  </div>
+
+  <div class="mb-3 form-group">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input type="text" id="nombre" class="form-control" formControlName="nombre">
+    <div *ngIf="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched">
+      <div class="text-danger" *ngIf="usuarioForm.get('nombre')?.errors?.['required']">
+        El nombre es obligatorio.
+      </div>
     </div>
-  
-    <div class="mb-3">
-      <!-- <img [src]="usuario.foto || 'usuario.png'" class="img-fluid rounded" alt="Foto de perfil" width="150"> -->
-      <img [src]="selectedFile ? getFilePreview() : usuario.foto || 'usuario.png'" 
-     class="img-fluid rounded" alt="Foto de perfil" width="150">
+  </div>
+
+  <div class="mb-3 form-group">
+    <label for="apellido" class="form-label">Apellido</label>
+    <input type="text" id="apellido" class="form-control" formControlName="apellido">
+    <div *ngIf="usuarioForm.get('apellido')?.invalid && usuarioForm.get('apellido')?.touched">
+      <div class="text-danger" *ngIf="usuarioForm.get('apellido')?.errors?.['required']">
+        El apellido es obligatorio.
+      </div>
     </div>
-  
-    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
-      Modificar Perfil
-      <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    </button>
-  
-    <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
-    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
-  </form>
-  
+  </div>
+
+  <div class="mb-3 form-group">
+    <label for="email" class="form-label">Correo Electrónico</label>
+    <input type="email" id="email" class="form-control" formControlName="email">
+    <div *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
+      <div class="text-danger" *ngIf="usuarioForm.get('email')?.errors?.['required']">
+        El correo es obligatorio.
+      </div>
+      <div class="text-danger" *ngIf="usuarioForm.get('email')?.errors?.['email']">
+        El correo no es válido.
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="foto" class="form-label">Foto</label>
+    <input class="form-control" id="foto" formControlName="foto" type="file" (change)="onFileChange($event)">
+  </div>
+
+  <div class="mb-3">
+    <!-- <img [src]="usuario.foto || 'usuario.png'" class="img-fluid rounded" alt="Foto de perfil" width="150"> -->
+    <img [src]="selectedFile ? getFilePreview() : usuario.foto || 'usuario.png'" class="img-fluid rounded"
+      alt="Foto de perfil" width="150">
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+    Modificar Perfil
+    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  </button>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+</form>

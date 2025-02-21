@@ -1,48 +1,36 @@
 <div class="container mt-4" *ngIf="usuario">
-    <div class="card shadow-lg p-4">
-      <div class="row">
-        <!-- Imagen del usuario -->
-        <div class="col-md-4 text-center">
-          <img [src]="usuario.foto || 'usuario.png' " 
-               alt="Foto de usuario" 
-               class="img-thumbnail" >
-        </div>
-  
-        <div class="col-md-8 p-3">
-            <h2 class="text-gradient fw-bold mb-3">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
-          
-            <div class="card border-0 shadow-sm glass-card p-3">
-              <div class="mb-2">
-                <span class="text-muted small">DNI</span>
-                <p class="fw-bold fs-5 text-dark">{{ usuario.dni }}</p>
-              </div>
-          
-              <div class="mb-2">
-                <span class="text-muted small">Email</span>
-                <p class="fw-bold fs-5">
-                  {{ usuario.email }}
-                </p>
-              </div>
-          
-              <div>
-                <span class="text-muted small">Rol</span>
-                <p class="fw-bold fs-5 text-dark">{{ usuario.rolName }}</p>
-              </div>
-            </div>
-          
-            <!-- <button class="btn mt-3 px-4 py-2 fw-bold shadow-sm rounded" (click)="goBack()">
-              Volver
-            </button> -->
-            
-            <button class="btn mt-3 px-4 py-2 fw-bold shadow-sm rounded" (click)="editarUsuario(usuario.id)">
-              Editar
-            </button>
-          </div>
-          
-          
+  <div class="card shadow p-4">
+    <div class="row">
+      <!-- Imagen del usuario -->
+      <div class="col-md-4 text-center">
+        <img [src]="usuario.foto || 'usuario.png' " alt="Foto de usuario" class="img-thumbnail">
       </div>
+
+      <div class="col-md-8 mt-3 mt-md-0">
+        <h2 class="mb-3">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+
+        <div class="card border-0 ">
+
+          <span class="text-muted small">DNI</span>
+          <p class="fs-5 ">{{ usuario.dni }}</p>
+
+
+          <span class="text-muted small">Email</span>
+          <p class="fs-5">
+            {{ usuario.email }}
+          </p>
+
+          <span class="text-muted small">Rol</span>
+          <p class="fs-5 ">{{ usuario.rolName }}</p>
+        </div>
+        <button class="btn btn-primary px-3" (click)="editarUsuario(usuario.id)">
+          Editar
+        </button>
+      </div>
+
+
     </div>
   </div>
-  
-  <h3 *ngIf="!usuario">Usuario no encontrado</h3>
-  
+</div>
+
+<h3 *ngIf="!usuario">Usuario no encontrado</h3>
