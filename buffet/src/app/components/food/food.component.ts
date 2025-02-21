@@ -25,35 +25,38 @@ export class FoodComponent {
   private destroy$ = new Subject<void>(); // Subject for unsubscribing
   cantidadPorComida: { [comidaId: number]: number } = {};
 
-  constructor(private foodsService: FoodsService, 
-    private router: Router, 
-    private loginService: LoginServicio, 
-    private cartService: CartService) {}
+  constructor(
+    private foodsService: FoodsService,
+    private router: Router,
+    private loginService: LoginServicio,
+    private cartService: CartService
+  ) {}
 
   ngOnInit() {
     this.foodsService.getFoods().subscribe((comidas) => {
       this.comidas = comidas;
       this.imageLoaded = new Array(comidas.length).fill(false);
       this.imageError = new Array(comidas.length).fill(false);
-      this.comidas.forEach(comida => {
-        this.cantidadPorComida[comida.id] = this.cartService.getFoodQuantity(comida.id); // Obtiene la cantidad del servicio
+      this.comidas.forEach((comida) => {
+        this.cantidadPorComida[comida.id] = 1;
       });
     });
 
-    this.loginService.isUserLoggedIn$.pipe(takeUntil(this.destroy$)).subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this.usuarioLogeado = this.loginService.getUserLoggedIn();
-      } else {
-        this.usuarioLogeado = null; // or handle the case when the user is not logged in
-      }
-    });
+    this.loginService.isUserLoggedIn$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isLoggedIn) => {
+        if (isLoggedIn) {
+          this.usuarioLogeado = this.loginService.getUserLoggedIn();
+        } else {
+          this.usuarioLogeado = null; // or handle the case when the user is not logged in
+        }
+      });
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 
   editFood(foodId: number) {
     this.router.navigate(['/comidas', foodId, 'editar']);
@@ -91,14 +94,13 @@ export class FoodComponent {
     const cantidadNumerica = this.cantidadPorComida[comida.id];
 
     if (isNaN(cantidadNumerica) || cantidadNumerica < 1) {
-      console.error("Cantidad inválida");
+      console.error('Cantidad inválida');
       return;
     }
 
     const orderFood = new OrderFood(comida, cantidadNumerica);
     this.cartService.addItem(orderFood, false);
     this.cartService.setFoodQuantity(comida.id, cantidadNumerica); // Guarda la cantidad en el servicio
-    console.log("Comida agregada/actualizada en el carrito:", orderFood);
+    console.log('Comida agregada/actualizada en el carrito:', orderFood);
   }
-
 }

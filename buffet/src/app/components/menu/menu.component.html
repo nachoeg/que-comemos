@@ -22,19 +22,21 @@
         <p class="card-text fw-bold">
           $ {{ menu.precio }}
         </p>
-        <div class="btn-group" role="group" aria-label="Botones del menú">
-          <button (click)="openMenu(menu.id)" class="btn btn-sm btn-outline-primary">Ver</button>
-          <ng-container *ngIf="usuarioLogeado?.rolName === 'ADMIN'">
-            <button (click)="editMenu(menu.id)" class="btn btn-sm btn-outline-secondary">Editar</button>
-            <button (click)="deleteMenu(menu.id)" class="btn btn-sm btn-outline-danger ">Eliminar</button>
-          </ng-container>
+        <div class="d-flex gap-2">
+          <div class="btn-group" role="group" aria-label="Botones del menú">
+            <button (click)="openMenu(menu.id)" class="btn btn-sm btn-outline-primary">Ver</button>
+            <ng-container *ngIf="usuarioLogeado?.rolName === 'ADMIN'">
+              <button (click)="editMenu(menu.id)" class="btn btn-sm btn-outline-secondary">Editar</button>
+              <button (click)="deleteMenu(menu.id)" class="btn btn-sm btn-outline-danger ">Eliminar</button>
+            </ng-container>
 
-        </div>
-        <div *ngIf="usuarioLogeado?.rolName === 'USER'" class="mt-2"> <label
-            for="quantity-{{menu.id}}">Cantidad:</label>
-          <input type="number" id="quantity-{{menu.id}}" class="form-control form-control-sm"
-            [(ngModel)]="cantidadPorMenu[menu.id]" min="1" value="1">
-          <button class="btn btn-sm btn-primary mt-2" (click)="agregarMenuAlPedido(menu)">Agregar al pedido</button>
+          </div>
+          <div *ngIf="usuarioLogeado?.rolName === 'USER'" class="input-group">
+            <input type="number" id="quantity-{{menu.id}}" class="form-control form-control-sm"
+              [(ngModel)]="cantidadPorMenu[menu.id]" style="max-width: 50px;" min="1" value="1">
+            <button class="btn btn-sm btn-outline-primary" (click)="agregarMenuAlPedido(menu)">Agregar al
+              carrito</button>
+          </div>
         </div>
       </div>
     </div>

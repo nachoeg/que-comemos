@@ -21,7 +21,7 @@ import { OrderMenu } from '../../models/order/order';
     MatButtonModule,
     MatIconModule,
     RouterModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css'],
@@ -29,43 +29,42 @@ import { OrderMenu } from '../../models/order/order';
 })
 export class MenuComponent implements OnInit {
   menus: Menu[] = [];
-  usuarioLogeado: any; 
+  usuarioLogeado: any;
   private destroy$ = new Subject<void>();
   cantidadPorMenu: { [menuId: number]: number } = {};
   showAllMenus: boolean = false;
 
-  constructor(private menuService: MenusService,
+  constructor(
+    private menuService: MenusService,
     private router: Router,
     private loginService: LoginServicio,
-    private cartService: CartService) { }
+    private cartService: CartService
+  ) {}
 
   ngOnInit() {
-    this.loginService.isUserLoggedIn$.pipe(takeUntil(this.destroy$)).subscribe(isLoggedIn => {
-      this.usuarioLogeado = isLoggedIn ? this.loginService.getUserLoggedIn() : null;
-      this.loadMenus(); 
-    });
+    this.loginService.isUserLoggedIn$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isLoggedIn) => {
+        this.usuarioLogeado = isLoggedIn
+          ? this.loginService.getUserLoggedIn()
+          : null;
+        this.loadMenus();
+      });
   }
 
   loadMenus() {
     if (this.usuarioLogeado?.rolName === 'USER') {
-      this.menuService.getMenusActive().subscribe(menus => {
+      this.menuService.getMenusActive().subscribe((menus) => {
         this.menus = menus;
-        this.initializeImageArrays();
+        this.menus.forEach((menu) => {
+          this.cantidadPorMenu[menu.id] = 1;
+        });
       });
     } else {
-      this.menuService.getMenus().subscribe(menus => {
+      this.menuService.getMenus().subscribe((menus) => {
         this.menus = menus;
-        this.initializeImageArrays();
       });
     }
-  }
-
-  initializeImageArrays() {
-    // this.imageLoaded = new Array(this.menus.length).fill(false);
-    // this.imageError = new Array(this.menus.length).fill(false);
-    this.menus.forEach(menu => {
-      this.cantidadPorMenu[menu.id] = this.cartService.getMenuQuantity(menu.id);
-    });
   }
 
   ngOnDestroy() {
@@ -113,13 +112,13 @@ export class MenuComponent implements OnInit {
     const cantidadNumerica = this.cantidadPorMenu[menu.id];
 
     if (isNaN(cantidadNumerica) || cantidadNumerica < 1) {
-        console.error("Cantidad inválida");
-        return;
+      console.error('Cantidad inválida');
+      return;
     }
 
     this.cartService.setMenuQuantity(menu.id, cantidadNumerica); // Actualiza la cantidad en el servicio
     const orderMenu = new OrderMenu(menu, cantidadNumerica);
     this.cartService.addItem(orderMenu, true);
-    console.log("Menu agregado/actualizado en el carrito:", orderMenu);
-    }
+    console.log('Menu agregado/actualizado en el carrito:', orderMenu);
+  }
 }

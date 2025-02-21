@@ -24,11 +24,11 @@
           <button (click)="editFood(comida.id)" class="btn btn-sm btn-outline-secondary">Editar</button>
           <button (click)="deleteFood(comida.id)" class="btn btn-sm btn-outline-danger ">Eliminar</button>
         </div>
-        <div *ngIf="usuarioLogeado?.rolName === 'USER'" class="mt-2"> <label
-            for="quantity-{{comida.id}}">Cantidad:</label>
+        <div *ngIf="usuarioLogeado?.rolName === 'USER'" class="mt-2 input-group">
           <input type="number" id="quantity-{{comida.id}}" class="form-control form-control-sm"
-            [(ngModel)]="cantidadPorComida[comida.id]" min="1" value="1">
-          <button class="btn btn-sm btn-primary mt-2" (click)="agregarComidaAlPedido(comida)">Agregar al pedido</button>
+            [(ngModel)]="cantidadPorComida[comida.id]" style="max-width: 50px;" min="1" value="1">
+          <button class="btn btn-sm btn-outline-primary " (click)="agregarComidaAlPedido(comida)">Agregar al
+            carrito</button>
         </div>
       </div>
     </div>
