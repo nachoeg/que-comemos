@@ -44,4 +44,4 @@ Proyecto grupal propuesto por la materia de de TTPS (Taller de Tecnologías de P
 ![Carrito usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/carrito-user.webp)
 ![Pedidos usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/pedidos-user.webp)
 ![Comprobante usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/comprobante-user.webp)
-![Sugerenias usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/sugerencias-user.webp)
+![Envio de email con el QR](https://github.com/nachoeg/que-comemos/blob/main/screenshots/email-qr.webp)
