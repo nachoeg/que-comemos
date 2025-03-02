@@ -21,6 +21,7 @@ Proyecto grupal propuesto por la materia de de TTPS (Taller de Tecnologías de P
 
 ## Capturas de pantalla
 
+![Página de inicio](https://github.com/nachoeg/que-comemos/blob/main/screenshots/home.webp)
 ![Inicio de sesión](https://github.com/nachoeg/que-comemos/blob/main/screenshots/login.webp)
 
 ### Rol administrador
