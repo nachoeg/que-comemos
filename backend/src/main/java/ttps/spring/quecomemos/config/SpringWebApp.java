@@ -56,7 +56,7 @@ public class SpringWebApp implements WebApplicationInitializer {
     public DataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setUsername("root");
-        driverManagerDataSource.setPassword("mzp1jj2b");
+        driverManagerDataSource.setPassword("12345678");
         driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/quecomemos");
         driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         return driverManagerDataSource;
