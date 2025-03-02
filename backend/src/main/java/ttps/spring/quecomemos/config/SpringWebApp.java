@@ -1,5 +1,6 @@
 package ttps.spring.quecomemos.config;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 import javax.servlet.Servlet;
@@ -7,20 +8,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -29,6 +21,10 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -41,25 +37,26 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.springdoc.core.customizers.OperationCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
+import ttps.spring.quecomemos.domain.Rol;
+import ttps.spring.quecomemos.domain.Usuario;
+import ttps.spring.quecomemos.repos.RolRepository;
+import ttps.spring.quecomemos.repos.UsuarioRepository;
+import ttps.spring.quecomemos.util.PasswordService;
+
+import javax.sql.DataSource;
 import jakarta.persistence.EntityManagerFactory;
-
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @ComponentScan(basePackages = "ttps.spring")
 @EnableTransactionManagement
-
 public class SpringWebApp implements WebApplicationInitializer {
 
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setUsername("root");
-        driverManagerDataSource.setPassword("12345678");
+        driverManagerDataSource.setPassword("mzp1jj2b");
         driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/quecomemos");
         driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         return driverManagerDataSource;
@@ -144,6 +141,39 @@ public class SpringWebApp implements WebApplicationInitializer {
         return mailSender;
     }
 
+    @Bean
+    public CommandLineRunner init(RolRepository rolRepository, UsuarioRepository usuarioRepository,
+            PasswordService passwordService) {
+        return args -> {
+            // Crear roles por defecto
+            Rol adminRole = new Rol("ADMIN");
+            Rol managerRole = new Rol("MANAGER");
+            Rol userRole = new Rol("USER");
+
+            if (rolRepository.findAll().isEmpty()) {
+                adminRole = rolRepository.save(adminRole);
+                managerRole = rolRepository.save(managerRole);
+                userRole = rolRepository.save(userRole);
+            } else {
+                adminRole = rolRepository.findByNombreRol("ADMIN");
+                managerRole = rolRepository.findByNombreRol("MANAGER");
+                userRole = rolRepository.findByNombreRol("USER");
+            }
+
+            // Crear usuarios por defecto
+            if (usuarioRepository.findAll().isEmpty()) {
+                Usuario admin = new Usuario(40534804, "Juan", "Perez", "admin@mail.com",
+                        passwordService.hashPassword("admin"), "/usuario_admin.webp", adminRole);
+                Usuario manager = new Usuario(40534805, "Maria", "Gomez", "manager@mail.com",
+                        passwordService.hashPassword("manager"), "/usuario_manager.webp", managerRole);
+                Usuario user = new Usuario(40534806, "Pedro", "Gonzalez", "user@mail.com",
+                        passwordService.hashPassword("user"), "/usuario_user.webp", userRole);
+
+                usuarioRepository.saveAll(Arrays.asList(admin, manager, user));
+            }
+        };
+    }
+
     public void onStartup(ServletContext container) throws ServletException {
         // Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
@@ -165,5 +195,4 @@ public class SpringWebApp implements WebApplicationInitializer {
         // TODO Auto-generated method stub
 
     }
-
 }

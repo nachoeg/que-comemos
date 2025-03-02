@@ -44,6 +44,21 @@ public class Usuario {
     @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
 
+    public Usuario() {
+    }
+
+    public Usuario(final Integer dni, final String nombre, final String apellido,
+            final String email, final String clave, final String foto,
+            final Rol rol) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.clave = clave;
+        this.foto = foto;
+        this.rol = rol;
+    }
+
     public Integer getId() {
         return id;
     }
