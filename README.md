@@ -2,6 +2,8 @@
 
 Proyecto grupal propuesto por la materia de de TTPS (Taller de Tecnologías de Producción de Software - Java). Consiste en una aplicación para gestionar el buffet de la Facultad de Informática de la UNLP. Desarrollada en Java (Spring Boot) y Angular.
 
+[Especificación del Trabajo Final](https://github.com/nachoeg/que-comemos/blob/main/Especificaci%C3%B3n%20del%20Trabajo%20Final%202024.pdf)
+
 ## Usuarios para probar la aplicación
 
 | Email                   | Contraseña | Roles   |
