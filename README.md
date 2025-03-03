@@ -21,27 +21,84 @@ Proyecto grupal propuesto por la materia de de TTPS (Taller de Tecnologías de P
 
 ## Capturas de pantalla
 
-![Página de inicio](https://github.com/nachoeg/que-comemos/blob/main/screenshots/home.webp)
-![Inicio de sesión](https://github.com/nachoeg/que-comemos/blob/main/screenshots/login.webp)
+<figure>
+  <figcaption>Página de inicio</figcaption>
+  <img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/home.webp">
+</figure>
+
+<figure>
+<figcaption>Inicio de sesión</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/login.webp">
+</figure>
 
 ### Rol administrador
 
-![Menú administrador](https://github.com/nachoeg/que-comemos/blob/main/screenshots/menus-admin.webp)
-![Comidas administrador](https://github.com/nachoeg/que-comemos/blob/main/screenshots/comidas-admin.webp)
-![Estadísticas administrador](https://github.com/nachoeg/que-comemos/blob/main/screenshots/estadisticas-admin.webp)
-![Menú detalle administrador](https://github.com/nachoeg/que-comemos/blob/main/screenshots/menu-detalle-admin.webp)
-![Usuarios administrador](https://github.com/nachoeg/que-comemos/blob/main/screenshots/usuarios-admin.webp)
+<figure>
+<figcaption>Administración de menús</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/menus-admin.webp">
+</figure>
+
+<figure>
+<figcaption>Administración de comidas</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/comidas-admin.webp">
+</figure>
+
+<figure>
+<figcaption>Estadísticas</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/estadisticas-admin.webp">
+</figure>
+
+<figure>
+<figcaption>Edición de menú</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/menu-detalle-admin.webp">
+</figure>
+
+<figure>
+<figcaption>Administración de usuarios</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/usuarios-admin.webp">
+</figure>
 
 ### Rol manager
 
-![Pedidos manager](https://github.com/nachoeg/que-comemos/blob/main/screenshots/pedidos-manager.webp)
-![Sugerencias manager](https://github.com/nachoeg/que-comemos/blob/main/screenshots/sugerencias-manager.webp)
+<figure>
+<figcaption>Administración de pedidos</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/pedidos-manager.webp">
+</figure>
+
+<figure>
+<figcaption>Listado de sugerencias</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/sugerencias-manager.webp">
+</figure>
 
 ### Rol usuario
 
-![Menú usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/menus-user.webp)
-![Menú detalle usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/menu-detalle-user.webp)
-![Carrito usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/carrito-user.webp)
-![Pedidos usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/pedidos-user.webp)
-![Comprobante usuario](https://github.com/nachoeg/que-comemos/blob/main/screenshots/comprobante-user.webp)
-![Envio de email con el QR](https://github.com/nachoeg/que-comemos/blob/main/screenshots/email-qr.webp)
+<figure>
+<figcaption>Menús</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/menus-user.webp">
+</figure>
+
+<figure>
+<figcaption>Menú detalle</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/menu-detalle-user.webp">
+</figure>
+
+<figure>
+<figcaption>Carrito</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/carrito-user.webp">
+</figure>
+
+<figure>
+<figcaption>Listado de pedidos realizados</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/pedidos-user.webp">
+</figure>
+
+<figure>
+<figcaption>Comprobante de compra</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/comprobante-user.webp">
+</figure>
+
+<figure>
+<figcaption>Envio de email con el comprobante y el QR</figcaption>
+<img src="https://raw.githubusercontent.com/nachoeg/que-comemos/main/screenshots/email-qr.webp">
+</figure>
+
