@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.lang.NonNull;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -191,8 +192,8 @@ public class SpringWebApp implements WebApplicationInitializer {
     }
 
     @Override
-    public void onStartup(jakarta.servlet.ServletContext servletContext) throws jakarta.servlet.ServletException {
-        // TODO Auto-generated method stub
+    public void onStartup(@NonNull jakarta.servlet.ServletContext servletContext)
+            throws jakarta.servlet.ServletException {
 
     }
 }

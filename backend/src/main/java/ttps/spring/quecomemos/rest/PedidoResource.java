@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailAuthenticationException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,24 +25,15 @@ import com.google.zxing.WriterException;
 import ttps.spring.quecomemos.model.PedidoDTO;
 import ttps.spring.quecomemos.model.PedidoResponseDTO;
 import ttps.spring.quecomemos.service.PedidoService;
-import ttps.spring.quecomemos.service.UsuarioService;
-import ttps.spring.quecomemos.util.EmailService;
-import ttps.spring.quecomemos.util.QRService;
 
 @RestController
 @RequestMapping(value = "/api/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PedidoResource {
 
 	private final PedidoService pedidoService;
-	private final UsuarioService usuarioService;
-	@Autowired
-	private QRService qrService;
-	@Autowired
-	private EmailService emailService;
 
-	public PedidoResource(final PedidoService pedidoService, final UsuarioService usuarioService) {
+	public PedidoResource(final PedidoService pedidoService) {
 		this.pedidoService = pedidoService;
-		this.usuarioService = usuarioService;
 	}
 
 	@GetMapping

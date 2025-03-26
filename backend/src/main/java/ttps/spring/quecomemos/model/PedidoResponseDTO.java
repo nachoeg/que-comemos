@@ -1,7 +1,5 @@
 package ttps.spring.quecomemos.model;
 
-import java.util.List;
-
 public class PedidoResponseDTO {
     private byte[] qrCodeImage;
     private PedidoDTO pedido;

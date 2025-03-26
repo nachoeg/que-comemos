@@ -1,7 +1,5 @@
 package ttps.spring.quecomemos.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 

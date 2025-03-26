@@ -152,8 +152,7 @@ public class MenuService {
 	}
 
 	public ReferencedWarning getReferencedWarning(final Long id) {
-		final ReferencedWarning referencedWarning = new ReferencedWarning();
-		final Menu menu = menuRepository.findById(id)
+		menuRepository.findById(id)
 				.orElseThrow(() -> new EmptyResultDataAccessException("Menu no encontrado", 1));
 
 		return null;
